@@ -12,6 +12,7 @@ LOCATION
 
 BIO GOES HERE-->
 
+## Lecturers
 
 #### Celia Greenwood
 
@@ -45,10 +46,11 @@ Montréal, Québec, Canada
 
 Alexandre Reynaud is an Assistant Professor in the Dept of Ophthalmology and Visual Sciences at McGill University. He obtained a PhD in Neurosciences from Aix-Marseille Université (France) and a MSc in Computer Sciences from Université de Nice Sophia-Antipolis (France). His research focuses on human visual perception and particularly binocular vision. To study those, he develops computer-based psychophysics, behavioral experiments. His research also focuses on a more clinical/translational aspect: the study of amblyopia, a neurodevelopmental condition which emerges during childhood and results in deficit of binocular vision. He tries to understand and develop treatments for this condition based on digital technologies and digital therapies. 
 
+## Instructors
 
 #### Adrien Osakwe
 
-<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Adrien Osakwe">
+<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Adrien Osakwe">-->
 
 PhD Student <br>
 McGill University <br>
@@ -59,7 +61,7 @@ Adrien Osakwe is a fourth-year PhD student in the Quantitative Life Sciences pro
 
 #### Audrey Baguette
 
-<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Audrey Baguette">
+<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Audrey Baguette">-->
 
 PhD Student <br>
 McGill University <br>
@@ -70,7 +72,7 @@ Audrey is a PhD Candidate in the Quantitative Life Sciences program. She holds a
 
 #### Han Yu
 
-<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Han Yu">
+<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Han Yu">-->
 
 PhD Student <br>
 McGill University <br>
@@ -81,11 +83,18 @@ Han Yu is a first-year PhD student in the Quantitative Life Sciences program at 
 
 #### Maximiliane Jousse
 
-<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Maximiliane Jousse">
+<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Maximiliane Jousse">-->
 
 PhD Student <br>
 McGill University <br>
 Montréal, Québec, Canada
 
 Maximiliane Jousse is a PhD Candidate in Dr. Laura Pollock’s lab (Quantitative Biodiversity Lab) at McGill University. She holds a B.Sc. in Mathematics and Biology from McGill University. She now studies biotic interactions and looks at how to better model predicted biodiversity rangeshifts in response to climate change using these biotic interactions.
+
+## TAs
+
+#### Daniel Gurman
+
+
+#### Rodrigo Migueles Ramirez
 
