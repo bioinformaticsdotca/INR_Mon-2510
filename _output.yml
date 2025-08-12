@@ -15,7 +15,7 @@ bookdown::gitbook:
          </a>
         <li><center><strong><a href="./"><br>Introduction to R<br><br></a></strong></center></li>
         <a href="./">
-         <img src="img/missingimg.png" width="70%" alt="Introduction to R logo" style="display:block; margin-left:auto; margin-right:auto; ">
+         <img src="img/INR-icon.png" width="70%" alt="Introduction to R logo" style="display:block; margin-left:auto; margin-right:auto; ">
          </a>
         <br>
 
@@ -28,6 +28,13 @@ bookdown::gitbook:
         <a href="https://www.ontariogenomics.ca/"><img src="img/sponsors/ontariogenomics.png" height="55" style="display:inline-block;" style="padding-bottom: 20px;" alt="Ontario Genomics logo.">
         <br><br>
         <a href="https://oicr.on.ca/"><img src="img/sponsors/oicr.png" width=35% style="display:inline-block;" style="padding-bottom: 20px" alt="Ontario Institute for Cancer Research logo.">
+
+        <a href="https://genomequebec.com"><img src="img/sponsors/genomequebec.png" height="100" style="display:inline-block;"  style="padding-bottom: 20px" alt="Genome Québec logo.">
+        <a href="https://www.calculquebec.ca"><img src="img/sponsors/calculquebec.png" height="40" style="display:inline-block;"  style="padding-bottom: 20px" alt="Calcul Québec logo.">
+        <a href="https://ivado.ca/en/"><img src="img/sponsors/ivado.png" height="55" style="display:inline-block;"  style="padding-bottom: 20px" alt="Ivado logo.">
+        <a href="https://santenumerique.umontreal.ca/accueil/"><img src="img/sponsors/consortiumsantenumerique.png" height="70" style="display:inline-block;"  style="padding-bottom: 22px" alt="Consortium Santé Numérique logo.">
+        <a href="https://www.umontreal.ca"><img src="img/sponsors/udem.png" height="45" style="display:inline-block;"  style="padding-bottom: 10px" alt="Université de Montréal logo.">
+        <a href="https://www.mcgill.ca/micm/"><img src="img/sponsors/MICM.png" height="60" style="display:inline-block;"  style="padding-bottom: 10px" alt="McGill initiative in Computational Medicine logo.">
     edit: https://github.com/bioinformaticsdotca/INR_Mon-2510/blob/main/%s
 
     download: ["pdf", "epub"]
