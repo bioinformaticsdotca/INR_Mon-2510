@@ -20,9 +20,9 @@ favicon: img/favicon.ico
 
 Welcome to the 2025 Introduction to R Canadian Bioinformatics Workshop webpage!  
 
-<!--## Class Photo
+## Class Photo
 
-After workshop concludes, YOUR EMBED CODE HERE-->
+<iframe src="https://drive.google.com/file/d/1-90oYdlsVas5dbt4cjTCxuBefu0uQIam/preview" allow="autoplay"></iframe>
 
 ## Schedule
 
