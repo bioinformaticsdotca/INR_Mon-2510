@@ -24,6 +24,10 @@ Welcome to the 2025 Introduction to R Canadian Bioinformatics Workshop webpage!
 
 <iframe src="https://drive.google.com/file/d/1-90oYdlsVas5dbt4cjTCxuBefu0uQIam/preview" allow="autoplay"></iframe>
 
+## Pre-work
+
+[You can find your pre-work here.](https://docs.google.com/forms/d/e/1FAIpQLSdqzz503MPixGxHCbMSvXJCsZyQ8yWG9g1NIO2SexwJL9JUzw/viewform?usp=share_link&ouid=101140812887781190012)
+
 ## Schedule
 
 ```{r schedule-loader, echo=FALSE, message=FALSE, warning=FALSE}
@@ -110,6 +114,7 @@ schedule_component <- tagList(
       white-space: nowrap;
       -ms-overflow-style: none;
       scrollbar-width: none;
+      scroll-behavior: smooth;
     }
     .schedule-tab-buttons::-webkit-scrollbar { display: none; }
     
@@ -158,6 +163,22 @@ schedule_component <- tagList(
       background-color: #F8F9FA;
     }
     .schedule-table tr:last-child td { border-bottom: none; }
+    
+    /* --- RULE FOR BREAKS AND PAUSES --- */
+    .schedule-table tr.is-break td {
+      font-style: italic;
+      font-size: 0.95em;
+      color: #777;
+    }
+    
+    /* --- NEW: RULE FOR 'OTHER' TYPE (More Visible) --- */
+    .schedule-table tr.is-other td {
+      background-color: #f0f4ff; /* A light blue background */
+      font-weight: 500; /* Slightly bolder text */
+    }
+    .schedule-table tr.is-other td:first-child {
+      border-left: 4px solid var(--schedule-primary-color);
+    }
   ")),
 
   # B. HTML placeholders
@@ -231,11 +252,20 @@ schedule_component <- tagList(
           const day = days[dayIndex];
           const dayEvents = scheduleData.filter(row => row.day_label === day);
           let tableHtml = `<table class="schedule-table"><thead><tr>
-                           <th style="width:25%;">Time (${selectedTzLabel})</th>
-                           <th>Activity</th>
-                           </tr></thead><tbody>`;
+                               <th style="width:25%;">${selectedTzLabel}</th>
+                               <th>Activity</th>
+                               </tr></thead><tbody>`;
           dayEvents.forEach(row => {
-            tableHtml += `<tr><td>${row[timeCol] || ""}</td><td>${row.activity || ""}</td></tr>`;
+            const type = row.type ? row.type.toLowerCase() : "";
+            let rowClass = "";
+
+            if (type === "break" || type === "pause") {
+              rowClass = "class=\'is-break\'";
+            } else if (type === "other") {
+              rowClass = "class=\'is-other\'";
+            }
+            
+            tableHtml += `<tr ${rowClass}><td>${row[timeCol] || ""}</td><td>${row.activity || ""}</td></tr>`;
           });
           tableHtml += `</tbody></table>`;
           panel.innerHTML = tableHtml;
@@ -245,26 +275,27 @@ schedule_component <- tagList(
       function switchTab(targetId) {
         tabs.forEach(tab => tab.classList.remove("active"));
         panels.forEach(panel => panel.classList.remove("active"));
+        
         const activeTab = document.querySelector(`[data-target=\'${targetId}\']`);
         const activePanel = document.getElementById(targetId);
-        if (activeTab) activeTab.classList.add("active");
-        if (activePanel) activePanel.classList.add("active");
+        
+        if (activeTab) {
+          activeTab.classList.add("active");
+          activeTab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+        if (activePanel) {
+          activePanel.classList.add("active");
+        }
       }
       
-      // --- CHANGE: Rewritten function for more robust indicator logic ---
       function updateScrollIndicators() {
         const el = tabButtonsContainer;
-        // Use rounded values to avoid floating point inaccuracies
         const scrollLeft = Math.round(el.scrollLeft);
         const scrollWidth = Math.round(el.scrollWidth);
         const clientWidth = Math.round(el.clientWidth);
         
         const hasOverflow = scrollWidth > clientWidth;
-        
-        // Show left indicator if scrolled away from the start
         tabsWrapper.classList.toggle("scrolled-left", hasOverflow && scrollLeft > 0);
-        
-        // Show right indicator if there is overflow and we are not at the very end
         const isAtEnd = scrollLeft >= scrollWidth - clientWidth;
         tabsWrapper.classList.toggle("scrolled-right", hasOverflow && !isAtEnd);
       }
@@ -283,11 +314,32 @@ schedule_component <- tagList(
       window.addEventListener("resize", updateScrollIndicators);
 
       renderTables();
-      if (tabs.length > 0) {
-        switchTab(tabs[0].dataset.target);
+
+      // --- LOGIC TO ACTIVATE CURRENT DAY ---
+      let initialTabIndex = 0;
+
+      const today = new Date();
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const monthName = monthNames[today.getMonth()];
+      const day = today.getDate();
+      const year = today.getFullYear();
+      const todayString = `${monthName} ${day}, ${year}`;
+
+      const todayEvent = scheduleData.find(row => row.date === todayString);
+
+      if (todayEvent) {
+        const dayIndex = days.findIndex(day => day === todayEvent.day_label);
+        if (dayIndex !== -1) {
+          initialTabIndex = dayIndex;
+        }
       }
-      
-      // A brief delay before the initial check can help ensure the browser has finalized layout
+
+      if (tabs.length > initialTabIndex) {
+        const initialTabId = `panel-${initialTabIndex}`;
+        switchTab(initialTabId);
+      }
+      // --- END OF CURRENT DAY LOGIC ---
+
       setTimeout(updateScrollIndicators, 100);
     });
   ')))
@@ -296,8 +348,3 @@ schedule_component <- tagList(
 # 7. Output the final component
 schedule_component
 ```
-
-## Pre-work
-
-[You can find your pre-work here.](https://docs.google.com/forms/d/e/1FAIpQLSdqzz503MPixGxHCbMSvXJCsZyQ8yWG9g1NIO2SexwJL9JUzw/viewform?usp=share_link&ouid=101140812887781190012)
-

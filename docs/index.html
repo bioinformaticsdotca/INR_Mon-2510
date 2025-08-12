@@ -109,8 +109,8 @@
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Workshop Info</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#class-photo"><i class="fa fa-check"></i>Class Photo</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#schedule"><i class="fa fa-check"></i>Schedule</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#pre-work"><i class="fa fa-check"></i>Pre-work</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#schedule"><i class="fa fa-check"></i>Schedule</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="meet-your-faculty.html"><a href="meet-your-faculty.html"><i class="fa fa-check"></i>Meet Your Faculty</a>
 <ul>
@@ -187,6 +187,10 @@
 <iframe src="https://drive.google.com/file/d/1-90oYdlsVas5dbt4cjTCxuBefu0uQIam/preview" allow="autoplay">
 </iframe>
 </div>
+<div id="pre-work" class="section level2 hasAnchor">
+<h2>Pre-work<a href="index.html#pre-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdqzz503MPixGxHCbMSvXJCsZyQ8yWG9g1NIO2SexwJL9JUzw/viewform?usp=share_link&amp;ouid=101140812887781190012">You can find your pre-work here.</a></p>
+</div>
 <div id="schedule" class="section level2 hasAnchor">
 <h2>Schedule<a href="index.html#schedule" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <style>
@@ -243,6 +247,7 @@
       white-space: nowrap;
       -ms-overflow-style: none;
       scrollbar-width: none;
+      scroll-behavior: smooth;
     }
     .schedule-tab-buttons::-webkit-scrollbar { display: none; }
     
@@ -291,6 +296,22 @@
       background-color: #F8F9FA;
     }
     .schedule-table tr:last-child td { border-bottom: none; }
+    
+    /* --- RULE FOR BREAKS AND PAUSES --- */
+    .schedule-table tr.is-break td {
+      font-style: italic;
+      font-size: 0.95em;
+      color: #777;
+    }
+    
+    /* --- NEW: RULE FOR 'OTHER' TYPE (More Visible) --- */
+    .schedule-table tr.is-other td {
+      background-color: #f0f4ff; /* A light blue background */
+      font-weight: 500; /* Slightly bolder text */
+    }
+    .schedule-table tr.is-other td:first-child {
+      border-left: 4px solid var(--schedule-primary-color);
+    }
   </style>
 <div class="schedule-card">
 <div class="schedule-tabs" id="schedule-tabs-container"></div>
@@ -298,7 +319,7 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const scheduleData = [{"day_label":"October 1","date":"2025-10-01","activity":"Arrivals & Check-in (30min)","type":"other","time_1":"08:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Welcome (Coordinator)","type":"other","time_1":"08:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 1: Introduction to Base R & RStudio (Maximiliane Jousse)","type":"activity","time_1":"09:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Break (30min)","type":"break","time_1":"11:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 2: Data Wrangling (Audrey Baguette)","type":"activity","time_1":"11:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Lunch (1h)","type":"break","time_1":"13:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 3: Introduction to Statistics in R (Audrey Baguette)","type":"activity","time_1":"14:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Break (30min)","type":"break","time_1":"15:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Lecture 1: Health Policy Simulation in R (Dr. Alton Russell)","type":"activity","time_1":"16:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Finished","type":"activity","time_1":"17:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Arrivals (30min)","type":"other","time_1":"08:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 4: Data Visualization (Han Yu)","type":"activity","time_1":"09:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Break (30min)","type":"break","time_1":"11:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Lecture 2: Factor Analysis for Human Spatial Vision (Dr. Alexandre Reynaud)","type":"activity","time_1":"11:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Class photo + Lunch (1h)","type":"break","time_1":"12:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 5: Working with Rmarkdown & Quarto (Adrien Osakwe)","type":"activity","time_1":"13:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Lecture 3: Smoothing Curves for DNA Methylation (Dr. Celia Greenwood)","type":"activity","time_1":"14:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Break (30min)","type":"break","time_1":"15:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 6: Using Git with R (Adrien Osakwe)","type":"activity","time_1":"16:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Survey & Closing Remarks","type":"activity","time_1":"17:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Finished","type":"activity","time_1":"17:30","timezone_1_label":"Time (ET)"}];
+      const scheduleData = [{"day_label":"October 1","date":"2025-10-01","activity":"Arrivals & Check-in (30min)","type":"break","time_1":"08:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Welcome (Coordinator)","type":"activity","time_1":"08:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 1: Introduction to Base R & RStudio (Maximiliane Jousse)","type":"activity","time_1":"09:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Break (30min)","type":"break","time_1":"11:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 2: Data Wrangling (Audrey Baguette)","type":"activity","time_1":"11:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Lunch (1h)","type":"break","time_1":"13:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Practical 3: Introduction to Statistics in R (Audrey Baguette)","type":"activity","time_1":"14:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Break (30min)","type":"break","time_1":"15:30","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Lecture 1: Health Policy Simulation in R (Dr. Alton Russell)","type":"activity","time_1":"16:00","timezone_1_label":"Time (ET)"},{"day_label":"October 1","date":"2025-10-01","activity":"Finished","type":"break","time_1":"17:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Arrivals (30min)","type":"break","time_1":"08:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 4: Data Visualization (Han Yu)","type":"activity","time_1":"09:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Break (30min)","type":"break","time_1":"11:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Lecture 2: Factor Analysis for Human Spatial Vision (Dr. Alexandre Reynaud)","type":"activity","time_1":"11:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Class photo + Lunch (1h)","type":"break","time_1":"12:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 5: Working with Rmarkdown & Quarto (Adrien Osakwe)","type":"activity","time_1":"13:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Lecture 3: Smoothing Curves for DNA Methylation (Dr. Celia Greenwood)","type":"activity","time_1":"14:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Break (30min)","type":"break","time_1":"15:30","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Practical 6: Using Git with R (Adrien Osakwe)","type":"activity","time_1":"16:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Survey & Closing Remarks","type":"activity","time_1":"17:00","timezone_1_label":"Time (ET)"},{"day_label":"October 2","date":"2025-10-02","activity":"Finished","type":"break","time_1":"17:30","timezone_1_label":"Time (ET)"}];
       const tabsContainer = document.getElementById("schedule-tabs-container");
       const panelsContainer = document.getElementById("schedule-panels-container");
 
@@ -360,11 +381,20 @@
           const day = days[dayIndex];
           const dayEvents = scheduleData.filter(row => row.day_label === day);
           let tableHtml = `<table class="schedule-table"><thead><tr>
-                           <th style="width:25%;">Time (${selectedTzLabel})</th>
-                           <th>Activity</th>
-                           </tr></thead><tbody>`;
+                               <th style="width:25%;">${selectedTzLabel}</th>
+                               <th>Activity</th>
+                               </tr></thead><tbody>`;
           dayEvents.forEach(row => {
-            tableHtml += `<tr><td>${row[timeCol] || ""}</td><td>${row.activity || ""}</td></tr>`;
+            const type = row.type ? row.type.toLowerCase() : "";
+            let rowClass = "";
+
+            if (type === "break" || type === "pause") {
+              rowClass = "class='is-break'";
+            } else if (type === "other") {
+              rowClass = "class='is-other'";
+            }
+            
+            tableHtml += `<tr ${rowClass}><td>${row[timeCol] || ""}</td><td>${row.activity || ""}</td></tr>`;
           });
           tableHtml += `</tbody></table>`;
           panel.innerHTML = tableHtml;
@@ -374,26 +404,27 @@
       function switchTab(targetId) {
         tabs.forEach(tab => tab.classList.remove("active"));
         panels.forEach(panel => panel.classList.remove("active"));
+        
         const activeTab = document.querySelector(`[data-target='${targetId}']`);
         const activePanel = document.getElementById(targetId);
-        if (activeTab) activeTab.classList.add("active");
-        if (activePanel) activePanel.classList.add("active");
+        
+        if (activeTab) {
+          activeTab.classList.add("active");
+          activeTab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+        if (activePanel) {
+          activePanel.classList.add("active");
+        }
       }
       
-      // --- CHANGE: Rewritten function for more robust indicator logic ---
       function updateScrollIndicators() {
         const el = tabButtonsContainer;
-        // Use rounded values to avoid floating point inaccuracies
         const scrollLeft = Math.round(el.scrollLeft);
         const scrollWidth = Math.round(el.scrollWidth);
         const clientWidth = Math.round(el.clientWidth);
         
         const hasOverflow = scrollWidth > clientWidth;
-        
-        // Show left indicator if scrolled away from the start
         tabsWrapper.classList.toggle("scrolled-left", hasOverflow && scrollLeft > 0);
-        
-        // Show right indicator if there is overflow and we are not at the very end
         const isAtEnd = scrollLeft >= scrollWidth - clientWidth;
         tabsWrapper.classList.toggle("scrolled-right", hasOverflow && !isAtEnd);
       }
@@ -412,18 +443,35 @@
       window.addEventListener("resize", updateScrollIndicators);
 
       renderTables();
-      if (tabs.length > 0) {
-        switchTab(tabs[0].dataset.target);
+
+      // --- LOGIC TO ACTIVATE CURRENT DAY ---
+      let initialTabIndex = 0;
+
+      const today = new Date();
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const monthName = monthNames[today.getMonth()];
+      const day = today.getDate();
+      const year = today.getFullYear();
+      const todayString = `${monthName} ${day}, ${year}`;
+
+      const todayEvent = scheduleData.find(row => row.date === todayString);
+
+      if (todayEvent) {
+        const dayIndex = days.findIndex(day => day === todayEvent.day_label);
+        if (dayIndex !== -1) {
+          initialTabIndex = dayIndex;
+        }
       }
-      
-      // A brief delay before the initial check can help ensure the browser has finalized layout
+
+      if (tabs.length > initialTabIndex) {
+        const initialTabId = `panel-${initialTabIndex}`;
+        switchTab(initialTabId);
+      }
+      // --- END OF CURRENT DAY LOGIC ---
+
       setTimeout(updateScrollIndicators, 100);
     });
   </script>
-</div>
-<div id="pre-work" class="section level2 hasAnchor">
-<h2>Pre-work<a href="index.html#pre-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdqzz503MPixGxHCbMSvXJCsZyQ8yWG9g1NIO2SexwJL9JUzw/viewform?usp=share_link&amp;ouid=101140812887781190012">You can find your pre-work here.</a></p>
 
 </div>
 </div>

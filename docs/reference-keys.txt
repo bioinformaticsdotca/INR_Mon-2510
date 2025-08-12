@@ -1,8 +1,8 @@
 part-introduction
 workshop-info
 class-photo
-schedule
 pre-work
+schedule
 meet-your-faculty
 lecturers
 celia-greenwood
