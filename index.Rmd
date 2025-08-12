@@ -1,7 +1,7 @@
 --- 
 title: "Introduction to R 2025"
 author: "Faculty: Celia Greenwood, Alexandre Reynaud, W. Alton Russell, Adrien Osakwe, Han Yu, Audrey Baguette, Maximiliane Jousse, Daniel Gurman, Rodrigo Migueles Ramirez"
-date: "October 01-02, 2025)"
+date: "October 01-02, 2025"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -299,5 +299,5 @@ schedule_component
 
 ## Pre-work
 
-<!--[You can find your pre-work here.](LINK TO PREWORK)
--->
+[You can find your pre-work here.](https://docs.google.com/forms/d/e/1FAIpQLSdqzz503MPixGxHCbMSvXJCsZyQ8yWG9g1NIO2SexwJL9JUzw/viewform?usp=share_link&ouid=101140812887781190012)
+
