@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Workshop Schedule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Final CSS Reset for Bookdown --- */
+        #schedule-container, #schedule-container * {
+            all: revert; /* Revert all inherited styles to browser defaults */
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #schedule-container h1 {
+            font-size: 30px;
+            font-weight: 700;
+        }
+        #schedule-container p {
+            font-size: 16px;
+            color: #6b7280;
+        }
+        #schedule-container button[role="tab"] {
+            font-size: 16px;
+            padding: 10px 18px !important;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        #schedule-container button[role="tab"][aria-selected="true"] {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        #schedule-container button[role="tab"][aria-selected="false"]:hover {
+            background-color: #eef2ff;
+        }
+        #schedule-container button[role="tab"]:focus-visible {
+            outline: 2px solid #4338ca;
+            outline-offset: 2px;
+            z-index: 10;
+        }
+        #schedule-container div[role="tabpanel"] { display: none; }
+        #schedule-container div[role="tabpanel"]:not([hidden]) { display: block; }
+
+        #schedule-container table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: 0;
+            table-layout: fixed;
+        }
+        #schedule-container table th,
+        #schedule-container table td {
+            padding: 10px 18px !important; /* Reduced cell padding */
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        #schedule-container table th {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #374151; /* Darker text */
+            background-color: #e5e7eb; /* Darker background */
+            white-space: nowrap;
+        }
+        #schedule-container table td {
+            font-size: 15px;
+            word-wrap: break-word;
+        }
+        #schedule-container table tbody tr.schedule-item-shaded {
+            background-color: #f9fafb;
+        }
+        #schedule-container .time-cell {
+            font-weight: 500;
+            color: #111827;
+            white-space: nowrap;
+        }
+        #schedule-container .activity-cell {
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div id="schedule-container" class="bg-white rounded-xl shadow-lg overflow-hidden my-8">
+        <div class="p-8">
+            <h1 id="schedule-title">Workshop Schedule</h1>
+            <p class="mt-2 mb-8">Select a day to view the schedule.</p>
+
+            <div role="tablist" aria-label="Workshop Schedule" id="tab-list" class="border-b border-gray-200 mb-6 flex flex-wrap -mb-px"></div>
+            <div id="tab-panels"></div>
+
+            <div id="loading-message" class="text-center py-8 text-gray-500">Initializing schedule...</div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.scheduleData !== 'undefined') {
+                initializeSchedule(window.scheduleData);
+            } else {
+                const loadingMessage = document.getElementById('loading-message');
+                loadingMessage.textContent = "Error: Schedule data was not provided.";
+                console.error("window.scheduleData is not defined. Ensure the R code chunk ran correctly.");
+            }
+        });
+
+        function initializeSchedule(scheduleData) {
+            const tabList = document.getElementById('tab-list');
+            const tabPanels = document.getElementById('tab-panels');
+            const loadingMessage = document.getElementById('loading-message');
+            loadingMessage.style.display = 'none';
+
+            const headers = Object.keys(scheduleData[0] || {});
+
+            const days = scheduleData.reduce((acc, row) => {
+                const day = row.day_label.trim();
+                if (!acc[day]) acc[day] = { date: row.date, items: [] };
+                acc[day].items.push(row);
+                return acc;
+            }, {});
+
+            buildTabs(days, headers, scheduleData);
+
+            function buildTabs(days, headers, allData) {
+                const dayLabels = Object.keys(days);
+                if (dayLabels.length === 0) {
+                    loadingMessage.style.display = 'block';
+                    loadingMessage.textContent = "No schedule data found.";
+                    return;
+                }
+
+                // Dynamically find time zones
+                const timeZoneColumns = headers.filter(h => h.startsWith('time_'));
+
+                const today = new Date();
+                const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                let activeTabIndex = dayLabels.findIndex(label => days[label].date === todayString);
+                if (activeTabIndex === -1) activeTabIndex = 0;
+
+                dayLabels.forEach((label, index) => {
+                    const dayInfo = days[label];
+                    const isActive = index === activeTabIndex;
+
+                    const tabId = `tab-${index}`;
+                    const panelId = `panel-${index}`;
+                    const button = document.createElement('button');
+                    button.id = tabId;
+                    button.role = 'tab';
+                    button.setAttribute('aria-controls', panelId);
+                    button.setAttribute('aria-selected', isActive);
+                    button.tabIndex = isActive ? 0 : -1;
+                    button.className = "text-gray-600";
+                    button.textContent = label;
+                    tabList.appendChild(button);
+
+                    const panel = document.createElement('div');
+                    panel.id = panelId;
+                    panel.role = 'tabpanel';
+                    panel.tabIndex = 0;
+                    panel.setAttribute('aria-labelledby', tabId);
+                    if (!isActive) panel.hidden = true;
+
+                    let tableHeaderHtml = '';
+                    // Adjusted widths for narrower time columns
+                    const timeHeaderWidths = { 1: 20, 2: 15, 3: 12, 4: 12 };
+                    const numTimeZones = timeZoneColumns.length;
+                    const timeColWidth = timeHeaderWidths[numTimeZones] || 12;
+                    const activityColWidth = 100 - (numTimeZones * timeColWidth);
+
+                    timeZoneColumns.forEach(timeCol => {
+                        const tzIndex = timeCol.split('_')[1];
+                        const labelCol = `timezone_${tzIndex}_label`;
+                        const headerLabel = allData[0][labelCol] || `Time ${tzIndex}`;
+                        tableHeaderHtml += `<th style="width: ${timeColWidth}%;">${headerLabel}</th>`;
+                    });
+
+                    if (numTimeZones > 0) {
+                        tableHeaderHtml += `<th style="width: ${activityColWidth}%;">Activity</th>`;
+                    } else {
+                        panel.innerHTML = `<p style="padding: 16px; color: #dc2626;">Error: No 'time' or 'time_X' columns found in CSV.</p>`;
+                        tabPanels.appendChild(panel);
+                        return;
+                    }
+
+                    let tableRowsHtml = '';
+                    dayInfo.items.forEach(item => {
+                        const isShaded = item.type && item.type.toLowerCase() !== 'activity';
+                        let timeCells = '';
+                        timeZoneColumns.forEach(timeCol => {
+                            timeCells += `<td class="time-cell">${item[timeCol] || ''}</td>`;
+                        });
+                        tableRowsHtml += `<tr class="${isShaded ? 'schedule-item-shaded' : ''}">${timeCells}<td class="activity-cell">${item.activity || ''}</td></tr>`;
+                    });
+
+                    panel.innerHTML = `<div class="overflow-x-auto"><table><thead><tr>${tableHeaderHtml}</tr></thead><tbody>${tableRowsHtml}</tbody></table></div>`;
+                    tabPanels.appendChild(panel);
+                });
+
+                setupEventListeners();
+            }
+
+            function setupEventListeners() {
+                const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+                function activateTab(tab) {
+                    tabs.forEach(t => {
+                        t.setAttribute('aria-selected', 'false');
+                        t.setAttribute('tabindex', '-1');
+                        const panel = document.getElementById(t.getAttribute('aria-controls'));
+                        if (panel) panel.hidden = true;
+                    });
+                    tab.setAttribute('aria-selected', 'true');
+                    tab.setAttribute('tabindex', '0');
+                    const panel = document.getElementById(tab.getAttribute('aria-controls'));
+                    if (panel) panel.hidden = false;
+                }
+                tabList.addEventListener('click', (e) => {
+                    const clickedTab = e.target.closest('[role="tab"]');
+                    if (clickedTab) activateTab(clickedTab);
+                });
+                tabList.addEventListener('keydown', (e) => {
+                    const currentTab = e.target.closest('[role="tab"]');
+                    if (!currentTab) return;
+                    let index = tabs.indexOf(currentTab);
+                    if (e.key === 'ArrowRight') index = (index + 1) % tabs.length;
+                    else if (e.key === 'ArrowLeft') index = (index - 1 + tabs.length) % tabs.length;
+                    else if (e.key === 'Home') index = 0;
+                    else if (e.key === 'End') index = tabs.length - 1;
+                    else return;
+
+                    e.preventDefault();
+                    tabs[index].focus();
+                    activateTab(tabs[index]);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
