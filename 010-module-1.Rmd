@@ -9,5 +9,8 @@
 
 <!--<iframe src="GOOGLE SLIDES LINK/preview" width="640" height="480" allow="autoplay"></iframe>  
 -->
+<iframe src="https://docs.google.com/presentation/d/1vnbTtlq4bfxTId1XHu9mn1toE_AIpapm/preview" width="640" height="480" allow="autoplay"></iframe>  
 
 ## Lab
+
+<iframe width="640" height="360" src="https://www.youtube.com/watch?v=RhdK7_lw2kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
