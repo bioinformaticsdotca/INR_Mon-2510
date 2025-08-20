@@ -20,7 +20,7 @@ BIO GOES HERE-->
 
 Professor <br>
 Lady Davis Institute for Medical Research / McGill University <br>
-Montreal, QC, Canada
+Montreal, Québec, Canada
 
 Celia Greenwood is Senior Investigator at the Lady Davis Institute for Medical Research ([www.ladydavis.ca](www.ladydavis.ca)). At McGill University, she holds a James McGill Professorship. She  obtained her PhD in Biostatistics from the University of Toronto, and her research involves developing, improving and applying statistical methods for genetic, genomic and high dimensional data. She was the inaugural and Graduate Program Director of the interdisciplinary PhD in Quantitative Life Sciences ([www.mcgill.ca/qls](www.mcgill.ca/qls)) from 2017 to 2024, and is a former president of the International Genetic Epidemiology Society ([www.geneticepi.org](www.geneticepi.org)), from whom she received their Leadership Award in 2022.
 
@@ -31,7 +31,7 @@ Celia Greenwood is Senior Investigator at the Lady Davis Institute for Medical R
 
 Assistant Professor <br>
 McGill University <br>
-Montreal, QC, Canada
+Montreal, Québec, Canada
 
 W. Alton Russell, PhD, is an Assistant Professor in the McGill School of Population and Global Health and director of the Data-Driven Decision Modeling Lab. His research aims to enable the efficient, effective, and equitable use of finite healthcare resources by developing, assessing, and applying traditional decision modeling methods (mathematical modeling, simulation, optimization) together with data-driven methods (machine learning, Bayesian statistics). Dr. Russell received training at North Carolina State University, Stanford University, and the Massachusetts General Hospital Institute for Technology Assessment and Harvard Medical School.
 
@@ -50,7 +50,7 @@ Alexandre Reynaud is an Assistant Professor in the Dept of Ophthalmology and Vis
 
 #### Adrien Osakwe
 
-<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Adrien Osakwe">-->
+<img src="./img/faculty/AdrienOsakwe_Headshot.jpg" width="200" alt="Photo of Adrien Osakwe">
 
 PhD Student <br>
 McGill University <br>
@@ -83,7 +83,7 @@ Han Yu is a first-year PhD student in the Quantitative Life Sciences program at 
 
 #### Maximiliane Jousse
 
-<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Maximiliane Jousse">-->
+<img src="./img/faculty/Maximiliane_Jousse.jpg" width="200" alt="Photo of Maximiliane Jousse">
 
 PhD Student <br>
 McGill University <br>
@@ -94,6 +94,14 @@ Maximiliane Jousse is a PhD Candidate in Dr. Laura Pollock’s lab (Quantitative
 ## TAs
 
 #### Daniel Gurman
+
+<img src="./img/faculty/Headshot_Daniel_Gurman.jpg" width="200" alt="Photo of Maximiliane Jousse">
+
+PhD Candidate <br>
+McGill University <br>
+Montreal, Québec, Canada
+
+Daniel is a PhD candidate in the Integrated Program in Neuroscience and holds a BSc in Neuroscience from Dalhousie University. His PhD research, performed under the supervision of Dr. Alexandre Reynaud, is focussed on understanding the brain’s ability to integrate information from the two eyes into a unified percept when that information is not properly synchronized.  The goal of this research is to contribute to the development of novel treatments for amblyopia (aka “lazy eye”). 
 
 
 #### Rodrigo Migueles Ramirez
