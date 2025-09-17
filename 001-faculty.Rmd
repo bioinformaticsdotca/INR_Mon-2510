@@ -61,7 +61,7 @@ Adrien Osakwe is a fourth-year PhD student in the Quantitative Life Sciences pro
 
 #### Audrey Baguette
 
-<!--<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Audrey Baguette">-->
+<img src="./img/faculty/Audrey_Baguette.jpg" width="200" alt="Photo of Audrey Baguette">
 
 PhD Student <br>
 McGill University <br>
