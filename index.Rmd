@@ -1,6 +1,6 @@
 --- 
 title: "Introduction to R 2025"
-author: "Faculty: Celia Greenwood, Alexandre Reynaud, W. Alton Russell, Adrien Osakwe, Han Yu, Audrey Baguette, Maximiliane Jousse, Daniel Gurman, Rodrigo Migueles Ramirez"
+author: "Faculty: Celia Greenwood, Alexandre Reynaud, W. Alton Russell, Anna K. Naumova, Adrien Osakwe, Han Yu, Audrey Baguette, Maximiliane Jousse, Daniel Gurman, Rodrigo Migueles Ramirez"
 date: "October 01-02, 2025"
 site: bookdown::bookdown_site
 documentclass: book
