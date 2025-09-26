@@ -1,0 +1,22 @@
+# Practical 6
+
+## Requirements
+
+This section will require access to the git software on your system. If you do not have git installed, you can do so from the following link:
+
+- [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+## Lecture
+
+<iframe 
+  src="https://docs.google.com/presentation/d/1NghzfbwIMPtzeMJe-ZpAC1wDWX40HOeU/preview" 
+  width="640" 
+  height="480" 
+  frameborder="0" 
+  allow="autoplay">
+</iframe>
+
+<!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+-->
+
+## Lab

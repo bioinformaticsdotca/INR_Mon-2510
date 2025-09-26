@@ -1,17 +1,28 @@
-# (PART) Modules {-}
+# (PART) Practicals {-}
 
-# Module 1
+# Practical 1
 
+## Requirements
+- R and RStudio must be installed prior to the session - you can follow the instructions below
+  - [Install R](https://cran.r-project.org/)
+  - [Install RStudio](https://posit.co/download/rstudio-desktop/)
+  
 ## Lecture
+<iframe 
+  src="https://docs.google.com/presentation/d/10LFAUpZFSsJ2ZsJH6y70J7RfVGb97OfR/preview" 
+  width="640" 
+  height="480" 
+  frameborder="0" 
+  allow="autoplay">
+</iframe>
 
 <!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 -->
 
-<!--<iframe src="GOOGLE SLIDES LINK/preview" width="640" height="480" allow="autoplay"></iframe>  
--->
 
-<!--<iframe src="https://docs.google.com/presentation/d/1vnbTtlq4bfxTId1XHu9mn1toE_AIpapm/preview" width="640" height="480" allow="autoplay"></iframe> --> 
+
+
+
 
 ## Lab
 
-<!--<iframe width="640" height="360" src="https://www.youtube.com/embed/RhdK7_lw2kU?si=fOJ6jGvPVd3-nWqw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->

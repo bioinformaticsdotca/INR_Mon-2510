@@ -1,6 +1,20 @@
-# Module 2
+# Practical 2
+
+## Requirements
+
+The `tidyverse` package is required for this section and can be installed with:
+
+`install.packages('tidyverse')`
 
 ## Lecture
 
+<iframe src="https://docs.google.com/presentation/d/1Phl87n9UiTmtwdQdq3tPvOVuc_Op__dL/preview" width="640" height="480" frameborder="0" allow="autoplay">
+
+</iframe>
+
+```{=html}
+<!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+-->
+```
 
 ## Lab

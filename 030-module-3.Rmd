@@ -1,6 +1,24 @@
-# Module 3
+# Practical 3
+
+## Requirements
+
+The `tidyverse` and `nnet` packages are required for this section and can be installed with:
+
+`install.packages(c("tidyverse","nnet"))`
+
+You will also need previous experience with probability to best benefit from the materials.
 
 ## Lecture
 
+<iframe 
+  src="https://docs.google.com/presentation/d/1_n8ycxON2l7g1Wo_OOEVX1oXYNI-KNxt/preview" 
+  width="640" 
+  height="480" 
+  frameborder="0" 
+  allow="autoplay">
+</iframe>
+
+<!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+-->
 
 ## Lab
