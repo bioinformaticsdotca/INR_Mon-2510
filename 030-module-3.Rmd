@@ -22,3 +22,5 @@ You will also need previous experience with probability to best benefit from the
 -->
 
 ## Lab
+
+Materials for this practical can be downloaded [from here](https://github.com/AudreyBaguette/CBW25_Introduction-to-Statistics-in-R).

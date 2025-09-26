@@ -26,3 +26,4 @@
 
 ## Lab
 
+Materials for this practical can be downloaded [from here](https://github.com/MJousse/IntroToR/).

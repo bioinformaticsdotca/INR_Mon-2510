@@ -14,3 +14,5 @@
 -->
 
 ## Lab
+
+Materials from this section can be downloaded [from here](https://github.com/aosakwe/CBW-INR-RMarkdown-Quarto).

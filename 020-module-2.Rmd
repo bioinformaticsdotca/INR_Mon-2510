@@ -18,3 +18,5 @@ The `tidyverse` package is required for this section and can be installed with:
 ```
 
 ## Lab
+
+Materials for this practical can be downloaded [from here](https://github.com/AudreyBaguette/CBW25_Data-Wrangling).

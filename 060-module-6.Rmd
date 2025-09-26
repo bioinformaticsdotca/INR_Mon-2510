@@ -6,6 +6,8 @@ This section will require access to the git software on your system. If you do n
 
 - [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
+You will also need a [GitHub account](http://github.com/).
+
 ## Lecture
 
 <iframe 
@@ -20,3 +22,5 @@ This section will require access to the git software on your system. If you do n
 -->
 
 ## Lab
+
+Materials from this section can be downloaded [from here](https://github.com/aosakwe/CBW-INR-Git-With-R).
