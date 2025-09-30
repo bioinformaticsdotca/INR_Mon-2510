@@ -7,7 +7,7 @@
 ### Day 1 — October 1, 2025
 
 | Time (ET) | Activity |
-|--------------------------------------|----------------------------------|
+|----|----|
 | 08:00 | Arrivals & Check-in (30min) |
 | 08:30 | Welcome (Coordinator) |
 | 09:00 | Practical 1: Introduction to Base R & RStudio *(Maximiliane Jousse)* |
@@ -24,7 +24,7 @@
 ### Day 2 — October 2, 2025
 
 | Time (ET) | Activity |
-|--------------------------------------|----------------------------------|
+|----|----|
 | 08:30 | Arrivals (30min) |
 | 09:00 | Practical 4: Data Visualization *(Han Yu)* |
 | 11:00 | Break (30min) |
