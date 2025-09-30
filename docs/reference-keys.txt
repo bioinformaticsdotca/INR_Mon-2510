@@ -17,8 +17,7 @@ maximiliane-jousse
 tas
 daniel-gurman
 rodrigo-migueles-ramirez
-data
-course-data-downloads
+materials-requirements
 part-practicals
 practical-1
 requirements

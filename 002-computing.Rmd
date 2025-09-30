@@ -1,3 +1,4 @@
+```{=html}
 <!--
 IF YOUR WORKSHOP DOES NOT INCLUDE COMPUTE:
 - REMOVE "AND COMPUTE SETUP" FROM THE TOP-LEVEL HEADER
@@ -7,11 +8,18 @@ IF YOUR WORKSHOP INCLUDES COMPUTE:
 - AFTER THE WORKSHOP, ADD DATA DOWNLOAD LINKS, AWS MACHINE IMAGE INSTRUCTIONS, ETC.
 - IF IT IS MORE APPROPRIATE, YOU CAN INCLUDE THE DATA DOWNLOAD LINKS IN EACH OF THE MODULES.
 -->
+```
 
-# Data
+# Materials & Requirements
 
-#### Course data downloads
-Coming soon!
+R and RStudio must be installed for the bootcamp - you can follow the instructions below - [Install R](https://cran.r-project.org/) - [Install RStudio](https://posit.co/download/rstudio-desktop/)
 
+The `tidyverse` and `nnet` packages are required for multiple practicals and can be installed with:
 
+`install.packages(c("tidyverse","nnet"))`
 
+You will also require access to the git software on your system. If you do not have git installed, you can do so from the following link:
+
+-   [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+You will also need a [GitHub account](http://github.com/).
