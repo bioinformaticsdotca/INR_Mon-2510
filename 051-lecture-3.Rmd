@@ -15,4 +15,4 @@
 
 ## Lab
 
-Materials for this practical can be downloaded [from here](https://github.com/AudreyBaguette/CBW25_Introduction-to-Statistics-in-R).
+Materials for this practical can be downloaded [from here]().
