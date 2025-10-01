@@ -1,4 +1,4 @@
-# (PART) Practicals {-}
+# (PART) Modules {-}
 
 # Practical 1
 
