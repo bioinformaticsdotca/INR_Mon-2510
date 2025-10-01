@@ -1,0 +1,15 @@
+# Lecture 1 - Health Policy Simulation in R
+
+**Lecturers:** Dr. Alton Russell
+
+## Lecture
+
+<iframe src="" width="640" height="480" frameborder="0" allow="autoplay">
+
+</iframe>
+
+```{=html}
+<!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+-->
+```
+

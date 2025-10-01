@@ -1,18 +1,24 @@
-# Lecture 3 - Dr. Celia Greenwood and Anna K. Naumova
+# Lecture 3 - Smoothing Curves for DNA Methylation
+
+**Lecturers:** Dr. Celia Greenwood and Anna K. Naumova
 
 ## Lecture
 
-<iframe 
-  src="https://docs.google.com/presentation/d/1trPwbP7dMP4YFQov77wJfKFjzWIKLqQA/preview" 
-  width="640" 
-  height="480" 
-  frameborder="0" 
-  allow="autoplay">
+<iframe src="https://docs.google.com/presentation/d/1trPwbP7dMP4YFQov77wJfKFjzWIKLqQA/preview" width="640" height="480" frameborder="0" allow="autoplay">
+
 </iframe>
 
+```{=html}
 <!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 -->
+```
 
 ## Lab
 
-Materials for this practical can be downloaded [from here]().
+Materials for this practical can be downloaded from this [Google Drive Link](https://drive.google.com/drive/folders/10MxDjaNVwez6mTuGxVRv98r7I8U9mHpt). You will need to download the following files from the folder:
+
+-   smoothingSimulatedData.forWorkshop.Rmd (open this file in RStudio)
+
+-   Tex14_methCounts.Rdata (Dataset 1)
+
+-   Tex14unmethCounts.Rdata (Dataset 2)

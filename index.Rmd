@@ -1,4 +1,4 @@
---- 
+---
 title: "Introduction to R 2025"
 author: 'Faculty: Celia Greenwood, Alexandre Reynaud, W. Alton Russell, Anna K. Naumova,
   Adrien Osakwe, Han Yu, Audrey Baguette, Maximiliane Jousse, Daniel Gurman, Rodrigo
@@ -18,11 +18,11 @@ github-repo: "bioinformaticsdotca/INR_Mon-2510"
 favicon: img/favicon.ico
 ---
 
-# (PART) Introduction {-}
+# (PART) Introduction {.unnumbered}
 
 # Workshop Info
 
-Welcome to the 2025 Introduction to R Canadian Bioinformatics Workshop webpage!  
+Welcome to the 2025 Introduction to R Canadian Bioinformatics Workshop webpage!
 
 ## Class Photo
 
