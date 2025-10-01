@@ -3,7 +3,7 @@
 ## Lecture
 
 <iframe 
-  src="https://docs.google.com/presentation/d/1trPwbP7dMP4YFQov77wJfKFjzWIKLqQA/edit/preview" 
+  src="https://docs.google.com/presentation/d/1trPwbP7dMP4YFQov77wJfKFjzWIKLqQA/preview" 
   width="640" 
   height="480" 
   frameborder="0" 
