@@ -4,7 +4,7 @@
 
 ## Lecture
 
-<iframe src="" width="640" height="480" frameborder="0" allow="autoplay">
+<iframe src="https://docs.google.com/presentation/d/1bLMp_F5Ro9MY5X7RzVVUPXeh4PFlJ6Ic/preview" width="640" height="480" frameborder="0" allow="autoplay">
 
 </iframe>
 

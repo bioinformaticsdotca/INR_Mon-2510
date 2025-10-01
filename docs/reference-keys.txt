@@ -18,7 +18,7 @@ tas
 daniel-gurman
 rodrigo-migueles-ramirez
 materials-requirements
-part-practicals
+part-modules
 practical-1
 requirements
 lecture

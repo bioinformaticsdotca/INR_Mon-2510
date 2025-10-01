@@ -22,3 +22,5 @@ Materials for this practical can be downloaded from this [Google Drive Link](htt
 -   Tex14_methCounts.Rdata (Dataset 1)
 
 -   Tex14unmethCounts.Rdata (Dataset 2)
+
+Note: make sure all three files are stored in the same folder after downloading it.
