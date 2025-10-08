@@ -51,7 +51,7 @@ In the first module of the workshop, the goals are to familiarize with the langu
 -   Seeking help
 -   Installing packages
 
-[**Script**](./01-IntrotoR_Maximiliane_Jousse/Exercises/scripts/01GettingStarted.Rmd)
+[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/01GettingStarted.Rmd)
 
 ##### 2. Data types: attributes and built-in functions
 
