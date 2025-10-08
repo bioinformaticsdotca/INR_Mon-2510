@@ -76,6 +76,71 @@
 </script>
 
 
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -128,6 +193,7 @@
 <ul>
 <li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#intro-to-r"><i class="fa fa-check"></i>Intro To R</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#script"><i class="fa fa-check"></i><strong>Script:</strong></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html"><i class="fa fa-check"></i>Practical 2</a>
 <ul>
@@ -250,14 +316,131 @@
 </div>
 <div id="workshop-structure" class="section level4 hasAnchor">
 <h4>Workshop Structure<a href="practical-1.html#workshop-structure" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Slides can be found <a href="./IntroToR/Slides/IntroToR_CBHWorkshop.pptx">here</a>.</p>
+<!--
+Slides can be found [here](./IntroToR/Slides/IntroToR_CBHWorkshop.pptx).
+-->
 <div id="r-basics" class="section level5 hasAnchor">
 <h5>1. R basics<a href="practical-1.html#r-basics" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>In the first module of the workshop, the goals are to familiarize with the language and the logic behind it; Get started with R studio and create your first project; Create your first <code>.R</code> file to write down the live code; and get comfortable with installing packages.</p>
 <p><strong>Module content:</strong>
 - Seeking help
 - Installing packages</p>
-<p><a href="./IntroToR/Exercises/scripts/01GettingStarted.Rmd"><strong>Script</strong></a></p>
+</div>
+</div>
+</div>
+</div>
+<div id="script" class="section level2 hasAnchor">
+<h2><strong>Script:</strong><a href="practical-1.html#script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>title: “Intro to R 01: Getting Started”
+author:
+- name: “Maximiliane Jousse”
+affiliation: Workshop Lead
+- name: Larisa M. Soto
+affiliation: Original Material
+- name: Adrien Osakwe
+affiliation: Original Material
+- name: Xiaoqi Xie
+affiliation: Original Material
+date: “08 October, 2025”
+output:
+rmdformats::html_clean:
+toc: true
+thumbnails: false
+floating: true
+highlight: kate
+use_bookdown: true
+—</p>
+<div id="intro" class="section level6 hasAnchor">
+<h6>Intro<a href="practical-1.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div id="r-markdown-file" class="section level7">
+<p class="heading">R Markdown File</p>
+<p>R Markdown files act as notebooks which can make it easier to document and share code. All the results from the code as well as your comments and descriptions can be combined into one, tidy document. This makes it easy to combine insights, protocols and figures in a practical and organized fashion.</p>
+</div>
+<div id="setting-up" class="section level7">
+<p class="heading">Setting up:</p>
+<div id="installing-a-package" class="section level8">
+<p class="heading">Installing a package</p>
+<p>To install a package, we simply use the function <code>install.packages()</code> with the name of the desired package in quotation marks (i.e. as a string!)</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="practical-1.html#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;packageName1&quot;)</span></span>
+<span id="cb1-2"><a href="practical-1.html#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="practical-1.html#cb1-3" tabindex="-1"></a><span class="co"># for multiple packages:</span></span>
+<span id="cb1-4"><a href="practical-1.html#cb1-4" tabindex="-1"></a><span class="co"># install.packages(c(&quot;packageName1&quot;, &quot;packageName2&quot;))</span></span></code></pre></div>
+</div>
+<div id="loading-packages" class="section level8">
+<p class="heading">Loading packages</p>
+<p>To load a package you simply use the <code>library()</code> function. Note function takes the name of an installed library without quotation marks.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="practical-1.html#cb2-1" tabindex="-1"></a><span class="co">#library(packageName1)</span></span></code></pre></div>
+</div>
+</div>
+<div id="r-basics-1" class="section level7">
+<p class="heading">R Basics:</p>
+<div id="variable-names" class="section level8">
+<p class="heading">Variable names</p>
+<p>There are several naming conventions in coding: <code>snake_case</code> and <code>CamelCase</code> are the most common. There is no particular preference in R for naming, but make sure you are <strong>consistent</strong> and that your variable names are <strong>meaningful</strong>.</p>
+</div>
+<div id="case-sensitivity" class="section level8">
+<p class="heading">Case sensitivity</p>
+<p>R is case sensitive. This means that <code>var1</code> and <code>Var1</code> represent two different objects.</p>
+</div>
+<div id="based-indexing" class="section level8">
+<p class="heading">1 based indexing</p>
+<p>Indexing (calling elements in a list) in R starts with 1. The first element has index 1, the second 2, etc..</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="practical-1.html#cb3-1" tabindex="-1"></a><span class="co"># Initialising a vector</span></span>
+<span id="cb3-2"><a href="practical-1.html#cb3-2" tabindex="-1"></a>var1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>) <span class="co"># note &#39; and &quot; are the same in R :)</span></span>
+<span id="cb3-3"><a href="practical-1.html#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="practical-1.html#cb3-4" tabindex="-1"></a><span class="co"># Here we call elements 1 and 2 of var1</span></span>
+<span id="cb3-5"><a href="practical-1.html#cb3-5" tabindex="-1"></a>var1[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot;</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="practical-1.html#cb5-1" tabindex="-1"></a>var1[<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;b&quot;</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="practical-1.html#cb7-1" tabindex="-1"></a><span class="co">#Now we look at how long var1 is using the length() function</span></span>
+<span id="cb7-2"><a href="practical-1.html#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="practical-1.html#cb7-3" tabindex="-1"></a><span class="fu">length</span>(var1)</span></code></pre></div>
+<pre><code>## [1] 4</code></pre>
+</div>
+</div>
+</div>
+<div id="exercises" class="section level6 hasAnchor">
+<h6>Exercises<a href="practical-1.html#exercises" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div id="create-a-file" class="section level7">
+<p class="heading">1. Create a file</p>
+<p>Create a new .R script in R studio. Save it as <code>Script01</code> in the <code>IntroToR</code> folder.</p>
+</div>
+<div id="install-base-packages" class="section level7">
+<p class="heading">2. Install base packages</p>
+<p>In <code>Script01</code>, install the following packages: <code>"data.table"</code>,<code>"datasets"</code>,<code>"devtools"</code>,<code>"dplyr"</code>,<code>"ggplot2"</code>,<code>"plyr"</code>,<code>"medicaldata"</code>,<code>"gapminder"</code>,<code>"RColorBrewer"</code>,<code>"rmarkdown"</code>,<code>"stringr"</code>,<code>"tidyr"</code>,<code>"tidyverse"</code>,<code>"viridis"</code>.</p>
+</div>
+<div id="load-a-package" class="section level7">
+<p class="heading">3. Load a package</p>
+<p>Load all packages.</p>
+</div>
+</div>
+<div id="solutions" class="section level6 hasAnchor">
+<h6>Solutions<a href="practical-1.html#solutions" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div id="creating-a-file" class="section level7">
+<p class="heading">1. Creating a file</p>
+</div>
+<div id="install-base-packages-1" class="section level7">
+<p class="heading">2. Install base packages</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="practical-1.html#cb9-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;data.table&quot;</span>,<span class="st">&quot;datasets&quot;</span>,<span class="st">&quot;devtools&quot;</span>,<span class="st">&quot;dplyr&quot;</span>,<span class="st">&quot;ggplot2&quot;</span>,<span class="st">&quot;plyr&quot;</span>,<span class="st">&quot;medicaldata&quot;</span>,<span class="st">&quot;gapminder&quot;</span>,<span class="st">&quot;RColorBrewer&quot;</span>,<span class="st">&quot;rmarkdown&quot;</span>,<span class="st">&quot;stringr&quot;</span>,<span class="st">&quot;tidyr&quot;</span>,<span class="st">&quot;tidyverse&quot;</span>,<span class="st">&quot;viridis&quot;</span>))</span></code></pre></div>
+</div>
+<div id="load-packages" class="section level7">
+<p class="heading">3. load packages</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="practical-1.html#cb10-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb10-2"><a href="practical-1.html#cb10-2" tabindex="-1"></a><span class="fu">library</span>(datasets)</span>
+<span id="cb10-3"><a href="practical-1.html#cb10-3" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb10-4"><a href="practical-1.html#cb10-4" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-5"><a href="practical-1.html#cb10-5" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-6"><a href="practical-1.html#cb10-6" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb10-7"><a href="practical-1.html#cb10-7" tabindex="-1"></a><span class="fu">library</span>(medicaldata)</span>
+<span id="cb10-8"><a href="practical-1.html#cb10-8" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb10-9"><a href="practical-1.html#cb10-9" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb10-10"><a href="practical-1.html#cb10-10" tabindex="-1"></a><span class="fu">library</span>(rmarkdown)</span>
+<span id="cb10-11"><a href="practical-1.html#cb10-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb10-12"><a href="practical-1.html#cb10-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb10-13"><a href="practical-1.html#cb10-13" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-14"><a href="practical-1.html#cb10-14" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code></pre></div>
+</div>
 </div>
 <div id="data-types-attributes-and-built-in-functions" class="section level5 hasAnchor">
 <h5>2. Data types: attributes and built-in functions<a href="practical-1.html#data-types-attributes-and-built-in-functions" class="anchor-section" aria-label="Anchor link to header"></a></h5>
@@ -268,45 +451,54 @@
 - Factors
 - Data frames
 - Arrays
-- Coercion</p>
-<p><a href="./IntroToR/Exercises/scripts/02DataTypes.Rmd"><strong>Script</strong></a></p>
-</div>
-<div id="control-structures" class="section level5 hasAnchor">
-<h5>3. Control structures<a href="practical-1.html#control-structures" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>In this module, participants learn to use if-else, while, and for loops; as well as building their own functions; and what packages are.</p>
-<p><strong>Module Content</strong>
+- Coercion
+<!--
+[**Script**](./IntroToR/Exercises/scripts/02DataTypes.Rmd)
+
+##### 3. Control structures
+In this module, participants learn to use if-else, while, and for loops; as well as building their own functions; and what packages are.
+
+**Module Content**
 * If..Else
 * While loop
 * For loop
 * Functions
-* Packages</p>
-<p><a href="./IntroToR/Exercises/scripts/03ControlStructuresAndFunctions.Rmd"><strong>Script</strong></a></p>
-</div>
-<div id="basic-data-manipulation" class="section level5 hasAnchor">
-<h5>4. Basic data manipulation<a href="practical-1.html#basic-data-manipulation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>In this module participants will learn how to read/write data to/from files with different formats (.tsv, .csv); become familiar with basic data-frame operations; (3) index and subset data frames using base R; manipulate individual data frame columns.</p>
-<p><strong>Module content:</strong>
-- Reading/writing data
-- Exploring data frames</p>
-<p><a href="./IntroToR/Exercises/scripts/04BasicDataManipulation.Rmd"><strong>Script</strong></a></p>
-</div>
-<div id="advanced-data-manipulation" class="section level5 hasAnchor">
-<h5>5. Advanced data manipulation<a href="practical-1.html#advanced-data-manipulation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>The fourth module participants will familiarize with the dplyr syntax; create pipes with the operator <code>%&gt;%</code>; perform operations on data frames using dplyr and tidyr functions; learn how to join columns and rows of different data frames; and implement functions from external packages by reading their documentation in R.</p>
-<p><strong>Module content:</strong>
-- Handling data frames with dplyr
-- Other useful packages
-- Hands-on: advanced data manipulation</p>
-<p><a href="./IntroToR/Exercises/scripts/05AdvancedDataManipulation.Rmd"><strong>Script</strong></a></p>
-</div>
-<div id="generating-visual-outputs" class="section level5 hasAnchor">
-<h5>6. Generating visual outputs<a href="practical-1.html#generating-visual-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>This section will show participants how to (1) Create basic plots using base R functions; (2) Understand how to connect data frames with ggplot2; (3) create basic graphs with ggplot2; (4) use factors to customize graphics in ggplot2; (5) use RMarkdown to generate customized reports.</p>
-<p><strong>Module content:</strong>
-- Figures with base R
-- Graphics with <code>ggplot2</code></p>
-<p><a href="./IntroToR/Exercises/scripts/06GeneratingOutputs.Rmd"><strong>Script</strong></a></p>
-</div>
+* Packages
+
+[**Script**](./IntroToR/Exercises/scripts/03ControlStructuresAndFunctions.Rmd)
+
+##### 4. Basic data manipulation
+
+In this module participants will learn how to read/write data to/from files with different formats (.tsv, .csv); become familiar with basic data-frame operations; (3) index and subset data frames using base R; manipulate individual data frame columns.
+
+**Module content:**
+-   Reading/writing data
+-   Exploring data frames
+
+[**Script**](./IntroToR/Exercises/scripts/04BasicDataManipulation.Rmd)
+
+##### 5. Advanced data manipulation
+
+The fourth module participants will familiarize with the dplyr syntax; create pipes with the operator `%>%`; perform operations on data frames using dplyr and tidyr functions; learn how to join columns and rows of different data frames; and implement functions from external packages by reading their documentation in R.
+
+**Module content:**
+-   Handling data frames with dplyr
+-   Other useful packages
+-   Hands-on: advanced data manipulation
+
+[**Script**](./IntroToR/Exercises/scripts/05AdvancedDataManipulation.Rmd)
+
+##### 6. Generating visual outputs
+
+This section will show participants how to (1) Create basic plots using base R functions; (2) Understand how to connect data frames with ggplot2; (3) create basic graphs with ggplot2; (4) use factors to customize graphics in ggplot2; (5) use RMarkdown to generate customized reports.
+
+**Module content:**
+-   Figures with base R
+-   Graphics with `ggplot2`
+
+[**Script**](./IntroToR/Exercises/scripts/06GeneratingOutputs.Rmd)
+
+--></p>
 </div>
 <div id="repo-structure" class="section level4 hasAnchor">
 <h4>Repo structure<a href="practical-1.html#repo-structure" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -344,7 +536,6 @@
 - Higgins P (2021). <em>medicaldata: Data Package for Medical Datasets</em>. <a href="doi:10.32614/CRAN.package.medicaldata" class="uri">doi:10.32614/CRAN.package.medicaldata</a> <a href="https://doi.org/10.32614/CRAN.package.medicaldata" class="uri">https://doi.org/10.32614/CRAN.package.medicaldata</a>, R package version 0.2.0, <a href="https://CRAN.R-project.org/package=medicaldata" class="uri">https://CRAN.R-project.org/package=medicaldata</a>.</p>
 <p><em>Workshop created as part of the McGill Initiative in Computational Medicine</em></p>
 
-</div>
 </div>
 </div>
 </div>
