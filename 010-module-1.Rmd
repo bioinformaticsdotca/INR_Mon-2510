@@ -51,7 +51,7 @@ In the first module of the workshop, the goals are to familiarize with the langu
 -   Seeking help
 -   Installing packages
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/01GettingStarted.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/01GettingStarted.Rmd)
 
 ##### 2. Data types: attributes and built-in functions
 
@@ -65,7 +65,7 @@ In this section participants will understand the differences between classes, ob
 -   Arrays
 -   Coercion
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/02DataTypes.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/02DataTypes.Rmd)
 
 ##### 3. Control structures
 In this module, participants learn to use if-else, while, and for loops; as well as building their own functions; and what packages are.
@@ -77,7 +77,7 @@ In this module, participants learn to use if-else, while, and for loops; as well
 * Functions
 * Packages
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/03ControlStructuresAndFunctions.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/03ControlStructuresAndFunctions.Rmd)
 
 ##### 4. Basic data manipulation
 
@@ -87,7 +87,7 @@ In this module participants will learn how to read/write data to/from files with
 -   Reading/writing data
 -   Exploring data frames
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/04BasicDataManipulation.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/04BasicDataManipulation.Rmd)
 
 ##### 5. Advanced data manipulation
 
@@ -98,7 +98,7 @@ The fourth module participants will familiarize with the dplyr syntax; create pi
 -   Other useful packages
 -   Hands-on: advanced data manipulation
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/05AdvancedDataManipulation.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/05AdvancedDataManipulation.Rmd)
 
 ##### 6. Generating visual outputs
 
@@ -108,7 +108,7 @@ This section will show participants how to (1) Create basic plots using base R f
 -   Figures with base R
 -   Graphics with `ggplot2`
 
-[**Script**](./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/06GeneratingOutputs.Rmd)
+[**Script**](./Practical1_IntroToR_Maximiliane_Jousse/Exercises/scripts/06GeneratingOutputs.Rmd)
 
 #### Repo structure
 ```

@@ -1,0 +1,121 @@
+---
+title: "Intro to R 01: Getting Started"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Intro
+
+## R Markdown File
+
+R Markdown files act as notebooks which can make it easier to document and share code. All the results from the code as well as your comments and descriptions can be combined into one, tidy document. This makes it easy to combine insights, protocols and figures in a practical and organized fashion.
+
+## Setting up:
+
+### Installing a package
+
+To install a package, we simply use the function `install.packages()` with the name of the desired package in quotation marks (i.e. as a string!)
+
+```{r}
+# install.packages("packageName1")
+
+# for multiple packages:
+# install.packages(c("packageName1", "packageName2"))
+
+```
+
+### Loading packages
+
+To load a package you simply use the `library()` function. Note function takes the name of an installed library without quotation marks.
+
+```{r}
+
+#library(packageName1)
+
+```
+
+## R Basics:
+
+### Variable names
+
+There are several naming conventions in coding: `snake_case` and `CamelCase` are the most common. There is no particular preference in R for naming, but make sure you are **consistent** and that your variable names are **meaningful**.
+
+### Case sensitivity
+
+R is case sensitive. This means that `var1` and `Var1` represent two different objects.
+
+### 1 based indexing
+
+Indexing (calling elements in a list) in R starts with 1. The first element has index 1, the second 2, etc..
+
+```{r}
+# Initialising a vector
+var1 <- c('a', 'b', "c", "d") # note ' and " are the same in R :)
+
+# Here we call elements 1 and 2 of var1
+var1[1]
+var1[2]
+
+#Now we look at how long var1 is using the length() function
+
+length(var1)
+
+```
+
+# Exercises
+
+## 1. Create a file
+
+Create a new .R script in R studio. Save it as `Script01` in the `IntroToR` folder.
+
+## 2. Install base packages
+
+In `Script01`, install the following packages: `"data.table"`,`"datasets"`,`"devtools"`,`"dplyr"`,`"ggplot2"`,`"plyr"`,`"medicaldata"`,`"gapminder"`,`"RColorBrewer"`,`"rmarkdown"`,`"stringr"`,`"tidyr"`,`"tidyverse"`,`"viridis"`.
+
+## 3. Load a package
+
+Load all packages.
+
+# Solutions
+
+## 1. Creating a file
+
+## 2. Install base packages
+
+```{r, eval = F}
+install.packages(c("data.table","datasets","devtools","dplyr","ggplot2","plyr","medicaldata","gapminder","RColorBrewer","rmarkdown","stringr","tidyr","tidyverse","viridis"))
+```
+
+## 3. load packages
+
+```{r, eval = F}
+library(data.table)
+library(datasets)
+library(devtools)
+library(dplyr)
+library(ggplot2)
+library(plyr)
+library(medicaldata)
+library(gapminder)
+library(RColorBrewer)
+library(rmarkdown)
+library(stringr)
+library(tidyr)
+library(tidyverse)
+library(viridis)
+```
