@@ -1,0 +1,392 @@
+---
+title: "Intro to R 06: Generating Outputs"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Examples
+
+Here we go over the material.
+
+We will continue using the palmer penguins as an example.
+
+```{r}
+library(ggplot2)
+library(palmerpenguins)
+library(tidyr)
+library(dplyr)
+
+df <- penguins
+```
+
+## Basic Plots
+
+R has a number of basic plots. The most basic of these functions is `plot()`.
+
+```{r}
+plot(df$species, df$bill_length_mm)
+```
+
+```{r}
+plot(df$bill_depth_mm, df$bill_length_mm)
+```
+
+A similar function exists to look at distributions: `hist()`
+
+```{r}
+hist(df$body_mass_g)
+```
+
+## Using `ggplot2`
+
+Most visualizations, however, are done with the package `ggplot2`. This package allows for more control over the graphs, and produces better visualizations. Furthermore, `ggplot2` is tailored to making visuals from data frames.
+
+In this section, we go over the basics of `ggplot2`, but <https://ggplot2.tidyverse.org/> has a handy cheatsheet!
+
+The basic architecture of a ggplot2 plot is `ggplot(df, aes(x, y)) + ...`, where `df` represents the data frame of data, `x` your x variable, and `y` your y variable. `aes` stands for aesthetic. The type of plot is specified after the first call, for example a scatter plot is created via `ggplot(df, aes(x, y)) + geom_point()`.
+
+Let's first set up a color scheme:
+
+```{r}
+colorcode <- c("darkorange","purple","cyan4") #scheme from citation(palmerpenguins)
+```
+
+Now we look at the number of penguins of each species on each island. This calls for a bar chart; in ggplot you do not specify a `y` variable for a bar chart as this is automatically calculated. Instead, you supply a `fill` aesthetic.
+
+```{r}
+
+df %>%
+  ggplot(aes(x = island, fill = species))+
+  geom_bar()+
+  scale_fill_manual(values = colorcode, 
+                    guide = NULL) +
+  # basic theme
+  theme_minimal()
+
+```
+
+If we want to separate by species, we can use `facet_wrap()`:
+
+```{r}
+df %>% 
+  ggplot(aes(x = island, fill = species))+ 
+  geom_bar()+ 
+  scale_fill_manual(values = colorcode, guide = NULL) + 
+  theme_minimal()+
+  facet_wrap(.~species)
+```
+
+Note that the same plot can be created a different way, specifying the `y` aesthetic. Notice the differences!
+
+```{r}
+df %>% 
+  
+  # we calculate the number of penguins of each species at each island
+  group_by(island, species) %>%
+  summarise(n = n()) %>%
+  
+  #now we can specify n
+  ggplot(aes(x = island, y = n, fill = species))+ 
+  
+  # since we specify n, we need to tell the function via stat = "identity"
+  geom_bar(stat = "identity")+ 
+  scale_fill_manual(values = colorcode, guide = NULL) + 
+  theme_minimal()+
+  facet_wrap(.~species)
+```
+
+Lets look at bill length in each species.
+
+```{r}
+
+df %>%
+  ggplot(aes(x = species, y = bill_length_mm, fill = species ))+
+  geom_boxplot()+
+  scale_fill_manual(values = colorcode, guide = NULL) + 
+  theme_minimal()
+
+```
+
+Now lets plot the bill length and depth against each other:
+
+```{r}
+df %>% 
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species, shape = island))+ 
+  geom_point()+ 
+  scale_color_manual(values = colorcode, guide = NULL) + 
+  theme_minimal()
+```
+
+Now Lets look at how many penguins of each sex and species there are using a bar chart.
+
+```{r}
+
+df %>% 
+  ggplot(aes(x = sex, fill = species)) +
+  
+  # alpha corresponds to transparency. the smaller, the more transparent
+  geom_bar(alpha = 0.8) +
+  
+  # code to control the 'fill' aes
+  scale_fill_manual(values = colorcode, 
+                    guide = NULL) +
+  
+  # basic theme
+  theme_minimal() +
+  
+  # bringing multiple 
+  facet_wrap(~species, ncol = 1) +
+  coord_flip()
+
+# note this snippet of code is adapted from citation("palmerpenguins")
+```
+
+Let's look at the distribution of body mass by sex.
+
+```{r}
+
+df %>%
+  ggplot(aes(x = body_mass_g, fill = species))+
+  geom_histogram(alpha = 0.8) +
+  scale_fill_manual(values = colorcode, 
+                    guide = NULL) +
+  theme_minimal() +
+  facet_wrap(. ~ sex)
+
+```
+
+If we want to separate all of them out in a nice grid format, we can use use `facet_grid()` :
+
+```{r}
+df %>%
+  ggplot(aes(x = body_mass_g, fill = species))+
+  geom_histogram(alpha = 0.8) +
+  scale_fill_manual(values = colorcode, 
+                    guide = NULL) +
+  theme_minimal() +
+  facet_grid(species ~ sex)
+```
+
+Finally, lets look at this data over time. Specifically, the number of penguins found each year!
+
+```{r}
+
+df %>%
+  group_by(year, species) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x = year, y = n, color = species))+
+  geom_point()+
+  geom_line()+
+  scale_color_manual(values = colorcode, 
+                    guide = NULL) +
+  theme_minimal()+
+  
+  # here we specify the x and y axes. We change the x axis limits so that we don't end up with 2007.5 and 2008.5 in the graph.
+  xlab("Year")+
+  ylab("Number of penguins")+
+  scale_x_continuous(breaks = c(2007, 2008, 2009))
+
+
+```
+
+Many more graphs exist, and many aspects of a graph can be modified in `ggplot2`. The best way to learn is by doing them!
+
+# Exercises
+
+You can do these in the notebook or in a separate `.R` script.
+
+For these exercises, you need libraries `ggplot2`, `medicaldata`, `dplyr` and `tidyr`.
+
+```{r}
+
+```
+
+## 1. Lets start by looking at the clinics.
+
+### a) How many clinics participated in the study
+
+```{r}
+
+```
+
+### b) How many valid tests were performed on each one?
+
+```{r}
+
+```
+
+### c) Did the testing trend vary over time?
+
+```{r}
+
+```
+
+## 2. Now Looking at the patients.
+
+### a) How many patients tested positive vs negative in the first 100 days of the pandemic?
+
+```{r}
+
+```
+
+### b) Do you notice any difference with the age of the patients?
+
+**Hint: You can make two age groups and calculate the percentage each age group in positive vs negative tests.**
+
+```{r}
+
+```
+
+## 3. Processing times
+
+### a) Look at the specimen processing time to receipt, did the sample processing times improve over the first 100 days of the pandemic?
+
+```{r}
+
+  
+```
+
+### b) Plot the median processing times of each day over the course of the pandemic and then compare the summary statistics of the first 50 vs the last 50 days.
+
+```{r}
+
+```
+
+## 4. Bonus - Higher viral loads are detected in less PCR cycles. What can you observe about the viral load of positive vs negative samples. Do you notice anything differences in viral load across ages in the positive samples?
+
+Hint: Also split the data into two age groups and try using geom_boxplot()
+
+```{r}
+
+```
+
+# Solutions
+
+```{r, eval = F}
+suppressPackageStartupMessages(library(ggplot2)) 
+suppressPackageStartupMessages(library(medicaldata))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
+```
+
+Use the `covid_testing` data set and everything you've learned so far to answer the following questions:
+
+## 1.Lets start by looking at the clinics.
+
+```{r}
+covid <- medicaldata::covid_testing
+```
+
+### a) How many clinics participated in the study
+
+```{r, eval = F}
+clinics<- covid %>%
+          dplyr::select(subject_id,clinic_name,result,pan_day) %>%
+          dplyr::distinct()
+length(unique(clinics$clinic_name))
+```
+
+### b) How many valid tests were performed on each one?
+
+```{r, eval = F}
+clinics %>%
+  dplyr::filter(result!="invalid") %>%
+  dplyr::group_by(clinic_name) %>%
+  dplyr::summarize(n_test = length(clinic_name)) %>%
+  dplyr::arrange(desc(n_test))
+```
+
+### c) Did the testing trend vary over time?
+
+```{r, eval = F}
+covid %>%
+  filter(pan_day<=100) %>%
+  group_by(pan_day) %>%
+  summarize(n=length(result)) %>%
+  ggplot(.,aes(x=pan_day,y=n))+
+    geom_point()+
+    geom_line()+
+    ylab("Number of tests per day")+
+    xlab("Pandemic day")
+```
+
+## 2. Now Looking at the patients.
+
+### a) How many patients tested positive vs negative in the first 100 days of the pandemic?
+
+```{r, eval = F}
+covid %>%
+  filter(result!="invalid" & pan_day<=100) %>%
+  group_by(result) %>%
+  summarize(n=length(subject_id))
+```
+
+### b) Do you notice any difference with the age of the patients?
+
+**Hint: You can make two age groups and calculate the percentage each age group in positive vs negative tests.**
+
+```{r, eval = F}
+tsts_age<-covid %>%
+            filter(result!="invalid" & pan_day<=100) %>%
+            mutate(age_group=ifelse(age<=21,"children","adults")) %>%
+            group_by(age_group,result) %>%
+            summarize(n=length(subject_id)) %>%
+            mutate(percent_total=n/sum(n)*100)
+tsts_age
+```
+
+## 3. Processing times
+
+### a) Look at the specimen processing time to receipt, did the sample processing times improve over the first 100 days of the pandemic?
+
+```{r, eval = F}
+covid %>%
+  group_by(pan_day) %>%
+  dplyr::summarise(median_col_rec_tat=median(col_rec_tat)) %>%
+  ggplot(.,aes(x=pan_day,y=median_col_rec_tat)) +
+  geom_point()+
+  geom_line()
+```
+
+### b) Plot the median processing times of each day over the course of the pandemic and then compare the summary statistics of the first 50 vs the last 50 days.
+
+```{r, eval = F}
+covid %>%
+  mutate(pan_day_group=ifelse(pan_day<50,"first_50","last_50")) %>%
+  group_by(pan_day_group) %>%
+  dplyr::summarise(mean_col_rec_tat=mean(col_rec_tat),
+                   median_col_rec_tat=median(col_rec_tat),
+                   min_col_rec_tat=min(col_rec_tat),
+                   max_col_rec_tat=max(col_rec_tat))
+```
+
+## 4. Bonus - Higher viral loads are detected in less PCR cycles. What can you observe about the viral load of positive vs negative samples. Do you notice anything differences in viral load across ages in the positive samples?
+
+Hint: Also split the data into two age groups and try using geom_boxplot()
+
+```{r,eval = F, warning=FALSE}
+ggplot(covid,aes(y=ct_result,x=result,color=result))+
+  geom_boxplot()
+```
+
+```{r,eval = F, warning=FALSE}
+covid %>%
+  mutate(age_group=ifelse(age<=21,"children","adults")) %>%
+  ggplot(.,aes(y=ct_result,x=result,color=age_group))+
+    geom_boxplot()
+```
