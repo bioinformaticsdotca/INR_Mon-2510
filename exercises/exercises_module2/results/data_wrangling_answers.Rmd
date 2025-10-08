@@ -1,0 +1,344 @@
+---
+title: "Data Wrangling"
+author: 
+- name: "Audrey Baguette"
+  affiliation: Workshop Lead
+- name: "Larisa M. Soto"
+  affiliation: Original Material
+- name: "Adrien Osakwe"
+  affiliation: Original Material
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+---
+
+# Loading libraries
+```{r Loading libraries}
+library(dplyr)
+library(tidyr)
+```
+
+
+# Selected dplyr functions
+
+## 1- Select
+Select permits to extract, and potentially rename, one or more columns of a data frame.
+```{r select doc}
+help(select)
+```
+### Examples
+Select the column "Species" from data frame iris
+```{r select 1}
+head(select(iris, Species))
+```
+Select the columns "Sepal.Length" and "Species" from data frame iris
+```{r select 2}
+head(select(iris, Sepal.Length, Species))
+```
+Select the columns "Sepal.Length" and "Species" from data frame iris AND rename "Sepal.Length" as "Sepal"
+```{r select 3}
+head(select(iris, Sepal = Sepal.Length, Species))
+```
+
+
+## 2- Filter
+Extract rows of a data frame, based on some conditions they need to meet.
+```{r filter doc}
+help(filter)
+```
+### Examples
+Select rows of Species "versicolor"
+```{r filter 1}
+filter(iris, Species == 'versicolor')
+```
+Select rows of Species "versicolor" AND Sepal.Length is smaller than 6
+```{r filter 2}
+filter(iris, Species == 'versicolor' & Sepal.Length < 6)
+```
+
+
+## 3- Group by
+Split a data frame in parts, based on the values contained in a column.
+```{r groupby doc}
+help(group_by)
+```
+### Example
+Group by Species
+```{r groupby 1}
+group_by(iris, Species)
+```
+
+
+## 4- Summarize
+Group by the values in a column, then produce a specified summary statistic.
+```{r summarize doc}
+help(summarize)
+```
+### Examples
+Get the mean Petal.Length
+```{r summarize 1}
+summarize(iris, mean(Petal.Length))
+```
+Get the mean Petal.Length, Petal.Length standard deviation and mean Sepal.Length AND rename them
+```{r summarize 2}
+summarize(iris,
+          Mean_petal_length = mean(Petal.Length),
+          SD_petal_length = sd(Petal.Length),
+          Mean_sepal_length = mean(Sepal.Length))
+```
+
+
+## 5- Count
+Count the number of individuals (rows) in a given category.
+```{r count doc}
+help(count)
+```
+### Examples
+Count the number of individual in each species
+```{r count 1}
+count(iris, Species)
+```
+Count the number of individuals with Sepal.Length above 6
+```{r count 2}
+count(iris, Sepal.Length > 6)
+```
+Count the number of individuals with Sepal.Length above 6, group by Species AND rename the column
+```{r count 3}
+count(iris, Sepal.Length > 6, Species, name = 'sepal_length_bigger_6')
+```
+
+
+## 6- Mutate
+Transform, combine and do operations on columns
+```{r mutate doc}
+help(mutate)
+```
+### Examples
+Compute the Petal area (assuming diamond shapes)
+```{r mutate 1}
+head(mutate(iris, Petal_surface = Petal.Length * Petal.Width / 2))
+```
+Compute the sums of lengths and widths
+```{r mutate 2}
+head(mutate(iris, Length_sum = Petal.Length + Sepal.Length, Width_sum = Petal.Width + Sepal.Width))
+```
+
+
+Here is a link to a cheatsheet, that contains small descriptions of many dplyr functions:
+https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+
+
+
+# Piping functions
+
+Say that we want to group the iris data frame by species, then create summary statistics. We can do it...
+## ...Witout piping
+```{r no piping}
+grouped_by_species <- group_by(iris, Species)
+mean_stats <- summarize(grouped_by_species,
+                        mean(Petal.Length), 
+                        mean(Petal.Width), 
+                        mean(Sepal.Length), 
+                        mean(Sepal.Width))
+mean_stats
+```
+
+## ...With piping
+```{r with piping}
+iris %>%
+  group_by(Species) %>%
+  summarize(mean(Petal.Length), mean(Petal.Width), mean(Sepal.Length), mean(Sepal.Width))
+```
+The piping operator `%>%` permits to put multiple functions one after the other, where the output of the function of the left of the pipe operator is used as first argument of the function on the right side.
+
+## Hands on 1: Conversion of script
+Convert the following script to its piped version:
+```{r hands on 1}
+grouped_cars <- group_by(mtcars, vs, hp >= 100) # group by vs (engine shape) and hp (horsepower)
+ratio_mpg_wt <- mutate(grouped_cars,ratio = mpg/wt) # add a column with the ratio of mpg (miles per gallon) and wt (weight)
+summarize(ratio_mpg_wt,
+          Mean_weight = mean(wt),
+          Mean_mpg = mean(mpg),
+          Mean_ratio = mean(ratio)) # summarize statistics
+```
+Solution
+```{r hands on 1 solution}
+mtcars %>%
+  group_by(vs, hp >= 100) %>%
+  mutate(ratio = mpg/wt) %>%
+  summarize(Mean_weight = mean(wt), Mean_mpg = mean(mpg), Mean_ratio = mean(ratio))
+```
+
+## Hands on 2:
+Count the number of cars with (1) a sum of gears (gear) and carburators (carb) >= 6, (2) a number of cylinders (cyl) < 8 and (3) stratified by engine shape (vs)
+
+Solution
+```{r hands on 2 solution}
+mtcars %>%
+  mutate(sum = gear + carb) %>%
+  filter(sum >= 6, cyl < 8) %>%
+  count(vs)
+```
+
+## Hands on 3: Find the errors
+We want to get the number of flowers with a sepal area (assuming area = width * length / 2) > 10, stratified by species
+```{r hands on 3.1}
+iris %>%
+  mutate(area = Sepal.Length * Sepal.Width / 2) %>%
+  group_by(Species) %>%
+  summarize(sum(area))
+```
+Solution
+```{r hands on 3.1 solution}
+iris %>%
+  mutate(area = Sepal.Length * Sepal.Width / 2) %>%
+  filter(area > 10) %>%
+  count(Species)
+```
+
+We want summary statistics by brand
+```{r hands on 3.2}
+#mtcars %>%
+#  mutate(brand = sub(' .*', '', row.names(mtcars))) %>%
+#  group_by(brand) %>%
+#  summarize(sum(brand), mean(gear), mean(carb))
+
+# ERROR
+```
+Solution
+```{r hands on 3.2 solution}
+mtcars %>%
+  mutate(brand = sub(' .*', '', row.names(mtcars))) %>%
+  group_by(brand) %>%
+  summarize(length(brand), mean(gear), mean(carb))
+```
+
+
+
+# tidyr pivot functions
+The pivot functions (`pivot_longer` and `pivot_wider`) can be used to transform a data frame, such as to convert columns into row values and vice-versa. For example, if we have a data in wide format...
+```{r pivot 1}
+billboard_subset <- billboard[1:15, 1:11]
+print(billboard_subset)
+```
+...we can convert it to long format...
+```{r pivot 2}
+billboard_long <- billboard_subset %>%
+  pivot_longer(cols = starts_with("wk"),
+               names_to = "week",
+               names_prefix = "wk",
+               values_to = "rank")
+print(billboard_long)
+```
+...then back to wide
+```{r pivot 3}
+billboard_wide <- billboard_long %>%
+  pivot_wider(names_from = "week",
+              values_from = "rank",
+              names_prefix = "wk")
+print(billboard_wide)
+```
+
+
+
+# Managing missing values
+Some data sets may have missing values, generally represented by `NA`. 
+These can be due to:
+- Missed medical appointment
+- Error of measuring instruments
+- Sampling stochasticity
+- ...
+
+```{r who2}
+View(who2)
+```
+We can deal with these misisng values in multiple ways.
+
+## 1- Ignoring missing values
+We want to have the average number and standard deviation of cases per country for positive smear in males between 0 and 14 years old (sp_m_014)
+```{r ignoring na 1}
+who2 %>%
+  group_by(country) %>%
+  summarize(Mean = mean(sp_m_014),
+            SD = sd(sp_m_014))
+```
+With na.rm
+```{r ignoring na 2}
+who2 %>%
+  group_by(country) %>%
+  summarize(Mean = mean(sp_m_014, na.rm = TRUE),
+            SD = sd(sp_m_014, na.rm = TRUE))
+```
+
+## 2- Dropping missing values
+We want to clean the table once and for all.
+We can remove rows that have missing values in specified columns only
+```{r dropping na 1}
+who2 %>% drop_na(sp_m_014)
+```
+By default, drop_na will drop all rows with a missing value in any column
+```{r dropping na 2}
+who2 %>% drop_na()
+```
+Alternatively, we can drop rows that only have missing data
+```{r dropping na 3}
+to_keep <- who2[, c(-1, -2)] %>% # remove the first 2 columns
+  is.na() %>% # test if each entry is an NA
+  rowSums() != (ncol(who2)-2) # count the NAs in each row and check if different from the max
+who2[to_keep,]
+```
+
+## 3- Replacing missing values
+We assume NA replace the absence of cases and are equivalent to 0.
+First, we create the named list used as parameter in replace_na()
+```{r replacing na 1}
+replacing_list <- rep(list(0), ncol(who2))
+names(replacing_list) <- colnames(who2)
+replacing_list['country'] <- 'unknown'
+replacing_list['year'] <- 'unknown'
+```
+Then, we replace the NAs in the data frame
+```{r replacing na 2}
+who2 %>% replace_na(replacing_list)
+```
+
+## 4- Imputing missing values
+We can replace missing values by custom values for each entry. Imputation consists in inferring missing data, generally using other datapoints as reference
+Should be done on a case-by-case scenario, based on the data type and assumptions
+
+
+## Hands-on 4: 
+```{r hands on 4}
+# 1- Drop the relapse columns
+who2_ho4 <- who2[,grep('rel', colnames(who2), invert = TRUE)]
+## 2- Remove empty rows 
+## Optional: remove rows with at least 80% of the data missing
+## 3- Pivot to long, then create new columns such that the data frame contains columns
+## country, year, method, sex, age. Hint: search the doc!
+## 4- Produce statistics of your choice
+## 5- Re-pivot to wide
+```
+Solution
+```{r hands on 4 solution}
+## 1- Drop the relapse columns
+who2_ho4 <- who2[,grep('rel', colnames(who2), invert = TRUE)]
+## 2- Remove empty rows 
+## Optional: remove rows with at least 80% of the data missing
+to_keep <- who2_ho4[, c(-1, -2)] %>% # remove the first 2 columns
+  is.na() %>% # test if each entry is an NA
+  rowSums()/(ncol(who2_ho4)-2) < 0.8 # remove rows with less than 80% of the data
+who2_ho4 <- who2_ho4[to_keep,]
+## 3- Pivot to long, then create new columns such that the data frame contains columns
+## country, year, method, sex, age
+who2_ho4 %>%
+  pivot_longer(cols = colnames(who2_ho4)[c(-1, -2)],
+               names_to = c("method", "sex", "age"),
+               names_pattern = "(.*)_(.)_(.*)",
+               values_to = "count") %>%
+  ## 4- Produce statistics of your choice
+  group_by(country, method, age) %>%
+  summarise(Mean = mean(count, na.rm = TRUE),
+            SD = sd(count, na.rm = TRUE)) %>%
+  ## 5- Re-pivot to wide
+  pivot_wider(names_from = "method",
+              values_from = c("Mean", "SD"))
+```
+#

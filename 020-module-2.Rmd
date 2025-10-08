@@ -19,4 +19,6 @@ The `tidyverse` package is required for this section and can be installed with:
 
 ## Lab
 
-Materials for this practical can be downloaded [from here](https://github.com/AudreyBaguette/CBW25_Data-Wrangling).
+For this practical you can download this [**script**](./exercises/exercises_module2/scripts/data_wrangling.Rmd).
+
+The solutions are in this [**script**](./exercises/exercises_module2/results/data_wrangling_answers.Rmd).
