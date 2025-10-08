@@ -15,4 +15,17 @@
 
 ## Lab
 
-Materials from this section can be downloaded [from here](https://github.com/Hannah-Yu-0816/CBH_Workshop_Practial4_DataVisualization).
+### Data Visualization
+
+For the practical, you can download this [**script**](./exercises/exercises_module4/data_visualization_codeR.Rmd).
+
+You can also use this [**cheatsheet**](./exercises/exercises_module4/cheatsheet/data_visualization_cheatsheet.pdf).
+
+### Shiny App
+
+For this part of the practical, you can download these 3 examples of Shiny App:
+[**Demo 1**](./exercises/exercises_module4/shiny_app/1_ShinyDemo.R) <br>
+[**Demo 2**](./exercises/exercises_module4/shiny_app/2_ShinyDemo.R) <br>
+[**Demo 3**](./exercises/exercises_module4/shiny_app/3_ShinyDemo.R)
+
+You can also use this [**cheatsheet**](./exercises/exercises_module4/cheatsheet/shiny_cheatsheet.pdf).
