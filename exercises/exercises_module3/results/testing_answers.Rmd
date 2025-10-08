@@ -1,0 +1,139 @@
+---
+title: "Statistical testing"
+author: 
+- name: "Audrey Baguette"
+  affiliation: Workshop Lead
+- name: "Alex Diaz-Papkovich"
+  affiliation: Original Material
+- name: "Adrien Osakwe"
+  affiliation: Original Material
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+---
+
+# Loading libraries
+```{r Loading libraries}
+library(tidyverse)
+```
+
+# Two-samples t-test
+1- First, we create two random samples from Normal distributions
+```{r ttest 1}
+set.seed(20221011) # Seed for reproducibility
+n <- 100 # Sample size
+
+mu1 <- 0 # Mean of sample 1
+mu2 <- 0.1 # Mean of sample 2
+
+sd1 <- 1 # Standard deviation 1
+sd2 <- 1 # Standard deviation 2
+```
+Generate two samples of of size n of normally-distributed data.
+
+Sample x1 has a mean of mu1 and standard deviation sd1
+
+Sample x2 has a mean of mu2 and standard deviation sd2
+```{r ttest 2}
+x1 <- rnorm(n, mu1, sd1)
+x2 <- rnorm(n, mu2, sd2)
+```
+2- We can take a look at the data with boxplots
+```{r ttest 3}
+x_df <- data.frame(Values = c(x1,x2),
+                   Group = c(rep('G1',n),rep('G2',n)))
+ggplot(x_df) + geom_boxplot(aes(y = Values, color = Group))
+```
+3- t-test
+```{r ttest 4}
+t.test(x1, x2)
+```
+4- The result of the test is influenced by the sample size
+```{r ttest 5}
+x3 <- rnorm(10000, mu1, sd1)
+x4 <- rnorm(10000, mu2, sd2)
+t.test(x3, x4)
+```
+4- We can also do a one-sided test
+Check if group2 is greater than group1 (aka the difference 1-2 is smaller)
+```{r ttest 6}
+t.test(x1, x2, alternative = 'less')
+```
+
+
+# ANOVA
+1- Create mutliple datasets
+
+Our artificial data will have three different means
+```{r anova 1}
+set.seed(20221011)
+m1 <- rnorm(30, mean = 25, sd = 5)
+m2 <- rnorm(30, mean = 30, sd = 6)
+m3 <- rnorm(30, mean = 22, sd = 7)
+
+ms <- c(m1, m2, m3) # Combine our three measures into one vector
+
+# Our vector of group labels A, B, and C
+ls <- as.factor(c(rep("A",30),rep("B",30),rep("C",30)))
+```
+2- Visualize the data
+```{r anova 2}
+df_anova <- data.frame(Measure = ms, Group = ls)
+ggplot(df_anova) + geom_boxplot(aes(y = Measure, color = Group))
+```
+
+3- ANOVA
+```{r anova 3}
+results_aov <- aov(Measure ~ Group, data = df_anova)
+summary(results_aov)
+```
+We can look at the coefficients to find the difference across groups
+```{r anova 4}
+results_aov$coefficients
+```
+
+
+# Hands-on
+
+## 1- ANOVA vs multiple t-tests
+Data PlantGrowth has multiple groups: one control and two treatments
+
+Make an ANOVA and consecutive t-tests between the control and each treatment. 
+Do they lead to the same conclusion?
+```{r hands on 1}
+head(PlantGrowth)
+```
+
+Solution
+```{r hands on 1 solution}
+results_aov <- aov(weight ~ group, data = PlantGrowth)
+summary(results_aov)
+results_aov$coefficients
+# At least one treatment is different, treatment 1 is lighter than control and
+# treatment 2 is heavier
+
+t.test(PlantGrowth$weight[PlantGrowth$group == 'ctrl'], PlantGrowth$weight[PlantGrowth$group == 'trt1'])
+t.test(PlantGrowth$weight[PlantGrowth$group == 'ctrl'], PlantGrowth$weight[PlantGrowth$group == 'trt2'])
+# Only treatment 2 is significantly different
+```
+
+
+## 2- Multiple testing correction
+Take the co2 dataset (note: not CO2), that records the CO2 level for each month across several years. 
+We want to test if the CO2 levels from 1959 to 1978 were lower than those between 1979 and 1997 for each month separately. 
+Then, we correct for multiple testing and compare the results (hint: see p.adjust). 
+Do the conclusions change? 
+```{r hands on 2}
+co2_df <- data.frame(matrix(co2, 39, 12), row.names = as.character(c(1959:1997)))
+colnames(co2_df) <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+```
+
+Solution
+```{r hands on 2 solution}
+p_values <- co2_df %>% apply(2, function(x) return(t.test(x[1:20], x[21:39])$p.value))
+sum(p_values < 0.05) # 9 months are different
+p_adj <- p.adjust(p_values, method = 'bonferroni')
+sum(p_adj < 0.05) # 5 months are different
+fdr <- p.adjust(p_values, method = 'fdr')
+sum(fdr < 0.05) # 8 months are different
+```
+
+#

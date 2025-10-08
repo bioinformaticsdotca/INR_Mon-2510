@@ -23,4 +23,21 @@ You will also need previous experience with probability to best benefit from the
 
 ## Lab
 
-Materials for this practical can be downloaded [from here](https://github.com/AudreyBaguette/CBW25_Introduction-to-Statistics-in-R).
+### Linear regression
+
+For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/linear_regression.Rmd).
+
+The solutions for this part are in this [**script**](./exercises/exercises_module3/results/linear_regression_answers.Rmd).
+
+### Logistic regression
+
+For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/logistic_regression.Rmd).
+
+The solutions for this part are in this [**script**](./exercises/exercises_module3/results/logistic_regression_answers.Rmd).
+
+### Statistical testing
+
+For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/testing.Rmd).
+
+The solutions for this part are in this [**script**](./exercises/exercises_module3/results/testing_answers.Rmd).
+
