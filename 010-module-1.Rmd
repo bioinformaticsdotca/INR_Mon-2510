@@ -19,6 +19,14 @@
 <!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 -->
 
+### 1. R basics
+In the first module of the workshop, the goals are to familiarize with the language and the logic behind it; Get started with R studio and create your first project; Create your first `.R` file to write down the live code; and get comfortabble with installing packages.
+
+**Module content:**
+-   Seeking help
+-   Installing packages
+
+[**Script**](./exercises/exercises_module1/scripts/01GettingStarted.Rmd)
 
 ## Lab
 
