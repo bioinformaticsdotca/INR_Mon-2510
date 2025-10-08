@@ -124,17 +124,20 @@
 <ul>
 <li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#requirements"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#lecture"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#lab"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#lab"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-1.html"><a href="practical-1.html#intro-to-r"><i class="fa fa-check"></i>Intro To R</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html"><i class="fa fa-check"></i>Practical 2</a>
 <ul>
-<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#requirements-1"><i class="fa fa-check"></i>Requirements</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#requirements-2"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#lecture-1"><i class="fa fa-check"></i>Lecture</a></li>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#lab-1"><i class="fa fa-check"></i>Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html"><i class="fa fa-check"></i>Practical 3</a>
 <ul>
-<li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html#requirements-2"><i class="fa fa-check"></i>Requirements</a></li>
+<li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html#requirements-3"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html#lecture-2"><i class="fa fa-check"></i>Lecture</a></li>
 <li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html#lab-2"><i class="fa fa-check"></i>Lab</a></li>
 </ul></li>
@@ -164,7 +167,7 @@
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html"><i class="fa fa-check"></i>Practical 6</a>
 <ul>
-<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#requirements-3"><i class="fa fa-check"></i>Requirements</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#requirements-4"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lecture-8"><i class="fa fa-check"></i>Lecture</a></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a></li>
 </ul></li>
@@ -223,8 +226,126 @@
 </div>
 <div id="lab" class="section level2 hasAnchor">
 <h2>Lab<a href="practical-1.html#lab" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Materials for this practical can be downloaded <a href="https://github.com/MJousse/IntroToR/">from here</a>.</p>
+<!-- Materials for this practical can be downloaded [from here](https://github.com/MJousse/IntroToR/). -->
+<div id="intro-to-r" class="section level3 hasAnchor">
+<h3>Intro To R<a href="practical-1.html#intro-to-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="overview" class="section level4 hasAnchor">
+<h4>Overview<a href="practical-1.html#overview" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This workshop is delivered in 6 modules and aims to get the user comfortable with basic R. It goes through installing R and Rstudio, learning about operators and data structures, functions, packages, and basics of data manipulation, including with dplyr, tidyr and visualisation with ggplot2.</p>
+</div>
+<div id="requirements-1" class="section level4 hasAnchor">
+<h4>Requirements<a href="practical-1.html#requirements-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>No knowledge requirements. To go through with the workshop, R version 4.0+ and Rstudio must be installed. Installation of R, RStudio and necessary packages are helped with in the slides and scripts. Please review the following topics if you’re not comfortable with them:
+* basic linear algebra (operations with vectors and metrices)
+* mathematical operations (exponentials, logarithms)
+* basic statistics (mean, variance, median, standard deviation)
+* logical statements (AND, OR, NOT)</p>
+</div>
+<div id="sofware" class="section level4 hasAnchor">
+<h4>Sofware<a href="practical-1.html#sofware" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>[R] (<a href="https://cran.rstudio.com/" class="uri">https://cran.rstudio.com/</a>)</li>
+<li>[RStudio] (<a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a>)</li>
+</ul>
+</div>
+<div id="workshop-structure" class="section level4 hasAnchor">
+<h4>Workshop Structure<a href="practical-1.html#workshop-structure" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Slides can be found <a href="./01-IntroToR_Maximiliane_Jousse/Slides/IntroToR_CBHWorkshop.pptx">here</a>.</p>
+<div id="r-basics" class="section level5 hasAnchor">
+<h5>1. R basics<a href="practical-1.html#r-basics" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In the first module of the workshop, the goals are to familiarize with the language and the logic behind it; Get started with R studio and create your first project; Create your first <code>.R</code> file to write down the live code; and get comfortable with installing packages.</p>
+<p><strong>Module content:</strong>
+- Seeking help
+- Installing packages</p>
+<p><a href="./01-IntrotoR_Maximiliane_Jousse/Exercises/scripts/01GettingStarted.Rmd"><strong>Script</strong></a></p>
+</div>
+<div id="data-types-attributes-and-built-in-functions" class="section level5 hasAnchor">
+<h5>2. Data types: attributes and built-in functions<a href="practical-1.html#data-types-attributes-and-built-in-functions" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In this section participants will understand the differences between classes, objects and data types in R; Compute arithmetic operations; Use logical operators; create objects of different types, learn about their attributes and apply some built-in functions in R; Subset and index objects; and get comfortable with vectorized operations.</p>
+<p><strong>Module content:</strong>
+- Vectors
+- Lists
+- Factors
+- Data frames
+- Arrays
+- Coercion</p>
+<p><a href="./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/02DataTypes.Rmd"><strong>Script</strong></a></p>
+</div>
+<div id="control-structures" class="section level5 hasAnchor">
+<h5>3. Control structures<a href="practical-1.html#control-structures" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In this module, participants learn to use if-else, while, and for loops; as well as building their own functions; and what packages are.</p>
+<p><strong>Module Content</strong>
+* If..Else
+* While loop
+* For loop
+* Functions
+* Packages</p>
+<p><a href="./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/03ControlStructuresAndFunctions.Rmd"><strong>Script</strong></a></p>
+</div>
+<div id="basic-data-manipulation" class="section level5 hasAnchor">
+<h5>4. Basic data manipulation<a href="practical-1.html#basic-data-manipulation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In this module participants will learn how to read/write data to/from files with different formats (.tsv, .csv); become familiar with basic data-frame operations; (3) index and subset data frames using base R; manipulate individual data frame columns.</p>
+<p><strong>Module content:</strong>
+- Reading/writing data
+- Exploring data frames</p>
+<p><a href="./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/04BasicDataManipulation.Rmd"><strong>Script</strong></a></p>
+</div>
+<div id="advanced-data-manipulation" class="section level5 hasAnchor">
+<h5>5. Advanced data manipulation<a href="practical-1.html#advanced-data-manipulation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The fourth module participants will familiarize with the dplyr syntax; create pipes with the operator <code>%&gt;%</code>; perform operations on data frames using dplyr and tidyr functions; learn how to join columns and rows of different data frames; and implement functions from external packages by reading their documentation in R.</p>
+<p><strong>Module content:</strong>
+- Handling data frames with dplyr
+- Other useful packages
+- Hands-on: advanced data manipulation</p>
+<p><a href="./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/05AdvancedDataManipulation.Rmd"><strong>Script</strong></a></p>
+</div>
+<div id="generating-visual-outputs" class="section level5 hasAnchor">
+<h5>6. Generating visual outputs<a href="practical-1.html#generating-visual-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>This section will show participants how to (1) Create basic plots using base R functions; (2) Understand how to connect data frames with ggplot2; (3) create basic graphs with ggplot2; (4) use factors to customize graphics in ggplot2; (5) use RMarkdown to generate customized reports.</p>
+<p><strong>Module content:</strong>
+- Figures with base R
+- Graphics with <code>ggplot2</code></p>
+<p><a href="./01-IntroToR_Maximiliane_Jousse/Exercises/scripts/06GeneratingOutputs.Rmd"><strong>Script</strong></a></p>
+</div>
+</div>
+<div id="repo-structure" class="section level4 hasAnchor">
+<h4>Repo structure<a href="practical-1.html#repo-structure" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<pre><code>├── README.md
+├── .gitignore
+├── _config.yaml
+├── IntroToR.Rproj
+├── Exercises
+│   └── README.md
+│   ├── data
+│   │   └── co2_pcap_cons.csv
+│   │   └── penguins.csv
+│   ├── scripts
+│   │   └── 01GettingStarted.Rmd and .html
+│   │   └── 02DataTypes.Rmd and .html
+│   │   └── 03ControlStructuresAndFunctions.Rmd and .html
+│   │   └── 04BasicDataManipulation.Rmd and .html
+│   │   └── 05AdvancedDataManipulation.Rmd and .html
+│   │   └── 06GeneratingOutputs.Rmd and .html
+├── Slides
+│   └── IntroToR_CBHWorkshop.pptx
+└── Outline
+    └── workshopoutline.pdf #using the template provided</code></pre>
+</div>
+<div id="references" class="section level4 hasAnchor">
+<h4>References<a href="practical-1.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The materials for this workshop were based on the following sources:
+- <a href="https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf">Base R Cheat Sheet</a><br />
+- <a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a>
+- <a href="https://bookdown.org/rdpeng/RProgDA/">Mastering Software Development in R</a></p>
+<p>Data in this workshop comes from:
+- Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0. <a href="https://allisonhorst.github.io/palmerpenguins/" class="uri">https://allisonhorst.github.io/palmerpenguins/</a>. doi: 10.5281/zenodo.3960218
+- Gapminder data free from www.gapminder.org, CC-BY LICENSE
+- Bryan J (2025). <em>gapminder: Data from Gapminder</em>. <a href="doi:10.32614/CRAN.package.gapminder" class="uri">doi:10.32614/CRAN.package.gapminder</a> <a href="https://doi.org/10.32614/CRAN.package.gapminder" class="uri">https://doi.org/10.32614/CRAN.package.gapminder</a>, R package version 1.0.1, <a href="https://CRAN.R-project.org/package=gapminder" class="uri">https://CRAN.R-project.org/package=gapminder</a>.
+- Higgins P (2021). <em>medicaldata: Data Package for Medical Datasets</em>. <a href="doi:10.32614/CRAN.package.medicaldata" class="uri">doi:10.32614/CRAN.package.medicaldata</a> <a href="https://doi.org/10.32614/CRAN.package.medicaldata" class="uri">https://doi.org/10.32614/CRAN.package.medicaldata</a>, R package version 0.2.0, <a href="https://CRAN.R-project.org/package=medicaldata" class="uri">https://CRAN.R-project.org/package=medicaldata</a>.</p>
+<p><em>Workshop created as part of the McGill Initiative in Computational Medicine</em></p>
 
+</div>
+</div>
 </div>
 </div>
             </section>

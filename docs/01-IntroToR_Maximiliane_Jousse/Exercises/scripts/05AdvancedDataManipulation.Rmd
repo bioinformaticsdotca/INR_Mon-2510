@@ -1,0 +1,257 @@
+---
+title: "Intro to R 05: Advanced Data Manipulation"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Examples
+
+Here we go over the material.
+
+```{r}
+# install.packages("dplyr")
+library(dplyr)
+library(tidyr)
+library(palmerpenguins)
+
+df <- penguins
+```
+
+## Dplyr
+
+```{r, eval = F}
+?dplyr
+browseVignettes(package = "dplyr") # note this opens a window
+```
+
+`dplyr` is a package widely used in R analysis, and lets us easily analyse large datasets. It both contains useful functions, and a "grammar" called piping which can be applied to these functions.
+
+Piping uses the `%>%` operator. In short, this operator "passes" the previous lines of code into the next.
+
+Let us look at the following example:
+
+```{r}
+df %>% 
+  dplyr::select(species) #select is a dplyr function, and lets you select columns using names and types. The pipe passes df as an input to select.
+
+# alternatively, one could do select(df, species)
+```
+
+Note the `packagName::functionName`. This is good practice for two reasons: 1) trace-ability, and 2) some packages overwrite functions.
+
+Let us try more functions. Common, and useful, functions include `select()`, `filter()`, `mutate()`, `group_by()`, and `summarise()`. Piping becomes more useful once you start to chain more than one function; the output of the previous function is passed onto the next.
+
+```{r}
+
+df %>% 
+  # select specified columns
+  dplyr::select(species, island, year) %>% 
+  
+  # keeps data where years greater than 2007
+  dplyr::filter(year > 2007) %>% 
+  
+  # adds a column sorting islands into Torgersen and others
+  dplyr::mutate(Torgersen = ifelse(island == "Torgersen", TRUE, FALSE)) %>% 
+  
+  # create groups which are a combination of the values in species and Torgersen
+  dplyr::group_by(species, Torgersen) %>%
+  
+  # Count the number of entries in each group
+  dplyr::summarise(number = dplyr::n())
+```
+
+### Mutating joins
+
+Mutating joins are a group of `dplyr` functions which allow you to join two datasets together. Different joins exist: `inner_join()`, `left_join()`, `right_join()`, and `full_join()`.
+
+In the following example, we will create a new data frame with a code for each species, and join it to `df`.
+
+```{r}
+# first we look at what species are present in the dataset
+df %>% select(species) %>% unique(.)
+```
+
+```{r}
+# then we create the code data frame
+df_code <- df %>% 
+  dplyr::select(species) %>%
+  dplyr::mutate(code = case_when(
+    species == "Adelie" ~ 1,
+    species == "Gentoo" ~ 2,
+    species == "Chinstrap" ~ 3
+  ))
+
+head(df_code)
+```
+
+```{r}
+# Now we join the two together.
+df %>%
+  dplyr::left_join(., df_code, by = "species")
+```
+
+## Other Packages
+
+### Stringr
+
+For fun, lets look at and inplement `stringr`, a string manipulation package.
+
+```{r}
+# install.packages("stringr")
+library(stringr)
+```
+
+We will extract the first three letters of each island to create an island code. To do this, we will use
+
+```{r}
+df %>%
+  dplyr::mutate(island_code = stringr::str_sub(island, 1, 3))
+```
+
+### Tidyr
+
+`tidyr` is a useful package that helps clean/sort/manipulate data.
+
+Useful functions include `pivot_longer()` and `pivot_wider()` which are often used in combination with `ggplot2` to plot data (don't worry we will see plotting in the next module!)/
+
+Let's use `pivot_wider()` as an example. These functions can also be piped.
+
+```{r}
+df %>% 
+  pivot_wider(names_from = island, values_from = species)
+```
+
+Note! doing the above really isn't useful in this situation but there are times where it is useful to have a wider data-frame. For example, in ecology, this data set can be adapted using pivot_wider to create a site by species data frame.
+
+# Exercises
+
+You can do these in the notebook or in a separate `.R` script. We again use the `gapminder` library. If it is not installed, install it, and if it is not loaded, load it. Note! If you use a separate `.R` script, you must load the necessary additional libraries.
+
+```{r}
+
+```
+
+## 1. Write one command (can span multiple lines) using pipes that will output a data frame that has only the columns `lifeExp`, `country` and `year` for the records before the year 2000 from African countries, but not for other Continents.
+
+```{r}
+
+```
+
+## 2. Calculate the average life expectancy per country. Which country has the longest average life expectancy and which one the shortest average life expectancy?
+
+```{r}
+
+```
+
+## 3. In the previous hands-on you discovered that all the entries from 2007 are actually from 2008. Write a command to edit the data accordingly using pipes. In the same command filter only the entries from 2008 to verify the change.
+
+```{r}
+
+```
+
+## 4. Lets add data from a different .csv to our data frame.
+
+### a) Read in the `co2_pcap_cons.csv` found in `IntroToR/Exercises/data`
+
+```{r}
+
+```
+
+### b) Look at the data. What do you notice? What will you need to change to be able to join the two dataframes together?
+
+### c) Perform the changes you identified in (b)
+
+hint: use `stringr`!
+
+```{r}
+
+```
+
+### d) join both data frames
+
+```{r}
+
+```
+
+# Solutions
+
+```{r}
+library(gapminder)
+library(dplyr)
+library(tidyr)
+```
+
+## 1. Write one command ( can span multiple lines) using pipes that will output a data frame that has only the columns `lifeExp`, `country` and `year` for the records before the year 2000 from African countries, but not for other Continents.
+
+```{r}
+tidy_africa <- gapminder %>%
+                dplyr::filter(continent == "Africa") %>%
+                dplyr::select(year, country, lifeExp)
+head(tidy_africa)
+```
+
+## 2. Calculate the average life expectancy per country. Which country has the longest average life expectancy and which one the shortest average life expectancy?
+
+```{r}
+gapminder %>%
+   dplyr::group_by(country) %>%
+   dplyr::summarize(mean_lifeExp = mean(lifeExp)) %>%
+   dplyr::filter(mean_lifeExp == min(mean_lifeExp) | mean_lifeExp == max(mean_lifeExp))
+```
+
+## 3. In the previous hands-on you discovered that all the entries from 2007 are actually from 2008. Write a command to edit the data accordingly using pipes. In the same command filter only the entries from 2008 to verify the change.
+
+```{r}
+gapminder %>%
+  dplyr::mutate(year = ifelse(year==2007,2008,year)) %>%
+  dplyr::filter(year==2008) %>%
+  head()
+```
+
+## 4. Lets add data from a different .csv to our data frame.
+
+### a) Read in the `co2_pcap_cons.csv` found in `IntroToR/Exercises/data`
+
+```{r}
+new_data <- read.csv("../data/co2_pcap_cons.csv")
+```
+
+### b) Look at the data. What do you notice? What will you need to change to be able to join the two dataframes together?
+
+-   Change the data frame such that `country` , `year`, and `emissions` are separate columns.
+
+-   Change `year` to numeric.
+
+### c) Perform the changes you identified in (b)
+
+hint: use `stringr`!
+
+```{r}
+new_data_t <- new_data %>% 
+  pivot_longer(cols = -country, names_to = "year", values_to = "emissions") %>%
+  mutate(year = as.numeric(str_extract(year, "\\d+")))
+
+```
+
+Note here i use `str_extract()` combined with regex, but you can use `str_sub()` with `start = 2` and `end = 5` as seen in the examples above!
+
+### d) join both data frames
+
+```{r}
+gapminder %>% left_join(., new_data_t, by = c("country", "year"))
+```

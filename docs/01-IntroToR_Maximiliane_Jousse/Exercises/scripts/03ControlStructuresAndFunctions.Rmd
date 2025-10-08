@@ -1,0 +1,210 @@
+---
+title: "Intro to R 03: Control structures and functions"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Examples
+In this section we go over the material.
+
+## If... Else
+We can tell our code to perform certain tasks if a certain condition is met.
+
+```{r}
+x <- 5
+
+#If the number is greater than 5, get its square
+if (x > 5){
+  x^2
+} else{
+  #If not, multiply it by 2
+  x*2
+}
+```
+
+```{r}
+# Can incorporate multiple conditions
+x <- 7
+
+if (x > 5 && x < 10){
+  #If x is greater than 5 AND is less than 10
+  x^2
+} else if ( x < 0 || x > 10){
+  #If x is less than 0 OR greater than 10
+  -x
+} else {
+  x * 2
+}
+```
+
+##For & While Loops
+
+For loops let you iterate over the elements of a vector
+
+```{r}
+#Iterate from 1 to 10
+
+for (i in 1:10){
+  print(i)
+}
+```
+
+```{r}
+#Iterate through strings
+x <- c('a','ab','cab','taxi')
+
+for (i in x){
+  print(i)
+}
+```
+
+While loops let you iterate over a piece of code until a condition is no longer met.
+
+```{r}
+x <- 5
+#while x is greater than 0
+while (x > 0){
+  print(x)
+  x <- x -1
+}
+```
+
+## Functions
+
+Sometimes, we need to repeatedly use a sequence of code. Creating functions helps reduce the amount of clutter in our code.
+
+```{r}
+#Example Function that calculates mean
+
+new_mean <- function(values){
+  print(values)
+  #return()
+  sum(values)/length(values)
+}
+
+x <- 1:5
+
+mean(x) == new_mean(x)
+
+```
+
+## Installing packages
+
+There are multiple sources and ways to do this.
+
+### CRAN
+
+```{r,eval=FALSE}
+install.packages(c("dplyr","ggplot2","gapminder","medicaldata"))
+```
+
+### BioConductor
+
+For more details about the project you can visit https://www.bioconductor.org
+
+To install packages from BioConductor you first need to install BioConductor itself.
+
+``` {r,eval=F}
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(version = "3.16")
+```
+
+Then you can install any package you want by using the install
+
+```{r,eval=F}
+BiocManager::install("DESeq2")
+```
+
+### GitHub
+
+If you want to install the development version of a package, or you are installing something that is only available on GitHub you can use devtools
+
+```{r,eval=F}
+devtools::install_github('andreacirilloac/updateR')
+```
+
+
+# Exercises
+
+## 1. Initialise variable `x` with numbers 1 through 10. Calculate the sum of x using base R. Then write a function to perform the sum of `x`.
+
+```{r}
+
+
+```
+
+## 2. Create a function that returns `TRUE` if the number is even, and `FALSE` if the number passed is odd. Test it.
+Hint: Use `if` and `else`!
+
+```{r}
+
+
+```
+
+# Solutions
+Note these solutions are not unique :)
+
+## 1. Initialise variable `x = c(1,2,3,4,5,6,7,8,9,10)` using base R. Calculate the sum of x. Then write a function to perform the sum of `x`.
+
+```{r, eval = F}
+
+x <- c(1,2,3,4,5,6,7,8,9,10)
+
+sum(x)
+
+
+new.sum <- function(x){
+  
+  len <- length(x) # also base R!
+  
+  y <- 0
+  
+  for(i in 1:len){
+    
+    y <- y + x[i]
+
+  }
+  
+  return(y)
+  
+}
+
+new.sum(x)
+
+```
+
+
+## 2. Create a function that returns `TRUE` if the number is even, and `FALSE` if the number passed is odd. Test it.
+Hint: Use `if` and `else`!
+
+```{r, eval = F}
+
+is.even <- function(x){
+  
+  if(x %%2 == 0){
+    y <- TRUE
+  }else{
+    y <- FALSE
+  }
+  
+  return(y)
+}
+
+
+```

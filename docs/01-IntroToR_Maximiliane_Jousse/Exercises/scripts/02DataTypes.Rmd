@@ -1,0 +1,838 @@
+---
+title: "Intro to R 02: Data Types & Structures"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Examples
+In this section we go over the material.
+
+## **Comments**
+
+Comments are embedded into your code to help explain its purpose. This is extremely important for reproducibility and for documentation. To start a comment line, you use : `#`. The whole line is commented. Multi-line comments are available using `#'`.
+
+```{r}
+# This is a comment line 
+# print('hello world')
+
+#' start comment
+#' 
+#' end comment!
+
+```
+
+## Creating variables
+
+You 'assign' a value to a variable using the assigning operator: `<-`
+
+```{r}
+# The convention is to use left hand assignation 
+var1 <- 12
+var2 <- "hello world"
+```
+
+Hint: Look at your environment!
+
+## Printing Variables
+
+```{r}
+var1
+var2
+
+print(var1)
+print(var2)
+```
+
+```{r}
+# It is also possible to use the '=' sign, but is NOT convention and therefore not good practice.
+var1 = 13
+var2 = "hello world"
+var1
+var2
+```
+
+```{r}
+# Now what happens when you use the function rm()? hint: look at your environment!
+rm(var1)
+```
+
+## Data types and data structures
+
+### Atomic Classes
+
+Atomic classes are the fundamental data type found in R. All subsequent data structures are used to store entries of different atomic classes.
+
+#### Numeric
+
+They store numbers as `double`, and it is stored with decimals. The term double refers to the number of bytes required to store it. Each double is accurate up to 16 significant digits.
+
+#### Integer
+
+They store numbers that can be written without a decimal component. Adding an *L* after an integer tells R to store it as an integer class instead of a numeric
+
+#### Logical
+
+They store the outputs of logical statements - TRUE or FALSE. Can be converted to integer where TRUE = 1 and FALSE = 0.
+
+#### Character
+
+Represents text. Can either be a single character or a word/sentence.
+
+#### Missing Value
+
+Used by R to indicate a missing data entry. Useful for manipulating data sets where missing entries are common.
+
+### Arithmetic Operations
+
+```{r}
+# Addition  
+2+100000
+```
+
+```{r}
+# Subtraction  
+3-5
+```
+
+```{r}
+# Multiplication  
+71*9
+```
+
+```{r}
+# Division  
+90/((3*5) + 4)
+```
+
+```{r}
+# Power  
+2^3
+```
+
+### Logical operators
+
+```{r}
+# First create two numeric variables  
+var1 <- 35  
+var2 <- 27
+```
+
+```{r}
+# Equal to  
+var1 == var2
+```
+
+```{r}
+# Less than or equal to  
+var1 <= var2   
+
+# Not equal
+var1 != var2
+```
+
+```{r}
+# They also work with other classes  
+var1 <- "mango" 
+var2 <- "mangos"
+```
+
+```{r}
+var1 == var2
+```
+
+Strings are compared character by character until they are not equal or there are no more characters left to compare.
+
+```{r}
+var1 < var2
+```
+
+We can test if a variable is contained in another object using the contained operator `%in%`.
+
+```{r}
+"c" %in% letters  
+"c" %in% LETTERS
+
+# note letters and LETTERS are built in constants. letters is the lowercase alphabet as a vector, and LETTERS uppercase.
+```
+
+## Data Structures
+
+### Vectors
+
+Key points:\
+- Can only contain objects of the same class\
+- Most basic type of R object\
+- Variables are vectors
+
+#### Numeric
+
+Creating a numeric vector using `c()`
+
+```{r}
+x <- c(0.3, 0.1)
+x
+```
+
+Using the `vector()` function
+
+```{r}
+x <- vector(mode = "numeric",length = 10)
+x
+```
+
+Using the `numeric()` function
+
+```{r}
+x <- numeric(length = 10)
+x
+```
+
+Creating a numeric vector with a sequence of numbers
+
+```{r}
+# x <- seq(1,10,1)
+# x
+
+x <- seq(1,10,2)
+x
+
+x <- rep(2,10)
+x
+```
+
+Check length of vector with `length()`
+
+```{r}
+x
+length(x)
+
+y <- rep(2,5)
+y
+length(y)
+
+length(x) == length(y)
+
+```
+
+#### Integer
+
+Creating an integer vector using `c()`
+
+```{r}
+x <- c(1L,2L,3L,4L,5L)  
+x
+```
+
+Creating an integer vector of a sequences of numbers
+
+```{r}
+x <- 1:10
+x
+```
+
+#### Logical
+
+Creating a logical vector with `c()`
+
+```{r}
+x <- c(TRUE,FALSE,T,F)
+x
+```
+
+Creating a logical vector with `vector()`
+
+```{r}
+x <- vector(mode = "logical",length = 5)
+x
+```
+
+Creating a logical vector using `logical()`
+
+```{r}
+x <- logical(length = 10)
+x
+```
+
+#### Character
+
+```{r}
+x<-c("a","b","c")
+x
+
+x<-vector(mode = "character",length=10)
+x
+
+x<-character(length = 3)
+x
+```
+
+Some useful functions to modify strings
+
+```{r}
+tolower(LETTERS)
+toupper(letters)
+paste(letters,1:length(letters),sep="_") # Note the implicit coercion
+```
+
+#### Vector attributes
+
+The elements of a vector can have names
+
+```{r}
+x<-1:5
+names(x)<-c("one","two","three","four","five")
+x
+
+x<-logical(length = 4)
+names(x)<-c("F1","F2","F3","F4")
+x
+```
+
+
+### Built-in functions
+
+**To inspect the contents of a vector**
+
+```{r}
+is.vector(x) # Check if it is a vector
+is.na(x) # Check if it is empty
+is.null(x) # Check if it is NULL
+is.numeric(x) # Check if it is numeric
+is.logical(x) # Check if it is logical
+is.character(x) # Check if it is character
+```
+
+**To know what kind of vector you are working with**
+
+```{r}
+class(x) # Atomic class type
+typeof(x) # Object type or data structure (matrix, list, array...)
+str(x)
+```
+
+**To know more about the data contained in the vector**
+
+#### Mathematical operations
+
+```{r}
+sum(x)
+```
+
+```{r}
+min(x) 
+max(x)
+```
+
+```{r}
+x <- seq(1,10,1)
+mean(x) 
+median(x) 
+sd(x)
+```
+
+```{r}
+log(x) 
+exp(x)
+```
+
+Other operations
+
+```{r}
+length(x)
+table(x)
+summary(x)
+```
+
+Grouping elements in a vector using `tapply`
+
+```{r}
+measurements<-sample(1:1000,6) 
+samples<-factor(c(rep("case",3),rep("control",3)), 
+                levels = c("control", "case"))
+```
+
+```{r}
+tapply(measurements, samples, mean)
+```
+
+#### Vector Operations
+
+```{r}
+x<-1:10
+y<-11:20
+```
+
+```{r}
+x*2
+```
+
+```{r}
+x+y
+
+```
+
+```{r}
+x*y
+
+```
+
+```{r}
+x^y
+```
+
+#### Recycling
+
+If one of the vectors is smaller than the other, operations are still possible. R will replicate the smaller vector to enable the operation to occur.
+
+**IMPORTANT: if the larger vector is NOT a multiple of the smaller vector, the replication will still occur but will end at the length of the larger vector.**
+
+```{r}
+x<-1:10
+y<-c(1,2,3)
+x+y
+```
+
+### Indexing and subsetting
+
+For this example, lets create a vector of random numbers from 1 to 100 of size 15.
+
+```{r}
+x<-sample(x = 1:100,size = 15,replace = F) 
+x
+```
+
+Using the index/position
+
+```{r}
+x[1] # Get the first element
+x[13] # Get the thirteenth element
+```
+
+Using a vector of indices
+
+```{r}
+x[1:12] # The first 12 numbers
+x[c(1,5,6,8,9,13)] # Specific positions only
+
+names(x) <- letters[1:length(x)]
+
+x[c('a','c','d')]
+```
+
+Using a logical vector
+
+```{r}
+# Only numbers that are less than or equal to 10
+x<10
+x[x>95] 
+# 
+# # Only even numbers 
+# x%%2 == 0
+# x[x%%2 == 0]
+```
+
+```{r}
+x<10
+x[x<=10] # Only numbers that are less than or equal to 10
+```
+
+Skipping elements using indices
+
+```{r}
+x[c(-1, -5)]
+```
+
+Skipping elements using names
+
+```{r}
+x<-1:10
+names(x)<-letters[1:10]
+x[names(x) != "a"]
+```
+
+
+
+
+### Factors
+
+Key points:
+
+-   Useful for categorical data
+-   Can have implicit order, if needed
+-   Each element has a label or level
+-   Some operations behave differently on factors
+
+Creating factors with `factor`
+
+```{r}
+cols<-factor(x = c(rep("red",4),
+                   rep("blue",5),
+                   rep("green",2)),              
+             levels = c("red","blue","green"))
+cols
+```
+
+```{r}
+samples <- c("case", "control", "control", "case") 
+samples 
+samples_factor <- factor(samples, levels = c("control", "case")) 
+samples_factor 
+str(samples_factor)
+```
+
+
+
+## Lists
+
+Key points:\
+- Can contain objects of multiple classes\
+- Extremely powerful when combined with some R built-in functions
+
+Creating lists with different data types
+
+```{r}
+l <- list(1:10, list("hello",'hi'), TRUE)
+l
+```
+
+Assigning names as we create the list
+
+```{r}
+l<-list(title = "Numbers", 
+        numbers = 1:10, 
+        logic = TRUE )
+l
+names(l)
+
+l$numbers
+```
+
+### Indexing and subsetting
+
+Using `[[]]` instead of `[]`
+
+```{r}
+l[[1]]
+```
+
+Using `$` for named lists
+
+```{r}
+l$logic
+```
+
+### Built-in functions
+
+```{r}
+l<-list(sample(1:100,10),
+        sample(1:100,10),
+        sample(1:100,10))
+names(l)<-c("r1","r2","r3")
+l
+```
+
+Performing operations on all elements of the list using `lapply`
+
+```{r}
+lsums<-lapply(l,sum)
+lsums
+
+lsums <- lapply(l,function(a){
+  sum(a)^2
+})
+lsums
+```
+
+## Matrices
+
+Creating a matrix full of zeros with `matrix()`
+
+```{r}
+m<-matrix(0, ncol=6, nrow=3)
+m
+class(m)
+typeof(m)
+```
+
+Creating a matrix from a vector of numbers
+
+```{r}
+m<-matrix(1:5, ncol=2, nrow=5)
+m
+```
+
+### Attributes
+
+Names of each dimension
+
+```{r}
+colnames(m)<-letters[1:2]
+rownames(m)<-LETTERS[1:5]
+m
+str(m)
+```
+
+### Built-in functions
+
+To know the size of the matrix
+
+```{r}
+dim(m)
+ncol(m)
+nrow(m)
+```
+
+## Data frames
+
+Key points:
+
+-   Columns in data frames are vectors
+
+-   Each column can be of a different data type
+
+-   A data frame is essentially a list of vectors
+
+Creating a data frame using `data.frame()`
+
+```{r}
+df<-data.frame(numbers=1:10,
+               low_letters=letters[1:10],
+               logical_values=rep(c(T,F),each=5))
+df
+class(df)
+typeof(df)
+str(df)
+```
+
+Re-naming columns
+
+```{r}
+colnames(df)[2]<-"lowercase"
+head(df)
+View(df)
+```
+
+### Indexing and sub-setting
+
+```{r}
+df$numbers
+df["numbers"]
+df[1,]
+df[,1]
+
+df[3,3]
+```
+
+## Coercion
+
+Converting between data types with `as.` functions
+
+```{r}
+x<-1:10
+as.list(x)
+```
+
+```{r}
+l<-list(numbers=1:10,
+        lowercase=letters[1:10])
+l
+typeof(l)
+df<-as.data.frame(l)
+df
+typeof(df)
+```
+
+# Exercises
+Either complete these in the `.Rmd` file or create a new `.R` script and complete them.
+
+## 1. Write a piece of code that stores a number in a variable and then check if it is greater than 5. Try to use comments!
+
+Bonus: Is there a way to store the result of checking if the number is greater than 5?
+
+```{r}
+```
+
+## 2. Make a vector with the numbers 1 through 26. Multiply the vector by 2, and give the resulting vector names A through Z
+
+hint: there is a built in vector called LETTERS
+
+```{r}
+
+```
+
+## 3. Make a matrix with the numbers 1:50, with 5 columns and 10 rows. Did the matrix function fill your matrix by column, or by row, as its default behavior? Once you have figured it out, try to change the default.
+
+hint: read the documentation for `matrix`. To automatically call in documentation type `?` before the function, package, etc.
+
+```{r}
+
+```
+
+#### Bonus: Which of the following commands was used to generate the matrix below?
+
+-   `matrix(c(4, 1, 9, 5, 10, 7), nrow = 3)`
+-   `matrix(c(4, 9, 10, 1, 5, 7), ncol = 2, byrow = TRUE)`
+-   `matrix(c(4, 9, 10, 1, 5, 7), nrow = 2)`
+-   `matrix(c(4, 1, 9, 5, 10, 7), ncol = 2, byrow = TRUE)`
+
+```{r}
+
+```
+
+## 4. Create a list of length two containing a character vector for each of the data sections: (1) Data types and (2) Data structures. Populate each character vector with the names of the data types and data structures, respectively.
+
+```{r}
+
+```
+
+## 5. Data frames There are several subtly different ways to call variables, observations and elements from data frames. Try them all and discuss with your team what they return.
+
+Hint, use the function `typeof()`
+
+-   `iris[1]`
+-   `iris[[1]]`
+-   `iris$Species`
+-   `iris["Species"]`
+-   `iris[1,1]`
+-   `iris[,1]`
+-   `iris[1,]`
+
+```{r}
+
+```
+
+## 6. Take the list you created in 4 and coerce it into a data frame. Then change the names of the columns to "dataTypes" and "dataStructures"
+
+```{r}
+
+```
+
+## 7. Create a vector `x` of numbers from 1 to 100. Find all the odd numbers in `x`
+
+Hint: `3 %% 2 = 1` and `4 %% 2 = 0`
+
+```{r}
+
+
+```
+
+
+# Solutions
+
+## 1. Write a piece of code that stores a number in a variable and then check if it is greater than 5. Try to use comments!
+
+Bonus: Is there a way to store the result after checking the number?
+
+```{r, eval = F}
+
+x <- 10
+x > 5
+
+#Bonus
+y <- x > 5
+
+print(y)
+```
+
+## 2. Make a vector with the numbers 1 through 26. Multiply the vector by 2, and give the resulting vector names A through Z
+
+hint: there is a built in vector called LETTERS
+
+```{r, eval = F}
+x <- 1:26
+x <- x * 2
+names(x) <- LETTERS
+```
+
+## 3. Make a matrix with the numbers 1:50, with 5 columns and 10 rows. Did the matrix function fill your matrix by column, or by row, as its default behavior? Once you have figured it out, try to change the default.
+
+hint: read the documentation for `matrix`. To automatically call in documentation type `?` before the function, package, etc.
+
+```{r, eval = F}
+# By default the matrix is filled by columns, we can change this behavior using byrow=TRUE
+m<-matrix(1:50,ncol = 5,nrow = 10,byrow = T)
+```
+
+#### Bonus: Which of the following commands was used to generate the matrix below?
+
+-   `matrix(c(4, 1, 9, 5, 10, 7), nrow = 3)`
+-   `matrix(c(4, 9, 10, 1, 5, 7), ncol = 2, byrow = TRUE)`
+-   `matrix(c(4, 9, 10, 1, 5, 7), nrow = 2)`
+-   `matrix(c(4, 1, 9, 5, 10, 7), ncol = 2, byrow = TRUE)`
+
+```{r, eval = F}
+matrix(c(4, 1, 9, 5, 10, 7), ncol = 2, byrow = TRUE)
+```
+
+## 4. Create a list of length two containing a character vector for each of the data sections: (1) Data types and (2) Data structures. Populate each character vector with the names of the data types and data structures, respectively.
+
+```{r, eval = F}
+dt <- c('double', 'complex', 'integer', 'character', 'logical')
+ds <- c('data.frame', 'vector', 'factor', 'list', 'matrix')
+data.sections <- list(dt, ds)
+```
+
+## 5. Data frames There are several subtly different ways to call variables, observations and elements from data frames. Try them all and discuss with your team what they return.
+
+Hint, use the function `typeof()`
+
+-   `iris[1]`
+-   `iris[[1]]`
+-   `iris$Species`
+-   `iris["Species"]`
+-   `iris[1,1]`
+-   `iris[,1]`
+-   `iris[1,]`
+
+```{r,eval=F}
+# The single brace [1] returns the first slice of the list, as another list. In this case it is the first column of the data frame.
+iris[1]
+# The double brace [[1]] returns the contents of the list item. In this case it is the contents of the first column, a vector of type factor.
+iris[[1]]
+# This example uses the $ character to address items by name. Species is a vector of type factor.
+iris$Species
+# A single brace ["Species"] instead of the index number with the column name will also return a list like in the first example
+iris["Species"]
+# First element of first row and first column. The returned element is an integer
+iris[1,1]
+# First column. Returns a vector
+iris[,1]
+# First row. Returns a list with all the values in the first row.
+iris[1,]
+```
+
+## 6. Take the list you created in 4 and coerce it into a data frame. Then change the names of the columns to "dataTypes" and "dataStructures"
+
+```{r, eval = F}
+df<-as.data.frame(data.sections)
+colnames(df)<-c("dataTypes","dataStructures")
+```
+
+
+## 7. Create a vector `x` of numbers from 1 to 100. Find all the odd numbers in `x`
+
+Hint: `3 %% 2 = 1` and `4 %% 2 = 0`
+
+```{r, eval = F}
+
+x <- c(1:100)
+x[x %% 2 ==1]
+
+```
+
+

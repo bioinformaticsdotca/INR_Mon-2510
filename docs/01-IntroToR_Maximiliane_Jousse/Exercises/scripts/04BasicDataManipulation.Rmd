@@ -1,0 +1,329 @@
+---
+title: "Intro to R 04: Basic Data Manipulation"
+author: 
+- name: "Maximiliane Jousse"
+  affiliation: Workshop Lead
+- name: Larisa M. Soto
+  affiliation: Original Material
+- name: Adrien Osakwe
+  affiliation: Original Material
+- name: Xiaoqi Xie
+  affiliation: Original Material
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+   rmdformats::html_clean:
+    toc: true
+    thumbnails: false
+    floating: true
+    highlight: kate
+    use_bookdown: true
+---
+
+# Examples
+
+In this section we go over the material.
+
+## `.Rmd` files and paths
+
+Despite being in a `.Rproj`, the working directory for a `.Rmd` is automatically the folder the `.Rmd` file is in.
+
+```{r}
+getwd() #function to get the working directory
+```
+
+Therefore, to save a file into a desired path becomes a bit more complicated. Fortunately the following shorthands exist: `.` signifies the working directory, therefore setting a path as `./` will save the object to the current directory. `..` signifies going up a folder. In this case, `../` will signify the `Exercises` folder. To save an object in the `IntroToR` folder, say, we therefore write `../../`.
+
+## Read/Write
+
+Several nifty functions exist to read and write files.
+
+```{r}
+?read.csv() #reads .csv files into data.frames
+?read.table()
+?readRDS()
+```
+
+```{r}
+?write.csv()
+?write.table()
+?saveRDS()
+```
+
+Many packages also allow you to read/write different files. Technically `read.csv()` comes from the `utils` package, which is installed directly with R.
+
+```{r, eval = F}
+?readr::read_csv()
+?terra::rast() #in spatial ecology we use the Terra package to read spatial data
+```
+
+## Data frames
+
+Data frames are the easiest ways to manipulate, analyse, and visualize data in `.R`. For these examples we will use data from the package `palmerpenguins`, a toy data set for exploration and visualization. See <https://allisonhorst.github.io/palmerpenguins/>.
+
+```{r, eval = F}
+#install.packages("Rtools")
+install.packages("palmerpenguins")
+library(palmerpenguins)
+```
+
+```{r}
+# Let us first call and save a copy of the PP dataset penguins
+df <- penguins
+```
+
+### Indexing
+
+We have seen ways to index data frames in `./02DataTypes.Rmd`. As a refresher, we will show ways to index the palmer penguins data set.
+
+```{r}
+df[1] # first row
+```
+
+```{r}
+df[1,1] #first row and first column
+```
+
+```{r}
+df[1,] # first row
+```
+
+```{r}
+df[,1] # first column
+```
+
+```{r}
+df$species #species column
+```
+
+```{r}
+df[, "island"] # named column
+```
+
+### Subset-ing
+
+Subset-ing is very similar to indexing, and usually combines indexing with logical operators.
+
+```{r}
+df[df$species == "Adelie",] #rows where the species is Adelie
+```
+
+```{r}
+df[df$sex == "female" & df$year > 2006, ]
+```
+
+`:` is used as a "through" operator. I.e. `3:6` represents `3, 4, 5, 6`. We can use this to subset our data frame.
+
+```{r}
+df[1:3, 1:3]
+```
+
+### Manipulating
+
+We can apply `mean()`, `sum()`, etc.. to data frame columns.
+
+```{r}
+mean(df$bill_len)
+```
+
+Note we get `NA` as an answer. Why is that...? There are Nas in the dataset. We can remove them, or we can use a nice trick of `mean():`
+
+```{r}
+mean(df$bill_len, na.rm = TRUE)
+```
+
+To identify `NA`s, we use base R function `is.na()`.
+
+```{r}
+
+#removing NAs uses
+df_noNa <- df[!is.na(df$bill_len), ]
+mean(df_noNa$bill_len)
+```
+
+**Bonus!** What is "wrong" with `df_noNa` ?
+
+Next we can go in and change values! Let's say all the `NA`s in `bill_len` actually should be 0s.
+
+```{r}
+df[is.na(df$bill_len), "bill_len"] <- 0
+```
+
+**Bonus!** where did these changes save?
+
+```{r}
+mean(df$bill_len)
+```
+
+### Adding Data
+
+We can add columns and rows to the data!
+
+```{r}
+df$new_col <- NA #creates a new column with NA values
+```
+
+This can also be done using functions
+
+```{r}
+?cbind()
+cbind(df, df$species) #adding the species column to the df
+```
+
+**Bonus!** Did the above snippet of code modify `df`?
+
+### Apply
+
+`apply()` refers to a suite of base R functions which apply a function over a vector, array, or list. These have include `lapply()` , `tapply()`, `sapply()`, `mapply()`.
+
+```{r}
+# Here we subset df to numerical columns (which are cols. 3 to 6, where : indicates through). We apply the function mean over the columns, and remove Nas.
+apply(df[, 3:6], 2, mean, na.rm = TRUE)
+```
+
+### Example R/W
+
+Finally, lets write our toy data to the data folder as a `.csv` file.
+
+```{r}
+df <- penguins #lets overwrite df with the penguin data to save the original
+
+write.csv(df, "../data/penguins.csv" , row.names = F)
+```
+
+To make sure we did it right, we will read the data we saved.
+
+```{r}
+read.csv("../data/penguins.csv")
+```
+
+# Exercises
+
+These can be done in the `.Rmd` or in a separate `.R` script. To start, install and load the `gapminder` package.
+
+## 1. Write a data processing snippet to include only the data points collected after 1995 in Asian countries and save a CSV file
+
+```{r}
+
+```
+
+## 2. Separate the `gapminder` data frame into 5 individual data frames, one for each continent. Store those 5 data frames as an `RData` file in the `results` folder called `continents.RData`.
+
+```{r}
+
+```
+
+## 3. Finish exploring the `gapminder` data frame and a) Find the number of rows and the number of columns, b) Print the data type of each column, c) Explain the meaning of everything that `str(gapminder)` prints
+
+```{r}
+
+```
+
+## 4. In which years has the GDP of Canada been larger than the average of all data points?
+
+```{r}
+
+```
+
+## 5. Find the mean life expectancy of Switzerland before and after 2000
+
+```{r}
+
+```
+
+## 6. You discovered that all the entries from 2007 are actually from 2008. Create a copy of the full `gapminder` data frame in an object called `gp`. Then change the year column to correct the entries from 2007.
+
+```{r}
+
+```
+
+## **Bonus -** Find the mean life expectancy and mean gdp per continent using the function `tapply`
+
+hint: to understand the tapply function, use the `?`
+
+```{r}
+
+```
+
+# Solutions
+
+```{r, eval = F}
+#install.packages(gapminder)
+library(gapminder)
+
+```
+
+## 1. Write a data processing snippet to include only the data points collected after 1995 in Asian countries and save a CSV file
+
+```{r,eval=F}
+asia<-gapminder[gapminder$year > 1995 & gapminder$continent=="Asia", ]
+
+write.table(asia,
+            file = "data/gapminder_after1995_asia.csv",
+            sep = ",", 
+            quote = FALSE, 
+            row.names = FALSE)
+```
+
+## 2. Separate the `gapminder` data frame into 5 individual data frames, one for each continent. Store those 5 data frames as an `RData` file in the `results` folder called `continents.RData`.
+
+```{r,eval=FALSE}
+
+asia<-gapminder[gapminder$continent=="Asia", ]
+africa<-gapminder[gapminder$continent=="Africa", ]
+oceania<-gapminder[gapminder$continent=="Oceania", ]
+europe<-gapminder[gapminder$continent=="Europe", ]
+americas<-gapminder[gapminder$continent=="Americas", ]
+
+save(asia,africa,oceania,europe,americas,file="../results/continents.RData")
+```
+
+## 3. Finish exploring the `gapminder` data frame and a) Find the number of rows and the number of columns, b) Print the data type of each column, c) Explain the meaning of everything that `str(gapminder)` prints
+
+```{r,eval=F}
+dim(gapminder)
+
+typeof(gapminder$country)
+typeof(gapminder$continent)
+typeof(gapminder$year)
+typeof(gapminder$lifeExp)
+typeof(gapminder$pop)
+typeof(gapminder$gdpPercap)
+
+str(gapminder)
+```
+
+## 4. In which years has the GDP of Canada been larger than the average of all data points?
+
+```{r,eval=F}
+canada<-gapminder[gapminder$country=="Canada",]
+mgdp<-mean(canada$gdpPercap)
+canada[canada$gdpPercap>mgdp,"year"]
+```
+
+## 5. Find the mean life expectancy of Switzerland before and after 2000
+
+```{r,eval=F}
+swiss<-gapminder[gapminder$country=="Switzerland",]
+mean(swiss[swiss$year<2000,]$lifeExp) # Before
+mean(swiss[swiss$year>2000,]$lifeExp) # After
+```
+
+## 6. You discovered that all the entries from 2007 are actually from 2008. Create a copy of the full `gapminder` data frame in an object called `gp`. Then change the year column to correct the entries from 2007.
+
+```{r,eval=F}
+gp<-gapminder
+gp[gp$year==2007,"year"]<-2008
+gp[gp$year==2008,]
+```
+
+## **Bonus -** Find the mean life expectancy and mean gdp per continent using the function `tapply`
+
+hint: to understand the tapply function, use the `?`
+
+```{r, eval = F}
+?tapply()
+```
+
+```{r,eval=F}
+tapply(gapminder$lifeExp,gapminder$continent,mean)
+```
