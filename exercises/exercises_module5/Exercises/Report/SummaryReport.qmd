@@ -1,0 +1,94 @@
+---
+title: "Breast Cancer Patient Summary"
+author: "Author"
+format: html
+editor: visual
+---
+
+## Premise
+
+This report aims to provide core summary statistics for breast cancer patient data collected at the University of Wisconsin. The data comprises multiple quantitative attributes for benign and malignant samples. Results of this script will be updated as patient data is collected.
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+
+#QUESTION: why would we set message and warning to false here?
+```
+
+## Load Data
+
+```{r}
+#Loading full dataset.
+df <- read.csv('./breast_cancer_v1.csv')
+```
+
+```{r}
+#Loading descriptions for column names
+meta_df <- readRDS('./meta.rds')
+meta_df
+```
+
+## Brief Inspection of Dataset
+
+```{r}
+## Run the head() function on the df object to see the first 6 rows
+##try using the %>% operator
+```
+
+## Summary Statistics
+
+```{r}
+#TODO Create a data frame storing the mean and media for Cell.Size and Cell.Shape
+# Separate samples by Class
+##Hint:  we need to use the group_by and summarize functions!
+
+
+
+#####
+
+#TODO print out the created data frame
+
+
+#Hint: min(), mean(), median(), max() and quantile() are all functions in R use ? to check their usage
+```
+
+## Clinical Variable Visualization
+
+```{r}
+
+#Observing correlation between Cell size and shape
+ggplot(df,aes(x = Cell.size,
+              y = Cell.shape)) +
+  geom_point()
+## TODO Update the function to color by sample Class!
+#Hint: 
+## Update the plot to include labels and add a title (hint: aes(color = ?,..), ?labs)
+```
+
+```{r}
+#Box plots for Cell siZe and shape
+ggplot(df, aes(y = Cell.size)) +
+  geom_boxplot()
+```
+
+```{r}
+## TODO
+# Recreate the previous plot but visualize malignant and benign samples separately so that they can be compared
+##hint aes(x =?,....)
+```
+
+## Linear Classification
+
+```{r}
+#TODO Use what you learned in Module 3 to apply a logistic regression to predict the tumor class using TWO variables
+
+
+#hint ?glm and ?predict.glm
+#additional hint: see the example in the Example report we saw earlier
+```
+
+```{r}
+#TODO visualize the predictions (first plot) and compare them to the true labels (second plot)
+```
