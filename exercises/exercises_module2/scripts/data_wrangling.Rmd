@@ -308,4 +308,3 @@ Solution
 ```{r hands on 4 ex}
 
 ```
-#

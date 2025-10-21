@@ -205,7 +205,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#requirements-1"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#lecture-1"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#lab-1"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#lab-1"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#loading-libraries"><i class="fa fa-check"></i>Loading libraries</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#selected-dplyr-functions"><i class="fa fa-check"></i>Selected dplyr functions</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#piping-functions"><i class="fa fa-check"></i>Piping functions</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#tidyr-pivot-functions"><i class="fa fa-check"></i>tidyr pivot functions</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#managing-missing-values"><i class="fa fa-check"></i>Managing missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#solutions-6"><i class="fa fa-check"></i>Solutions</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#hands-on-1-conversion-of-script-1"><i class="fa fa-check"></i>Hands on 1: Conversion of script</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#hands-on-2-1"><i class="fa fa-check"></i>Hands on 2:</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#hands-on-3-find-the-errors-1"><i class="fa fa-check"></i>Hands on 3: Find the errors</a></li>
+<li class="chapter" data-level="" data-path="practical-2.html"><a href="practical-2.html#hands-on-4-1"><i class="fa fa-check"></i>Hands-on 4:</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-3.html"><a href="practical-3.html"><i class="fa fa-check"></i>Practical 3</a>
 <ul>
@@ -303,8 +317,317 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="lab-1" class="section level2 hasAnchor">
 <h2>Lab<a href="practical-2.html#lab-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For this practical, you can download this <a href="./exercises/exercises_module2/scripts/data_wrangling.Rmd"><strong>script</strong></a>.</p>
+<div id="loading-libraries" class="section level3 hasAnchor">
+<h3>Loading libraries<a href="practical-2.html#loading-libraries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="practical-2.html#cb173-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb173-2"><a href="practical-2.html#cb173-2" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code></pre></div>
+</div>
+<div id="selected-dplyr-functions" class="section level3 hasAnchor">
+<h3>Selected dplyr functions<a href="practical-2.html#selected-dplyr-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="select" class="section level4 hasAnchor">
+<h4>1- Select<a href="practical-2.html#select" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Select permits to extract, and potentially rename, one or more columns of a data frame.</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="practical-2.html#cb174-1" tabindex="-1"></a><span class="fu">help</span>(select)</span></code></pre></div>
+<div id="examples-5" class="section level5 hasAnchor">
+<h5>Examples<a href="practical-2.html#examples-5" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Select the column “Species” from data frame iris</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="practical-2.html#cb175-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(iris, Species))</span></code></pre></div>
+<p>Select the columns “Sepal.Length” and “Species” from data frame iris</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="practical-2.html#cb176-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(iris, Sepal.Length, Species))</span></code></pre></div>
+<p>Select the columns “Sepal.Length” and “Species” from data frame iris AND rename “Sepal.Length” as “Sepal”</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="practical-2.html#cb177-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(iris, <span class="at">Sepal =</span> Sepal.Length, Species))</span></code></pre></div>
+</div>
+</div>
+<div id="filter" class="section level4 hasAnchor">
+<h4>2- Filter<a href="practical-2.html#filter" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Extract rows of a data frame, based on some conditions they need to meet.</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="practical-2.html#cb178-1" tabindex="-1"></a><span class="fu">help</span>(filter)</span></code></pre></div>
+<div id="examples-6" class="section level5 hasAnchor">
+<h5>Examples<a href="practical-2.html#examples-6" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Select rows of Species “versicolor”</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="practical-2.html#cb179-1" tabindex="-1"></a><span class="fu">filter</span>(iris, Species <span class="sc">==</span> <span class="st">&#39;versicolor&#39;</span>)</span></code></pre></div>
+<p>Select rows of Species “versicolor” AND Sepal.Length is smaller than 6</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="practical-2.html#cb180-1" tabindex="-1"></a><span class="fu">filter</span>(iris, Species <span class="sc">==</span> <span class="st">&#39;versicolor&#39;</span> <span class="sc">&amp;</span> Sepal.Length <span class="sc">&lt;</span> <span class="dv">6</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="group-by" class="section level4 hasAnchor">
+<h4>3- Group by<a href="practical-2.html#group-by" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Split a data frame in parts, based on the values contained in a column.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="practical-2.html#cb181-1" tabindex="-1"></a><span class="fu">help</span>(group_by)</span></code></pre></div>
+<div id="example" class="section level5 hasAnchor">
+<h5>Example<a href="practical-2.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Group by Species</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="practical-2.html#cb182-1" tabindex="-1"></a><span class="fu">group_by</span>(iris, Species)</span></code></pre></div>
+</div>
+</div>
+<div id="summarize" class="section level4 hasAnchor">
+<h4>4- Summarize<a href="practical-2.html#summarize" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Group by the values in a column, then produce a specified summary statistic.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="practical-2.html#cb183-1" tabindex="-1"></a><span class="fu">help</span>(summarize)</span></code></pre></div>
+<div id="examples-7" class="section level5 hasAnchor">
+<h5>Examples<a href="practical-2.html#examples-7" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Get the mean Petal.Length</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="practical-2.html#cb184-1" tabindex="-1"></a><span class="fu">summarize</span>(iris, <span class="fu">mean</span>(Petal.Length))</span></code></pre></div>
+<p>Get the mean Petal.Length, Petal.Length standard deviation and mean Sepal.Length AND rename them</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="practical-2.html#cb185-1" tabindex="-1"></a><span class="fu">summarize</span>(iris,</span>
+<span id="cb185-2"><a href="practical-2.html#cb185-2" tabindex="-1"></a>          <span class="at">Mean_petal_length =</span> <span class="fu">mean</span>(Petal.Length),</span>
+<span id="cb185-3"><a href="practical-2.html#cb185-3" tabindex="-1"></a>          <span class="at">SD_petal_length =</span> <span class="fu">sd</span>(Petal.Length),</span>
+<span id="cb185-4"><a href="practical-2.html#cb185-4" tabindex="-1"></a>          <span class="at">Mean_sepal_length =</span> <span class="fu">mean</span>(Sepal.Length))</span></code></pre></div>
+</div>
+</div>
+<div id="count" class="section level4 hasAnchor">
+<h4>5- Count<a href="practical-2.html#count" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Count the number of individuals (rows) in a given category.</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="practical-2.html#cb186-1" tabindex="-1"></a><span class="fu">help</span>(count)</span></code></pre></div>
+<div id="examples-8" class="section level5 hasAnchor">
+<h5>Examples<a href="practical-2.html#examples-8" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Count the number of individual in each species</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="practical-2.html#cb187-1" tabindex="-1"></a><span class="fu">count</span>(iris, Species)</span></code></pre></div>
+<p>Count the number of individuals with Sepal.Length above 6</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="practical-2.html#cb188-1" tabindex="-1"></a><span class="fu">count</span>(iris, Sepal.Length <span class="sc">&gt;</span> <span class="dv">6</span>)</span></code></pre></div>
+<p>Count the number of individuals with Sepal.Length above 6, group by Species AND rename the column</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="practical-2.html#cb189-1" tabindex="-1"></a><span class="fu">count</span>(iris, Sepal.Length <span class="sc">&gt;</span> <span class="dv">6</span>, Species, <span class="at">name =</span> <span class="st">&#39;sepal_length_bigger_6&#39;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="mutate" class="section level4 hasAnchor">
+<h4>6- Mutate<a href="practical-2.html#mutate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Transform, combine and do operations on columns</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="practical-2.html#cb190-1" tabindex="-1"></a><span class="fu">help</span>(mutate)</span></code></pre></div>
+<div id="examples-9" class="section level5 hasAnchor">
+<h5>Examples<a href="practical-2.html#examples-9" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Compute the Petal area (assuming diamond shapes)</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="practical-2.html#cb191-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">mutate</span>(iris, <span class="at">Petal_surface =</span> Petal.Length <span class="sc">*</span> Petal.Width <span class="sc">/</span> <span class="dv">2</span>))</span></code></pre></div>
+<p>Compute the sums of lengths and widths</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="practical-2.html#cb192-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">mutate</span>(iris, <span class="at">Length_sum =</span> Petal.Length <span class="sc">+</span> Sepal.Length, <span class="at">Width_sum =</span> Petal.Width <span class="sc">+</span> Sepal.Width))</span></code></pre></div>
+<p>Here is a link to a cheatsheet, that contains small descriptions of many dplyr functions:
+<a href="https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf</a></p>
+</div>
+</div>
+</div>
+<div id="piping-functions" class="section level3 hasAnchor">
+<h3>Piping functions<a href="practical-2.html#piping-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Say that we want to group the iris data frame by species, then create summary statistics. We can do it…
+#### …Witout piping</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="practical-2.html#cb193-1" tabindex="-1"></a>grouped_by_species <span class="ot">&lt;-</span> <span class="fu">group_by</span>(iris, Species)</span>
+<span id="cb193-2"><a href="practical-2.html#cb193-2" tabindex="-1"></a>mean_stats <span class="ot">&lt;-</span> <span class="fu">summarize</span>(grouped_by_species,</span>
+<span id="cb193-3"><a href="practical-2.html#cb193-3" tabindex="-1"></a>                        <span class="fu">mean</span>(Petal.Length), </span>
+<span id="cb193-4"><a href="practical-2.html#cb193-4" tabindex="-1"></a>                        <span class="fu">mean</span>(Petal.Width), </span>
+<span id="cb193-5"><a href="practical-2.html#cb193-5" tabindex="-1"></a>                        <span class="fu">mean</span>(Sepal.Length), </span>
+<span id="cb193-6"><a href="practical-2.html#cb193-6" tabindex="-1"></a>                        <span class="fu">mean</span>(Sepal.Width))</span>
+<span id="cb193-7"><a href="practical-2.html#cb193-7" tabindex="-1"></a>mean_stats</span></code></pre></div>
+<div id="with-piping" class="section level4 hasAnchor">
+<h4>…With piping<a href="practical-2.html#with-piping" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="practical-2.html#cb194-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb194-2"><a href="practical-2.html#cb194-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb194-3"><a href="practical-2.html#cb194-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">mean</span>(Petal.Length), <span class="fu">mean</span>(Petal.Width), <span class="fu">mean</span>(Sepal.Length), <span class="fu">mean</span>(Sepal.Width))</span></code></pre></div>
+<p>The piping operator <code>%&gt;%</code> permits to put multiple functions one after the other, where the output of the function of the left of the pipe operator is used as first argument of the function on the right side.</p>
+</div>
+<div id="hands-on-1-conversion-of-script" class="section level4 hasAnchor">
+<h4>Hands on 1: Conversion of script<a href="practical-2.html#hands-on-1-conversion-of-script" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Convert the following script to its piped version:</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="practical-2.html#cb195-1" tabindex="-1"></a>grouped_cars <span class="ot">&lt;-</span> <span class="fu">group_by</span>(mtcars, vs, hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="co"># group by vs (engine shape) and hp (horsepower)</span></span>
+<span id="cb195-2"><a href="practical-2.html#cb195-2" tabindex="-1"></a>ratio_mpg_wt <span class="ot">&lt;-</span> <span class="fu">mutate</span>(grouped_cars,<span class="at">ratio =</span> mpg<span class="sc">/</span>wt) <span class="co"># add a column with the ratio of mpg (miles per gallon) and wt (weight)</span></span>
+<span id="cb195-3"><a href="practical-2.html#cb195-3" tabindex="-1"></a><span class="fu">summarize</span>(ratio_mpg_wt,</span>
+<span id="cb195-4"><a href="practical-2.html#cb195-4" tabindex="-1"></a>          <span class="at">Mean_weight =</span> <span class="fu">mean</span>(wt),</span>
+<span id="cb195-5"><a href="practical-2.html#cb195-5" tabindex="-1"></a>          <span class="at">Mean_mpg =</span> <span class="fu">mean</span>(mpg),</span>
+<span id="cb195-6"><a href="practical-2.html#cb195-6" tabindex="-1"></a>          <span class="at">Mean_ratio =</span> <span class="fu">mean</span>(ratio)) <span class="co"># summarize statistics</span></span></code></pre></div>
+<p>Solution</p>
+</div>
+<div id="hands-on-2" class="section level4 hasAnchor">
+<h4>Hands on 2:<a href="practical-2.html#hands-on-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Count the number of cars with (1) a sum of gears (gear) and carburators (carb) &gt;= 6, (2) a number of cylinders (cyl) &lt; 8 and (3) stratified by engine shape (vs)</p>
+<p>Solution</p>
+</div>
+<div id="hands-on-3-find-the-errors" class="section level4 hasAnchor">
+<h4>Hands on 3: Find the errors<a href="practical-2.html#hands-on-3-find-the-errors" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We want to get the number of flowers with a sepal area (assuming area = width * length / 2) &gt; 10, stratified by species</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="practical-2.html#cb196-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb196-2"><a href="practical-2.html#cb196-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area =</span> Sepal.Length <span class="sc">*</span> Sepal.Width <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb196-3"><a href="practical-2.html#cb196-3" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb196-4"><a href="practical-2.html#cb196-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">sum</span>(area))</span></code></pre></div>
+<p>Solution</p>
+<p>We want summary statistics by brand</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="practical-2.html#cb197-1" tabindex="-1"></a><span class="co">#mtcars %&gt;%</span></span>
+<span id="cb197-2"><a href="practical-2.html#cb197-2" tabindex="-1"></a><span class="co">#  mutate(brand = sub(&#39; .*&#39;, &#39;&#39;, row.names(mtcars))) %&gt;%</span></span>
+<span id="cb197-3"><a href="practical-2.html#cb197-3" tabindex="-1"></a><span class="co">#  group_by(brand) %&gt;%</span></span>
+<span id="cb197-4"><a href="practical-2.html#cb197-4" tabindex="-1"></a><span class="co">#  summarize(sum(brand), mean(gear), mean(carb))</span></span>
+<span id="cb197-5"><a href="practical-2.html#cb197-5" tabindex="-1"></a></span>
+<span id="cb197-6"><a href="practical-2.html#cb197-6" tabindex="-1"></a><span class="co"># ERROR</span></span></code></pre></div>
+<p>Solution</p>
+</div>
+</div>
+<div id="tidyr-pivot-functions" class="section level3 hasAnchor">
+<h3>tidyr pivot functions<a href="practical-2.html#tidyr-pivot-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The pivot functions (<code>pivot_longer</code> and <code>pivot_wider</code>) can be used to transform a data frame, such as to convert columns into row values and vice-versa. For example, if we have a data in wide format…</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="practical-2.html#cb198-1" tabindex="-1"></a>billboard_subset <span class="ot">&lt;-</span> billboard[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>]</span>
+<span id="cb198-2"><a href="practical-2.html#cb198-2" tabindex="-1"></a><span class="fu">print</span>(billboard_subset)</span></code></pre></div>
+<p>…we can convert it to long format…</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="practical-2.html#cb199-1" tabindex="-1"></a>billboard_long <span class="ot">&lt;-</span> billboard_subset <span class="sc">%&gt;%</span></span>
+<span id="cb199-2"><a href="practical-2.html#cb199-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;wk&quot;</span>),</span>
+<span id="cb199-3"><a href="practical-2.html#cb199-3" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;week&quot;</span>,</span>
+<span id="cb199-4"><a href="practical-2.html#cb199-4" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">&quot;wk&quot;</span>,</span>
+<span id="cb199-5"><a href="practical-2.html#cb199-5" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;rank&quot;</span>)</span>
+<span id="cb199-6"><a href="practical-2.html#cb199-6" tabindex="-1"></a><span class="fu">print</span>(billboard_long)</span></code></pre></div>
+<p>…then back to wide</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="practical-2.html#cb200-1" tabindex="-1"></a>billboard_wide <span class="ot">&lt;-</span> billboard_long <span class="sc">%&gt;%</span></span>
+<span id="cb200-2"><a href="practical-2.html#cb200-2" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;week&quot;</span>,</span>
+<span id="cb200-3"><a href="practical-2.html#cb200-3" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">&quot;rank&quot;</span>,</span>
+<span id="cb200-4"><a href="practical-2.html#cb200-4" tabindex="-1"></a>              <span class="at">names_prefix =</span> <span class="st">&quot;wk&quot;</span>)</span>
+<span id="cb200-5"><a href="practical-2.html#cb200-5" tabindex="-1"></a><span class="fu">print</span>(billboard_wide)</span></code></pre></div>
+</div>
+<div id="managing-missing-values" class="section level3 hasAnchor">
+<h3>Managing missing values<a href="practical-2.html#managing-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Some data sets may have missing values, generally represented by <code>NA</code>.
+These can be due to:
+- Missed medical appointment
+- Error of measuring instruments
+- Sampling stochasticity
+- …</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="practical-2.html#cb201-1" tabindex="-1"></a><span class="fu">View</span>(who2)</span></code></pre></div>
+<p>We can deal with these misisng values in multiple ways.</p>
+<div id="ignoring-missing-values" class="section level4 hasAnchor">
+<h4>1- Ignoring missing values<a href="practical-2.html#ignoring-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We want to have the average number and standard deviation of cases per country for positive smear in males between 0 and 14 years old (sp_m_014)</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="practical-2.html#cb202-1" tabindex="-1"></a>who2 <span class="sc">%&gt;%</span></span>
+<span id="cb202-2"><a href="practical-2.html#cb202-2" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb202-3"><a href="practical-2.html#cb202-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(sp_m_014),</span>
+<span id="cb202-4"><a href="practical-2.html#cb202-4" tabindex="-1"></a>            <span class="at">SD =</span> <span class="fu">sd</span>(sp_m_014))</span></code></pre></div>
+<p>With na.rm</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="practical-2.html#cb203-1" tabindex="-1"></a>who2 <span class="sc">%&gt;%</span></span>
+<span id="cb203-2"><a href="practical-2.html#cb203-2" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb203-3"><a href="practical-2.html#cb203-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(sp_m_014, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb203-4"><a href="practical-2.html#cb203-4" tabindex="-1"></a>            <span class="at">SD =</span> <span class="fu">sd</span>(sp_m_014, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+</div>
+<div id="dropping-missing-values" class="section level4 hasAnchor">
+<h4>2- Dropping missing values<a href="practical-2.html#dropping-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We want to clean the table once and for all.
+We can remove rows that have missing values in specified columns only</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="practical-2.html#cb204-1" tabindex="-1"></a>who2 <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(sp_m_014)</span></code></pre></div>
+<p>By default, drop_na will drop all rows with a missing value in any column</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="practical-2.html#cb205-1" tabindex="-1"></a>who2 <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span></code></pre></div>
+<p>Alternatively, we can drop rows that only have missing data</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="practical-2.html#cb206-1" tabindex="-1"></a>to_keep <span class="ot">&lt;-</span> who2[, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>)] <span class="sc">%&gt;%</span> <span class="co"># remove the first 2 columns</span></span>
+<span id="cb206-2"><a href="practical-2.html#cb206-2" tabindex="-1"></a>  <span class="fu">is.na</span>() <span class="sc">%&gt;%</span> <span class="co"># test if each entry is an NA</span></span>
+<span id="cb206-3"><a href="practical-2.html#cb206-3" tabindex="-1"></a>  <span class="fu">rowSums</span>() <span class="sc">!=</span> (<span class="fu">ncol</span>(who2)<span class="sc">-</span><span class="dv">2</span>) <span class="co"># count the NAs in each row and check if different from the max</span></span>
+<span id="cb206-4"><a href="practical-2.html#cb206-4" tabindex="-1"></a>who2[to_keep,]</span></code></pre></div>
+</div>
+<div id="replacing-missing-values" class="section level4 hasAnchor">
+<h4>3- Replacing missing values<a href="practical-2.html#replacing-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We assume NA replace the absence of cases and are equivalent to 0.
+First, we create the named list used as parameter in replace_na()</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="practical-2.html#cb207-1" tabindex="-1"></a>replacing_list <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">list</span>(<span class="dv">0</span>), <span class="fu">ncol</span>(who2))</span>
+<span id="cb207-2"><a href="practical-2.html#cb207-2" tabindex="-1"></a><span class="fu">names</span>(replacing_list) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(who2)</span>
+<span id="cb207-3"><a href="practical-2.html#cb207-3" tabindex="-1"></a>replacing_list[<span class="st">&#39;country&#39;</span>] <span class="ot">&lt;-</span> <span class="st">&#39;unknown&#39;</span></span>
+<span id="cb207-4"><a href="practical-2.html#cb207-4" tabindex="-1"></a>replacing_list[<span class="st">&#39;year&#39;</span>] <span class="ot">&lt;-</span> <span class="st">&#39;unknown&#39;</span></span></code></pre></div>
+<p>Then, we replace the NAs in the data frame</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="practical-2.html#cb208-1" tabindex="-1"></a>who2 <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(replacing_list)</span></code></pre></div>
+</div>
+<div id="imputing-missing-values" class="section level4 hasAnchor">
+<h4>4- Imputing missing values<a href="practical-2.html#imputing-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We can replace missing values by custom values for each entry. Imputation consists in inferring missing data, generally using other datapoints as reference
+Should be done on a case-by-case scenario, based on the data type and assumptions</p>
+</div>
+<div id="hands-on-4" class="section level4 hasAnchor">
+<h4>Hands-on 4:<a href="practical-2.html#hands-on-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="practical-2.html#cb209-1" tabindex="-1"></a><span class="co"># 1- Drop the relapse columns</span></span>
+<span id="cb209-2"><a href="practical-2.html#cb209-2" tabindex="-1"></a>who2_ho4 <span class="ot">&lt;-</span> who2[,<span class="fu">grep</span>(<span class="st">&#39;rel&#39;</span>, <span class="fu">colnames</span>(who2), <span class="at">invert =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb209-3"><a href="practical-2.html#cb209-3" tabindex="-1"></a><span class="do">## 2- Remove empty rows </span></span>
+<span id="cb209-4"><a href="practical-2.html#cb209-4" tabindex="-1"></a><span class="do">## Optional: remove rows with at least 80% of the data missing</span></span>
+<span id="cb209-5"><a href="practical-2.html#cb209-5" tabindex="-1"></a><span class="do">## 3- Pivot to long, then create new columns such that the data frame contains columns</span></span>
+<span id="cb209-6"><a href="practical-2.html#cb209-6" tabindex="-1"></a><span class="do">## country, year, method, sex, age. Hint: search the doc!</span></span>
+<span id="cb209-7"><a href="practical-2.html#cb209-7" tabindex="-1"></a><span class="do">## 4- Produce statistics of your choice</span></span>
+<span id="cb209-8"><a href="practical-2.html#cb209-8" tabindex="-1"></a><span class="do">## 5- Re-pivot to wide</span></span></code></pre></div>
+<p>Solution</p>
+</div>
+</div>
+</div>
+<div id="solutions-6" class="section level2 hasAnchor">
+<h2>Solutions<a href="practical-2.html#solutions-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The solutions are in this <a href="./exercises/exercises_module2/results/data_wrangling_answers.Rmd"><strong>script</strong></a>.</p>
+<div id="hands-on-1-conversion-of-script-1" class="section level3 hasAnchor">
+<h3>Hands on 1: Conversion of script<a href="practical-2.html#hands-on-1-conversion-of-script-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Convert the following script to its piped version:</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="practical-2.html#cb210-1" tabindex="-1"></a>grouped_cars <span class="ot">&lt;-</span> <span class="fu">group_by</span>(mtcars, vs, hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="co"># group by vs (engine shape) and hp (horsepower)</span></span>
+<span id="cb210-2"><a href="practical-2.html#cb210-2" tabindex="-1"></a>ratio_mpg_wt <span class="ot">&lt;-</span> <span class="fu">mutate</span>(grouped_cars,<span class="at">ratio =</span> mpg<span class="sc">/</span>wt) <span class="co"># add a column with the ratio of mpg (miles per gallon) and wt (weight)</span></span>
+<span id="cb210-3"><a href="practical-2.html#cb210-3" tabindex="-1"></a><span class="fu">summarize</span>(ratio_mpg_wt,</span>
+<span id="cb210-4"><a href="practical-2.html#cb210-4" tabindex="-1"></a>          <span class="at">Mean_weight =</span> <span class="fu">mean</span>(wt),</span>
+<span id="cb210-5"><a href="practical-2.html#cb210-5" tabindex="-1"></a>          <span class="at">Mean_mpg =</span> <span class="fu">mean</span>(mpg),</span>
+<span id="cb210-6"><a href="practical-2.html#cb210-6" tabindex="-1"></a>          <span class="at">Mean_ratio =</span> <span class="fu">mean</span>(ratio)) <span class="co"># summarize statistics</span></span></code></pre></div>
+<p>Solution</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="practical-2.html#cb211-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb211-2"><a href="practical-2.html#cb211-2" tabindex="-1"></a>  <span class="fu">group_by</span>(vs, hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb211-3"><a href="practical-2.html#cb211-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ratio =</span> mpg<span class="sc">/</span>wt) <span class="sc">%&gt;%</span></span>
+<span id="cb211-4"><a href="practical-2.html#cb211-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_weight =</span> <span class="fu">mean</span>(wt), <span class="at">Mean_mpg =</span> <span class="fu">mean</span>(mpg), <span class="at">Mean_ratio =</span> <span class="fu">mean</span>(ratio))</span></code></pre></div>
+</div>
+<div id="hands-on-2-1" class="section level3 hasAnchor">
+<h3>Hands on 2:<a href="practical-2.html#hands-on-2-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Count the number of cars with (1) a sum of gears (gear) and carburators (carb) &gt;= 6, (2) a number of cylinders (cyl) &lt; 8 and (3) stratified by engine shape (vs)</p>
+<p>Solution</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="practical-2.html#cb212-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb212-2"><a href="practical-2.html#cb212-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sum =</span> gear <span class="sc">+</span> carb) <span class="sc">%&gt;%</span></span>
+<span id="cb212-3"><a href="practical-2.html#cb212-3" tabindex="-1"></a>  <span class="fu">filter</span>(sum <span class="sc">&gt;=</span> <span class="dv">6</span>, cyl <span class="sc">&lt;</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb212-4"><a href="practical-2.html#cb212-4" tabindex="-1"></a>  <span class="fu">count</span>(vs)</span></code></pre></div>
+</div>
+<div id="hands-on-3-find-the-errors-1" class="section level3 hasAnchor">
+<h3>Hands on 3: Find the errors<a href="practical-2.html#hands-on-3-find-the-errors-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We want to get the number of flowers with a sepal area (assuming area = width * length / 2) &gt; 10, stratified by species</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="practical-2.html#cb213-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb213-2"><a href="practical-2.html#cb213-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area =</span> Sepal.Length <span class="sc">*</span> Sepal.Width <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb213-3"><a href="practical-2.html#cb213-3" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb213-4"><a href="practical-2.html#cb213-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">sum</span>(area))</span></code></pre></div>
+<p>Solution</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="practical-2.html#cb214-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb214-2"><a href="practical-2.html#cb214-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area =</span> Sepal.Length <span class="sc">*</span> Sepal.Width <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb214-3"><a href="practical-2.html#cb214-3" tabindex="-1"></a>  <span class="fu">filter</span>(area <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb214-4"><a href="practical-2.html#cb214-4" tabindex="-1"></a>  <span class="fu">count</span>(Species)</span></code></pre></div>
+<p>We want summary statistics by brand</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="practical-2.html#cb215-1" tabindex="-1"></a><span class="co">#mtcars %&gt;%</span></span>
+<span id="cb215-2"><a href="practical-2.html#cb215-2" tabindex="-1"></a><span class="co">#  mutate(brand = sub(&#39; .*&#39;, &#39;&#39;, row.names(mtcars))) %&gt;%</span></span>
+<span id="cb215-3"><a href="practical-2.html#cb215-3" tabindex="-1"></a><span class="co">#  group_by(brand) %&gt;%</span></span>
+<span id="cb215-4"><a href="practical-2.html#cb215-4" tabindex="-1"></a><span class="co">#  summarize(sum(brand), mean(gear), mean(carb))</span></span>
+<span id="cb215-5"><a href="practical-2.html#cb215-5" tabindex="-1"></a></span>
+<span id="cb215-6"><a href="practical-2.html#cb215-6" tabindex="-1"></a><span class="co"># ERROR</span></span></code></pre></div>
+<p>Solution</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="practical-2.html#cb216-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb216-2"><a href="practical-2.html#cb216-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">brand =</span> <span class="fu">sub</span>(<span class="st">&#39; .*&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="fu">row.names</span>(mtcars))) <span class="sc">%&gt;%</span></span>
+<span id="cb216-3"><a href="practical-2.html#cb216-3" tabindex="-1"></a>  <span class="fu">group_by</span>(brand) <span class="sc">%&gt;%</span></span>
+<span id="cb216-4"><a href="practical-2.html#cb216-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">length</span>(brand), <span class="fu">mean</span>(gear), <span class="fu">mean</span>(carb))</span></code></pre></div>
+</div>
+<div id="hands-on-4-1" class="section level3 hasAnchor">
+<h3>Hands-on 4:<a href="practical-2.html#hands-on-4-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="practical-2.html#cb217-1" tabindex="-1"></a><span class="co"># 1- Drop the relapse columns</span></span>
+<span id="cb217-2"><a href="practical-2.html#cb217-2" tabindex="-1"></a>who2_ho4 <span class="ot">&lt;-</span> who2[,<span class="fu">grep</span>(<span class="st">&#39;rel&#39;</span>, <span class="fu">colnames</span>(who2), <span class="at">invert =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb217-3"><a href="practical-2.html#cb217-3" tabindex="-1"></a><span class="do">## 2- Remove empty rows </span></span>
+<span id="cb217-4"><a href="practical-2.html#cb217-4" tabindex="-1"></a><span class="do">## Optional: remove rows with at least 80% of the data missing</span></span>
+<span id="cb217-5"><a href="practical-2.html#cb217-5" tabindex="-1"></a><span class="do">## 3- Pivot to long, then create new columns such that the data frame contains columns</span></span>
+<span id="cb217-6"><a href="practical-2.html#cb217-6" tabindex="-1"></a><span class="do">## country, year, method, sex, age. Hint: search the doc!</span></span>
+<span id="cb217-7"><a href="practical-2.html#cb217-7" tabindex="-1"></a><span class="do">## 4- Produce statistics of your choice</span></span>
+<span id="cb217-8"><a href="practical-2.html#cb217-8" tabindex="-1"></a><span class="do">## 5- Re-pivot to wide</span></span></code></pre></div>
+<p>Solution</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="practical-2.html#cb218-1" tabindex="-1"></a><span class="do">## 1- Drop the relapse columns</span></span>
+<span id="cb218-2"><a href="practical-2.html#cb218-2" tabindex="-1"></a>who2_ho4 <span class="ot">&lt;-</span> who2[,<span class="fu">grep</span>(<span class="st">&#39;rel&#39;</span>, <span class="fu">colnames</span>(who2), <span class="at">invert =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb218-3"><a href="practical-2.html#cb218-3" tabindex="-1"></a><span class="do">## 2- Remove empty rows </span></span>
+<span id="cb218-4"><a href="practical-2.html#cb218-4" tabindex="-1"></a><span class="do">## Optional: remove rows with at least 80% of the data missing</span></span>
+<span id="cb218-5"><a href="practical-2.html#cb218-5" tabindex="-1"></a>to_keep <span class="ot">&lt;-</span> who2_ho4[, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>)] <span class="sc">%&gt;%</span> <span class="co"># remove the first 2 columns</span></span>
+<span id="cb218-6"><a href="practical-2.html#cb218-6" tabindex="-1"></a>  <span class="fu">is.na</span>() <span class="sc">%&gt;%</span> <span class="co"># test if each entry is an NA</span></span>
+<span id="cb218-7"><a href="practical-2.html#cb218-7" tabindex="-1"></a>  <span class="fu">rowSums</span>()<span class="sc">/</span>(<span class="fu">ncol</span>(who2_ho4)<span class="sc">-</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="fl">0.8</span> <span class="co"># remove rows with less than 80% of the data</span></span>
+<span id="cb218-8"><a href="practical-2.html#cb218-8" tabindex="-1"></a>who2_ho4 <span class="ot">&lt;-</span> who2_ho4[to_keep,]</span>
+<span id="cb218-9"><a href="practical-2.html#cb218-9" tabindex="-1"></a><span class="do">## 3- Pivot to long, then create new columns such that the data frame contains columns</span></span>
+<span id="cb218-10"><a href="practical-2.html#cb218-10" tabindex="-1"></a><span class="do">## country, year, method, sex, age</span></span>
+<span id="cb218-11"><a href="practical-2.html#cb218-11" tabindex="-1"></a>who2_ho4 <span class="sc">%&gt;%</span></span>
+<span id="cb218-12"><a href="practical-2.html#cb218-12" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(who2_ho4)[<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>)],</span>
+<span id="cb218-13"><a href="practical-2.html#cb218-13" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;method&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>),</span>
+<span id="cb218-14"><a href="practical-2.html#cb218-14" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">&quot;(.*)_(.)_(.*)&quot;</span>,</span>
+<span id="cb218-15"><a href="practical-2.html#cb218-15" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;count&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb218-16"><a href="practical-2.html#cb218-16" tabindex="-1"></a>  <span class="do">## 4- Produce statistics of your choice</span></span>
+<span id="cb218-17"><a href="practical-2.html#cb218-17" tabindex="-1"></a>  <span class="fu">group_by</span>(country, method, age) <span class="sc">%&gt;%</span></span>
+<span id="cb218-18"><a href="practical-2.html#cb218-18" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Mean =</span> <span class="fu">mean</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb218-19"><a href="practical-2.html#cb218-19" tabindex="-1"></a>            <span class="at">SD =</span> <span class="fu">sd</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb218-20"><a href="practical-2.html#cb218-20" tabindex="-1"></a>  <span class="do">## 5- Re-pivot to wide</span></span>
+<span id="cb218-21"><a href="practical-2.html#cb218-21" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;method&quot;</span>,</span>
+<span id="cb218-22"><a href="practical-2.html#cb218-22" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;SD&quot;</span>))</span></code></pre></div>
 
+</div>
 </div>
 </div>
             </section>
