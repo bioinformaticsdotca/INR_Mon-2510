@@ -27,17 +27,413 @@ You will also need previous experience with probability to best benefit from the
 
 For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/linear_regression.Rmd).
 
+
+#### Loading libraries
+```{r Loading libraries linear regr, eval = F}
+library(tidyverse)
+```
+
+#### Verifying the dataset
+Let's take the iris data set, and check if the petal length and width follow a linear correlation
+```{r plot data linear regr, eval = F}
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species))
+cor(iris$Petal.Length, iris$Petal.Width)
+```
+The data seems to be linearly correlated. The species have different ranges of sizes, but they seem to all follow the same trend.
+
+
+#### Fitting with MLE
+##### 1- Estimating beta1
+$$\hat{\beta_1} = \frac{\sum^{N}_{i=1}(x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N}(x_{i} - \bar{x})^{2}} = \frac{SS_{xy}}{SS_{xx}}$$
+
+```{r beta1 estimation linear regr, eval = F}
+mean_x = mean(iris$Petal.Length)
+mean_y = mean(iris$Petal.Width)
+numerator = sum((iris$Petal.Length - mean_x) * (iris$Petal.Width - mean_y))
+denominator = sum((iris$Petal.Length - mean_x)**2)
+beta1 = numerator / denominator
+```
+##### 2- Estimating beta0
+$$\hat{\beta_0} = \bar{y} - \hat{\beta_{1}}\bar{x}$$
+```{r beta0 estimation linear regr, eval = F}
+beta0 = mean_y - beta1*mean_x
+```
+##### 3- Visualize the regression
+```{r visualization linear regr, eval = F}
+regression_df = data.frame(x = 1:7, y = beta0+c(1:7)*beta1)
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
+            geom_line(aes(x, y), data = regression_df)
+```
+
+
+#### Build-in linear regression
+lm is the build-in regression function
+```{r lm linear regr, eval = F}
+linear_model <- lm(Petal.Width ~ Petal.Length, data = iris)
+summary(linear_model)
+```
+Plot the results to compare with the MLE
+```{r plot lm linear regr, eval = F}
+regression_df2 = data.frame(x = 1:7, y = linear_model$coefficients[1]+c(1:7)*linear_model$coefficients[2])
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
+  geom_line(aes(x, y), data = regression_df2)
+```
+
+
+#### Predicting results
+Say we remove the versicolor species during model construction,  can we predict the Petal Width in function of its Length?
+
+1- We remove the versicolor data and compute the model
+```{r pred 1 linear regr, eval = F}
+iris_subset <- iris %>% filter(Species != 'versicolor')
+iris_model <- lm(Petal.Width ~ Petal.Length, data = iris_subset)
+```
+2- We extract the versicolor Petal Length
+```{r pred 2.1 linear regr, eval = F}
+versicolor_p <- iris %>% filter(Species == 'versicolor') %>%
+                          mutate(Predicted_pw = iris_model$coefficients[1] + Petal.Length*iris_model$coefficients[2])
+```
+Alternatively
+```{r pred 2.2 linear regr, eval = F}
+predict.lm(iris_model, versicolor_p, type = 'response')
+```
+3- Plot the results
+```{r pred 3 linear regr, eval = F}
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
+  geom_point(aes(Petal.Length, Predicted_pw), data = versicolor_p, color = 'darkgreen', shape = '+', size = 5)
+```
+4- Compute the MSE
+```{r pred 4 linear regr, eval = F}
+MSE = mean((versicolor_p$Petal.Width - versicolor_p$Predicted_pw)**2)
+print(MSE)
+```
+
+
+#### Using multiple variables
+What if we also use the Sepal values to predict the Petal Width?
+
+1- We compute the model after removal of versicolor
+```{r multi vars 1 linear regr, eval = F}
+iris_model2 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width, data = iris_subset)
+```
+2- We extract the versicolor Petal Length
+```{r multi vars 2 linear regr, eval = F}
+versicolor_p2 <- iris %>% filter(Species == 'versicolor') %>%
+  mutate(Predicted_pw = iris_model2$coefficients[1] +
+                        Petal.Length*iris_model2$coefficients[2] +
+                        Sepal.Length*iris_model2$coefficients[3] +
+                        Sepal.Width*iris_model2$coefficients[4])
+```
+3- Plot the results
+```{r multi vars 3 linear regr, eval = F}
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
+  geom_point(aes(Petal.Length, Predicted_pw), data = versicolor_p2, color = 'darkgreen', shape = '+', size = 5)
+```
+
+4- Compute the MSE
+```{r multi vars 4 linear regr, eval = F}
+MSE2 = mean((versicolor_p2$Petal.Width - versicolor_p2$Predicted_pw)**2)
+print(MSE2)
+```
+In this case, the MSE is a lot larger than the previous model, so adding more variables did not help. WWhat are the correlations between the variables?
+```{r multi vars 5 linear regr, eval = F}
+ggplot(iris) + geom_point(aes(Sepal.Width, Petal.Width, col = Species))
+cor(iris$Sepal.Width, iris$Petal.Width)
+ggplot(iris) + geom_point(aes(Sepal.Length, Petal.Width, col = Species))
+cor(iris$Sepal.Length, iris$Petal.Width)
+```
+Quick test with only the Petal Length and Sepal Length
+```{r multi vars 6 linear regr, eval = F}
+iris_model3 <- lm(Petal.Width ~ Petal.Length + Sepal.Length, data = iris_subset)
+versicolor_p3 <- iris %>% filter(Species == 'versicolor') %>%
+  mutate(Predicted_pw = iris_model3$coefficients[1] +
+                        Petal.Length*iris_model3$coefficients[2] +
+                        Sepal.Length*iris_model3$coefficients[3])
+MSE3 = mean((versicolor_p3$Petal.Width - versicolor_p3$Predicted_pw)**2)
+ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
+  geom_point(aes(Petal.Length, Predicted_pw), data = versicolor_p3, color = 'darkgreen', shape = '+', size = 5)
+print(MSE3)
+```
+This is the worst MSE of the 3, possibly because of overfitting.
+
+
+#### Hands-on
+Create your own linear model
+
+Using mtcars, find the best linear model to predict the miles per gallon (mpg)
+Use the first 2/3 of the data as training data for the model and the last third as test data
+```{r hands on linear regr, eval = F}
+mtcars_train <- mtcars[1:22,]
+mtcars_test <- mtcars[23:32,]
+```
+
+
+#### Hands-on solutions
+
 The solutions for this part are in this [**script**](./exercises/exercises_module3/results/linear_regression_answers.Rmd).
+
+Solution
+```{r hands on solution, eval = F}
+# To help us select a set of variables to use, we can test the correlation of all variables with mpg
+mtcars_train %>% apply(2, cor, y=mtcars_train$mpg)
+# We have a good negative correlation with the number of cylinders, the displacement,
+# horsepower and weight. We will construct a model with those
+
+# 1- Compute the model
+cars_model <- lm(mpg ~ cyl+disp+hp+wt, data = mtcars_train)
+
+# 2- Compute the results
+cars_p <- mtcars_test %>% 
+  mutate(Predicted_mpg = cars_model$coefficients[1] +
+                          cyl*cars_model$coefficients[2] +
+                          disp*cars_model$coefficients[3] +
+                          hp*cars_model$coefficients[4] +
+                          wt*cars_model$coefficients[5])
+
+# 3- Compute the MSE
+MSE = mean((cars_p$mpg - cars_p$Predicted_mpg)**2)
+```
+Note: this may not be the overall best solution, it's only one example
+
+
 
 ### Logistic regression
 
 For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/logistic_regression.Rmd).
 
+
+#### Loading libraries
+```{r Loading libraries logistic regr, eval = F}
+library(tidyverse)
+library(nnet)
+```
+
+
+#### Predicting species with a linear model
+We remove the versicolor species to only have two species
+```{r lm 1 logistic regr, eval = F}
+iris_subset <- iris %>% filter(Species != 'versicolor')
+```
+Predict the species based on the petal dimensions
+```{r lm 2 logistic regr, eval = F}
+iris_subset$train_test <- sample(c('train', 'test'), nrow(iris_subset), replace = TRUE, prob = c(0.8, 0.2))
+iris_model <- lm(Species ~ Petal.Length + Petal.Width, data = iris_subset[iris_subset$train_test == 'train',])
+predictions <- predict.lm(iris_model, iris_subset[iris_subset$train_test == 'test',], type = 'response')
+```
+Convert the predictions to species and compare to the truth
+```{r lm 3 logistic regr, eval = F}
+table(round(predictions), iris_subset[iris_subset$train_test == 'test', 'Species'])
+```
+
+
+#### Predicting 2 species with a log model
+```{r log 2 categories logistic regr, eval = F}
+iris_log_model <- glm(Species ~ Sepal.Length +  Sepal.Width,
+                  family = 'binomial',
+                  data = iris_subset[iris_subset$train_test == 'train',])
+
+predictions_log <- predict.glm(iris_log_model,
+                               iris_subset[iris_subset$train_test == 'test',],
+                              type = 'response')
+
+predictions_log <- ifelse(predictions_log >= 0.5,"virginica", "setosa")
+
+table(predictions_log, iris_subset[iris_subset$train_test == 'test', 'Species'])
+```
+
+
+#### Predicting 3 species with a log model
+```{r log 3 categories 1 logistic regr, eval = F}
+iris$train_test <- sample(c('train', 'test'), nrow(iris), replace = TRUE, prob = c(0.8, 0.2))
+iris_train <- iris %>% filter(train_test == 'train')
+iris_test <- iris %>% filter(train_test == 'test')
+
+iris_multinomial <- multinom(Species ~ Sepal.Length +  Sepal.Width,
+                      data = iris_train)
+
+predictions_multi <- predict(iris_multinomial,
+                               iris_test,
+                               'prob')
+```
+Convert the probabilities to species with a softmax
+```{r log 3 categories 2 logistic regr, eval = F}
+species_predictions <- predictions_multi %>%
+  apply(1, function(x) return(c('setosa', 'versicolor', 'virginica')[which.max(x)]))
+
+table(species_predictions, iris_test$Species)
+```
+
+
+#### Hands-on
+From the diamonds model, predict the cut
+
+First divide the data in training and testing datasets
+```{r hands on logistic regr, eval = F}
+diamonds$train_test <- sample(c('train', 'test'), nrow(diamonds), replace = TRUE, prob = c(0.8, 0.2))
+diamonds_train <- diamonds %>% filter(train_test == 'train')
+diamonds_test <- diamonds %>% filter(train_test == 'test')
+```
+
+
+#### Hands on solution
+
 The solutions for this part are in this [**script**](./exercises/exercises_module3/results/logistic_regression_answers.Rmd).
+
+Solution
+```{r hands on solution logistic regr, eval = F}
+diamonds_multinomial <- multinom(cut ~ carat + color + clarity + depth,
+                             data = diamonds_train)
+
+predictions_diamonds <- predict(diamonds_multinomial,
+                             diamonds_test,
+                             'prob')
+
+# Convert the probabilities to categories
+categories_predictions <- predictions_diamonds %>%
+  apply(1, function(x) return(colnames(predictions_diamonds)[which.max(x)]))
+
+table(categories_predictions, diamonds_test$cut)
+```
+Note: this may not be the overall best solution, it's only one example
+
+
 
 ### Statistical testing
 
 For this part of the practical, you can download this [**script**](./exercises/exercises_module3/scripts/testing.Rmd).
 
+
+#### Loading libraries
+```{r Loading libraries stats test, eval = F}
+library(tidyverse)
+```
+
+#### Two-samples t-test
+1- First, we create two random samples from Normal distributions
+```{r ttest 1 stats test, eval = F}
+set.seed(20221011) # Seed for reproducibility
+n <- 100 # Sample size
+
+mu1 <- 0 # Mean of sample 1
+mu2 <- 0.1 # Mean of sample 2
+
+sd1 <- 1 # Standard deviation 1
+sd2 <- 1 # Standard deviation 2
+```
+Generate two samples of of size n of normally-distributed data.
+
+Sample x1 has a mean of mu1 and standard deviation sd1
+
+Sample x2 has a mean of mu2 and standard deviation sd2
+```{r ttest 2 stats test, eval = F}
+x1 <- rnorm(n, mu1, sd1)
+x2 <- rnorm(n, mu2, sd2)
+```
+2- We can take a look at the data with boxplots
+```{r ttest 3 stats test, eval = F}
+x_df <- data.frame(Values = c(x1,x2),
+                   Group = c(rep('G1',n),rep('G2',n)))
+ggplot(x_df) + geom_boxplot(aes(y = Values, color = Group))
+```
+3- t-test
+```{r ttest 4 stats test, eval = F}
+t.test(x1, x2)
+```
+4- The result of the test is influenced by the sample size
+```{r ttest 5 stats test, eval = F}
+x3 <- rnorm(10000, mu1, sd1)
+x4 <- rnorm(10000, mu2, sd2)
+t.test(x3, x4)
+```
+4- We can also do a one-sided test
+Check if group2 is greater than group1 (aka the difference 1-2 is smaller)
+```{r ttest 6 stats test, eval = F}
+t.test(x1, x2, alternative = 'less')
+```
+
+
+#### ANOVA
+1- Create mutliple datasets
+
+Our artificial data will have three different means
+```{r anova 1 stats test, eval = F}
+set.seed(20221011)
+m1 <- rnorm(30, mean = 25, sd = 5)
+m2 <- rnorm(30, mean = 30, sd = 6)
+m3 <- rnorm(30, mean = 22, sd = 7)
+
+ms <- c(m1, m2, m3) # Combine our three measures into one vector
+
+# Our vector of group labels A, B, and C
+ls <- as.factor(c(rep("A",30),rep("B",30),rep("C",30)))
+```
+2- Visualize the data
+```{r anova 2 stats test, eval = F}
+df_anova <- data.frame(Measure = ms, Group = ls)
+ggplot(df_anova) + geom_boxplot(aes(y = Measure, color = Group))
+```
+
+3- ANOVA
+```{r anova 3 stats test, eval = F}
+results_aov <- aov(Measure ~ Group, data = df_anova)
+summary(results_aov)
+```
+We can look at the coefficients to find the difference across groups
+```{r anova 4 stats test, eval = F}
+results_aov$coefficients
+```
+
+
+#### Hands-on
+
+##### 1- ANOVA vs multiple t-tests
+Data PlantGrowth has multiple groups: one control and two treatments
+
+Make an ANOVA and consecutive t-tests between the control and each treatment. 
+Do they lead to the same conclusion?
+```{r hands on 1 stats test, eval = F}
+head(PlantGrowth)
+```
+
+
+##### 2- Multiple testing correction
+Take the co2 dataset (note: not CO2), that records the CO2 level for each month across several years. 
+We want to test if the CO2 levels from 1959 to 1978 were lower than those between 1979 and 1997 for each month separately. 
+Then, we correct for multiple testing and compare the results (hint: see p.adjust). 
+Do the conclusions change? 
+```{r hands on 2 stats test, eval = F}
+co2_df <- data.frame(matrix(co2, 39, 12), row.names = as.character(c(1959:1997)))
+colnames(co2_df) <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+```
+
+#### Hands-on solutions
+
 The solutions for this part are in this [**script**](./exercises/exercises_module3/results/testing_answers.Rmd).
+
+##### 1- ANOVA vs multiple t-tests
+
+Solution hands on 1
+```{r hands on 1 solution stats test, eval = F}
+results_aov <- aov(weight ~ group, data = PlantGrowth)
+summary(results_aov)
+results_aov$coefficients
+# At least one treatment is different, treatment 1 is lighter than control and
+# treatment 2 is heavier
+
+t.test(PlantGrowth$weight[PlantGrowth$group == 'ctrl'], PlantGrowth$weight[PlantGrowth$group == 'trt1'])
+t.test(PlantGrowth$weight[PlantGrowth$group == 'ctrl'], PlantGrowth$weight[PlantGrowth$group == 'trt2'])
+# Only treatment 2 is significantly different
+```
+
+##### 2- Multiple testing correction
+
+Solution hands on 2
+```{r hands on 2 solution stats test, eval = F}
+p_values <- co2_df %>% apply(2, function(x) return(t.test(x[1:20], x[21:39])$p.value))
+sum(p_values < 0.05) # 9 months are different
+p_adj <- p.adjust(p_values, method = 'bonferroni')
+sum(p_adj < 0.05) # 5 months are different
+fdr <- p.adjust(p_values, method = 'fdr')
+sum(fdr < 0.05) # 8 months are different
+```
 

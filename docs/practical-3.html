@@ -320,18 +320,319 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="linear-regression" class="section level3 hasAnchor">
 <h3>Linear regression<a href="practical-3.html#linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>For this part of the practical, you can download this <a href="./exercises/exercises_module3/scripts/linear_regression.Rmd"><strong>script</strong></a>.</p>
+<div id="loading-libraries-1" class="section level4 hasAnchor">
+<h4>Loading libraries<a href="practical-3.html#loading-libraries-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="practical-3.html#cb219-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+</div>
+<div id="verifying-the-dataset" class="section level4 hasAnchor">
+<h4>Verifying the dataset<a href="practical-3.html#verifying-the-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s take the iris data set, and check if the petal length and width follow a linear correlation</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="practical-3.html#cb220-1" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species))</span>
+<span id="cb220-2"><a href="practical-3.html#cb220-2" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div>
+<p>The data seems to be linearly correlated. The species have different ranges of sizes, but they seem to all follow the same trend.</p>
+</div>
+<div id="fitting-with-mle" class="section level4 hasAnchor">
+<h4>Fitting with MLE<a href="practical-3.html#fitting-with-mle" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="estimating-beta1" class="section level5 hasAnchor">
+<h5>1- Estimating beta1<a href="practical-3.html#estimating-beta1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><span class="math display">\[\hat{\beta_1} = \frac{\sum^{N}_{i=1}(x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N}(x_{i} - \bar{x})^{2}} = \frac{SS_{xy}}{SS_{xx}}\]</span></p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="practical-3.html#cb221-1" tabindex="-1"></a>mean_x <span class="ot">=</span> <span class="fu">mean</span>(iris<span class="sc">$</span>Petal.Length)</span>
+<span id="cb221-2"><a href="practical-3.html#cb221-2" tabindex="-1"></a>mean_y <span class="ot">=</span> <span class="fu">mean</span>(iris<span class="sc">$</span>Petal.Width)</span>
+<span id="cb221-3"><a href="practical-3.html#cb221-3" tabindex="-1"></a>numerator <span class="ot">=</span> <span class="fu">sum</span>((iris<span class="sc">$</span>Petal.Length <span class="sc">-</span> mean_x) <span class="sc">*</span> (iris<span class="sc">$</span>Petal.Width <span class="sc">-</span> mean_y))</span>
+<span id="cb221-4"><a href="practical-3.html#cb221-4" tabindex="-1"></a>denominator <span class="ot">=</span> <span class="fu">sum</span>((iris<span class="sc">$</span>Petal.Length <span class="sc">-</span> mean_x)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb221-5"><a href="practical-3.html#cb221-5" tabindex="-1"></a>beta1 <span class="ot">=</span> numerator <span class="sc">/</span> denominator</span></code></pre></div>
+</div>
+<div id="estimating-beta0" class="section level5 hasAnchor">
+<h5>2- Estimating beta0<a href="practical-3.html#estimating-beta0" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><span class="math display">\[\hat{\beta_0} = \bar{y} - \hat{\beta_{1}}\bar{x}\]</span></p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="practical-3.html#cb222-1" tabindex="-1"></a>beta0 <span class="ot">=</span> mean_y <span class="sc">-</span> beta1<span class="sc">*</span>mean_x</span></code></pre></div>
+</div>
+<div id="visualize-the-regression" class="section level5 hasAnchor">
+<h5>3- Visualize the regression<a href="practical-3.html#visualize-the-regression" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="practical-3.html#cb223-1" tabindex="-1"></a>regression_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">y =</span> beta0<span class="sc">+</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)<span class="sc">*</span>beta1)</span>
+<span id="cb223-2"><a href="practical-3.html#cb223-2" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span></span>
+<span id="cb223-3"><a href="practical-3.html#cb223-3" tabindex="-1"></a>            <span class="fu">geom_line</span>(<span class="fu">aes</span>(x, y), <span class="at">data =</span> regression_df)</span></code></pre></div>
+</div>
+</div>
+<div id="build-in-linear-regression" class="section level4 hasAnchor">
+<h4>Build-in linear regression<a href="practical-3.html#build-in-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>lm is the build-in regression function</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="practical-3.html#cb224-1" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Width <span class="sc">~</span> Petal.Length, <span class="at">data =</span> iris)</span>
+<span id="cb224-2"><a href="practical-3.html#cb224-2" tabindex="-1"></a><span class="fu">summary</span>(linear_model)</span></code></pre></div>
+<p>Plot the results to compare with the MLE</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="practical-3.html#cb225-1" tabindex="-1"></a>regression_df2 <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">y =</span> linear_model<span class="sc">$</span>coefficients[<span class="dv">1</span>]<span class="sc">+</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)<span class="sc">*</span>linear_model<span class="sc">$</span>coefficients[<span class="dv">2</span>])</span>
+<span id="cb225-2"><a href="practical-3.html#cb225-2" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span></span>
+<span id="cb225-3"><a href="practical-3.html#cb225-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x, y), <span class="at">data =</span> regression_df2)</span></code></pre></div>
+</div>
+<div id="predicting-results" class="section level4 hasAnchor">
+<h4>Predicting results<a href="practical-3.html#predicting-results" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Say we remove the versicolor species during model construction, can we predict the Petal Width in function of its Length?</p>
+<p>1- We remove the versicolor data and compute the model</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="practical-3.html#cb226-1" tabindex="-1"></a>iris_subset <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;versicolor&#39;</span>)</span>
+<span id="cb226-2"><a href="practical-3.html#cb226-2" tabindex="-1"></a>iris_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Width <span class="sc">~</span> Petal.Length, <span class="at">data =</span> iris_subset)</span></code></pre></div>
+<p>2- We extract the versicolor Petal Length</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="practical-3.html#cb227-1" tabindex="-1"></a>versicolor_p <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">&#39;versicolor&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb227-2"><a href="practical-3.html#cb227-2" tabindex="-1"></a>                          <span class="fu">mutate</span>(<span class="at">Predicted_pw =</span> iris_model<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> Petal.Length<span class="sc">*</span>iris_model<span class="sc">$</span>coefficients[<span class="dv">2</span>])</span></code></pre></div>
+<p>Alternatively</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="practical-3.html#cb228-1" tabindex="-1"></a><span class="fu">predict.lm</span>(iris_model, versicolor_p, <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span></code></pre></div>
+<p>3- Plot the results</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="practical-3.html#cb229-1" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span></span>
+<span id="cb229-2"><a href="practical-3.html#cb229-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Predicted_pw), <span class="at">data =</span> versicolor_p, <span class="at">color =</span> <span class="st">&#39;darkgreen&#39;</span>, <span class="at">shape =</span> <span class="st">&#39;+&#39;</span>, <span class="at">size =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>4- Compute the MSE</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="practical-3.html#cb230-1" tabindex="-1"></a>MSE <span class="ot">=</span> <span class="fu">mean</span>((versicolor_p<span class="sc">$</span>Petal.Width <span class="sc">-</span> versicolor_p<span class="sc">$</span>Predicted_pw)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb230-2"><a href="practical-3.html#cb230-2" tabindex="-1"></a><span class="fu">print</span>(MSE)</span></code></pre></div>
+</div>
+<div id="using-multiple-variables" class="section level4 hasAnchor">
+<h4>Using multiple variables<a href="practical-3.html#using-multiple-variables" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>What if we also use the Sepal values to predict the Petal Width?</p>
+<p>1- We compute the model after removal of versicolor</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="practical-3.html#cb231-1" tabindex="-1"></a>iris_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Width <span class="sc">~</span> Petal.Length <span class="sc">+</span> Sepal.Length <span class="sc">+</span> Sepal.Width, <span class="at">data =</span> iris_subset)</span></code></pre></div>
+<p>2- We extract the versicolor Petal Length</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="practical-3.html#cb232-1" tabindex="-1"></a>versicolor_p2 <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">&#39;versicolor&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb232-2"><a href="practical-3.html#cb232-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Predicted_pw =</span> iris_model2<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb232-3"><a href="practical-3.html#cb232-3" tabindex="-1"></a>                        Petal.Length<span class="sc">*</span>iris_model2<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">+</span></span>
+<span id="cb232-4"><a href="practical-3.html#cb232-4" tabindex="-1"></a>                        Sepal.Length<span class="sc">*</span>iris_model2<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">+</span></span>
+<span id="cb232-5"><a href="practical-3.html#cb232-5" tabindex="-1"></a>                        Sepal.Width<span class="sc">*</span>iris_model2<span class="sc">$</span>coefficients[<span class="dv">4</span>])</span></code></pre></div>
+<p>3- Plot the results</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="practical-3.html#cb233-1" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span></span>
+<span id="cb233-2"><a href="practical-3.html#cb233-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Predicted_pw), <span class="at">data =</span> versicolor_p2, <span class="at">color =</span> <span class="st">&#39;darkgreen&#39;</span>, <span class="at">shape =</span> <span class="st">&#39;+&#39;</span>, <span class="at">size =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>4- Compute the MSE</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="practical-3.html#cb234-1" tabindex="-1"></a>MSE2 <span class="ot">=</span> <span class="fu">mean</span>((versicolor_p2<span class="sc">$</span>Petal.Width <span class="sc">-</span> versicolor_p2<span class="sc">$</span>Predicted_pw)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb234-2"><a href="practical-3.html#cb234-2" tabindex="-1"></a><span class="fu">print</span>(MSE2)</span></code></pre></div>
+<p>In this case, the MSE is a lot larger than the previous model, so adding more variables did not help. WWhat are the correlations between the variables?</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="practical-3.html#cb235-1" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Sepal.Width, Petal.Width, <span class="at">col =</span> Species))</span>
+<span id="cb235-2"><a href="practical-3.html#cb235-2" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Sepal.Width, iris<span class="sc">$</span>Petal.Width)</span>
+<span id="cb235-3"><a href="practical-3.html#cb235-3" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Sepal.Length, Petal.Width, <span class="at">col =</span> Species))</span>
+<span id="cb235-4"><a href="practical-3.html#cb235-4" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Sepal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div>
+<p>Quick test with only the Petal Length and Sepal Length</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="practical-3.html#cb236-1" tabindex="-1"></a>iris_model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Width <span class="sc">~</span> Petal.Length <span class="sc">+</span> Sepal.Length, <span class="at">data =</span> iris_subset)</span>
+<span id="cb236-2"><a href="practical-3.html#cb236-2" tabindex="-1"></a>versicolor_p3 <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">&#39;versicolor&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb236-3"><a href="practical-3.html#cb236-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Predicted_pw =</span> iris_model3<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb236-4"><a href="practical-3.html#cb236-4" tabindex="-1"></a>                        Petal.Length<span class="sc">*</span>iris_model3<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">+</span></span>
+<span id="cb236-5"><a href="practical-3.html#cb236-5" tabindex="-1"></a>                        Sepal.Length<span class="sc">*</span>iris_model3<span class="sc">$</span>coefficients[<span class="dv">3</span>])</span>
+<span id="cb236-6"><a href="practical-3.html#cb236-6" tabindex="-1"></a>MSE3 <span class="ot">=</span> <span class="fu">mean</span>((versicolor_p3<span class="sc">$</span>Petal.Width <span class="sc">-</span> versicolor_p3<span class="sc">$</span>Predicted_pw)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb236-7"><a href="practical-3.html#cb236-7" tabindex="-1"></a><span class="fu">ggplot</span>(iris) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Petal.Width, <span class="at">col =</span> Species)) <span class="sc">+</span></span>
+<span id="cb236-8"><a href="practical-3.html#cb236-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Petal.Length, Predicted_pw), <span class="at">data =</span> versicolor_p3, <span class="at">color =</span> <span class="st">&#39;darkgreen&#39;</span>, <span class="at">shape =</span> <span class="st">&#39;+&#39;</span>, <span class="at">size =</span> <span class="dv">5</span>)</span>
+<span id="cb236-9"><a href="practical-3.html#cb236-9" tabindex="-1"></a><span class="fu">print</span>(MSE3)</span></code></pre></div>
+<p>This is the worst MSE of the 3, possibly because of overfitting.</p>
+</div>
+<div id="hands-on" class="section level4 hasAnchor">
+<h4>Hands-on<a href="practical-3.html#hands-on" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Create your own linear model</p>
+<p>Using mtcars, find the best linear model to predict the miles per gallon (mpg)
+Use the first 2/3 of the data as training data for the model and the last third as test data</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="practical-3.html#cb237-1" tabindex="-1"></a>mtcars_train <span class="ot">&lt;-</span> mtcars[<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>,]</span>
+<span id="cb237-2"><a href="practical-3.html#cb237-2" tabindex="-1"></a>mtcars_test <span class="ot">&lt;-</span> mtcars[<span class="dv">23</span><span class="sc">:</span><span class="dv">32</span>,]</span></code></pre></div>
+</div>
+<div id="hands-on-solutions" class="section level4 hasAnchor">
+<h4>Hands-on solutions<a href="practical-3.html#hands-on-solutions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The solutions for this part are in this <a href="./exercises/exercises_module3/results/linear_regression_answers.Rmd"><strong>script</strong></a>.</p>
+<p>Solution</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="practical-3.html#cb238-1" tabindex="-1"></a><span class="co"># To help us select a set of variables to use, we can test the correlation of all variables with mpg</span></span>
+<span id="cb238-2"><a href="practical-3.html#cb238-2" tabindex="-1"></a>mtcars_train <span class="sc">%&gt;%</span> <span class="fu">apply</span>(<span class="dv">2</span>, cor, <span class="at">y=</span>mtcars_train<span class="sc">$</span>mpg)</span>
+<span id="cb238-3"><a href="practical-3.html#cb238-3" tabindex="-1"></a><span class="co"># We have a good negative correlation with the number of cylinders, the displacement,</span></span>
+<span id="cb238-4"><a href="practical-3.html#cb238-4" tabindex="-1"></a><span class="co"># horsepower and weight. We will construct a model with those</span></span>
+<span id="cb238-5"><a href="practical-3.html#cb238-5" tabindex="-1"></a></span>
+<span id="cb238-6"><a href="practical-3.html#cb238-6" tabindex="-1"></a><span class="co"># 1- Compute the model</span></span>
+<span id="cb238-7"><a href="practical-3.html#cb238-7" tabindex="-1"></a>cars_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> cyl<span class="sc">+</span>disp<span class="sc">+</span>hp<span class="sc">+</span>wt, <span class="at">data =</span> mtcars_train)</span>
+<span id="cb238-8"><a href="practical-3.html#cb238-8" tabindex="-1"></a></span>
+<span id="cb238-9"><a href="practical-3.html#cb238-9" tabindex="-1"></a><span class="co"># 2- Compute the results</span></span>
+<span id="cb238-10"><a href="practical-3.html#cb238-10" tabindex="-1"></a>cars_p <span class="ot">&lt;-</span> mtcars_test <span class="sc">%&gt;%</span> </span>
+<span id="cb238-11"><a href="practical-3.html#cb238-11" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Predicted_mpg =</span> cars_model<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb238-12"><a href="practical-3.html#cb238-12" tabindex="-1"></a>                          cyl<span class="sc">*</span>cars_model<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">+</span></span>
+<span id="cb238-13"><a href="practical-3.html#cb238-13" tabindex="-1"></a>                          disp<span class="sc">*</span>cars_model<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">+</span></span>
+<span id="cb238-14"><a href="practical-3.html#cb238-14" tabindex="-1"></a>                          hp<span class="sc">*</span>cars_model<span class="sc">$</span>coefficients[<span class="dv">4</span>] <span class="sc">+</span></span>
+<span id="cb238-15"><a href="practical-3.html#cb238-15" tabindex="-1"></a>                          wt<span class="sc">*</span>cars_model<span class="sc">$</span>coefficients[<span class="dv">5</span>])</span>
+<span id="cb238-16"><a href="practical-3.html#cb238-16" tabindex="-1"></a></span>
+<span id="cb238-17"><a href="practical-3.html#cb238-17" tabindex="-1"></a><span class="co"># 3- Compute the MSE</span></span>
+<span id="cb238-18"><a href="practical-3.html#cb238-18" tabindex="-1"></a>MSE <span class="ot">=</span> <span class="fu">mean</span>((cars_p<span class="sc">$</span>mpg <span class="sc">-</span> cars_p<span class="sc">$</span>Predicted_mpg)<span class="sc">**</span><span class="dv">2</span>)</span></code></pre></div>
+<p>Note: this may not be the overall best solution, it’s only one example</p>
+</div>
 </div>
 <div id="logistic-regression" class="section level3 hasAnchor">
 <h3>Logistic regression<a href="practical-3.html#logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>For this part of the practical, you can download this <a href="./exercises/exercises_module3/scripts/logistic_regression.Rmd"><strong>script</strong></a>.</p>
+<div id="loading-libraries-2" class="section level4 hasAnchor">
+<h4>Loading libraries<a href="practical-3.html#loading-libraries-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="practical-3.html#cb239-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb239-2"><a href="practical-3.html#cb239-2" tabindex="-1"></a><span class="fu">library</span>(nnet)</span></code></pre></div>
+</div>
+<div id="predicting-species-with-a-linear-model" class="section level4 hasAnchor">
+<h4>Predicting species with a linear model<a href="practical-3.html#predicting-species-with-a-linear-model" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We remove the versicolor species to only have two species</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="practical-3.html#cb240-1" tabindex="-1"></a>iris_subset <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;versicolor&#39;</span>)</span></code></pre></div>
+<p>Predict the species based on the petal dimensions</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="practical-3.html#cb241-1" tabindex="-1"></a>iris_subset<span class="sc">$</span>train_test <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&#39;train&#39;</span>, <span class="st">&#39;test&#39;</span>), <span class="fu">nrow</span>(iris_subset), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>))</span>
+<span id="cb241-2"><a href="practical-3.html#cb241-2" tabindex="-1"></a>iris_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Species <span class="sc">~</span> Petal.Length <span class="sc">+</span> Petal.Width, <span class="at">data =</span> iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;train&#39;</span>,])</span>
+<span id="cb241-3"><a href="practical-3.html#cb241-3" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(iris_model, iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>,], <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span></code></pre></div>
+<p>Convert the predictions to species and compare to the truth</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="practical-3.html#cb242-1" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">round</span>(predictions), iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>, <span class="st">&#39;Species&#39;</span>])</span></code></pre></div>
+</div>
+<div id="predicting-2-species-with-a-log-model" class="section level4 hasAnchor">
+<h4>Predicting 2 species with a log model<a href="practical-3.html#predicting-2-species-with-a-log-model" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="practical-3.html#cb243-1" tabindex="-1"></a>iris_log_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span>  Sepal.Width,</span>
+<span id="cb243-2"><a href="practical-3.html#cb243-2" tabindex="-1"></a>                  <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>,</span>
+<span id="cb243-3"><a href="practical-3.html#cb243-3" tabindex="-1"></a>                  <span class="at">data =</span> iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;train&#39;</span>,])</span>
+<span id="cb243-4"><a href="practical-3.html#cb243-4" tabindex="-1"></a></span>
+<span id="cb243-5"><a href="practical-3.html#cb243-5" tabindex="-1"></a>predictions_log <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(iris_log_model,</span>
+<span id="cb243-6"><a href="practical-3.html#cb243-6" tabindex="-1"></a>                               iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>,],</span>
+<span id="cb243-7"><a href="practical-3.html#cb243-7" tabindex="-1"></a>                              <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb243-8"><a href="practical-3.html#cb243-8" tabindex="-1"></a></span>
+<span id="cb243-9"><a href="practical-3.html#cb243-9" tabindex="-1"></a>predictions_log <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(predictions_log <span class="sc">&gt;=</span> <span class="fl">0.5</span>,<span class="st">&quot;virginica&quot;</span>, <span class="st">&quot;setosa&quot;</span>)</span>
+<span id="cb243-10"><a href="practical-3.html#cb243-10" tabindex="-1"></a></span>
+<span id="cb243-11"><a href="practical-3.html#cb243-11" tabindex="-1"></a><span class="fu">table</span>(predictions_log, iris_subset[iris_subset<span class="sc">$</span>train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>, <span class="st">&#39;Species&#39;</span>])</span></code></pre></div>
+</div>
+<div id="predicting-3-species-with-a-log-model" class="section level4 hasAnchor">
+<h4>Predicting 3 species with a log model<a href="practical-3.html#predicting-3-species-with-a-log-model" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="practical-3.html#cb244-1" tabindex="-1"></a>iris<span class="sc">$</span>train_test <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&#39;train&#39;</span>, <span class="st">&#39;test&#39;</span>), <span class="fu">nrow</span>(iris), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>))</span>
+<span id="cb244-2"><a href="practical-3.html#cb244-2" tabindex="-1"></a>iris_train <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(train_test <span class="sc">==</span> <span class="st">&#39;train&#39;</span>)</span>
+<span id="cb244-3"><a href="practical-3.html#cb244-3" tabindex="-1"></a>iris_test <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>)</span>
+<span id="cb244-4"><a href="practical-3.html#cb244-4" tabindex="-1"></a></span>
+<span id="cb244-5"><a href="practical-3.html#cb244-5" tabindex="-1"></a>iris_multinomial <span class="ot">&lt;-</span> <span class="fu">multinom</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span>  Sepal.Width,</span>
+<span id="cb244-6"><a href="practical-3.html#cb244-6" tabindex="-1"></a>                      <span class="at">data =</span> iris_train)</span>
+<span id="cb244-7"><a href="practical-3.html#cb244-7" tabindex="-1"></a></span>
+<span id="cb244-8"><a href="practical-3.html#cb244-8" tabindex="-1"></a>predictions_multi <span class="ot">&lt;-</span> <span class="fu">predict</span>(iris_multinomial,</span>
+<span id="cb244-9"><a href="practical-3.html#cb244-9" tabindex="-1"></a>                               iris_test,</span>
+<span id="cb244-10"><a href="practical-3.html#cb244-10" tabindex="-1"></a>                               <span class="st">&#39;prob&#39;</span>)</span></code></pre></div>
+<p>Convert the probabilities to species with a softmax</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="practical-3.html#cb245-1" tabindex="-1"></a>species_predictions <span class="ot">&lt;-</span> predictions_multi <span class="sc">%&gt;%</span></span>
+<span id="cb245-2"><a href="practical-3.html#cb245-2" tabindex="-1"></a>  <span class="fu">apply</span>(<span class="dv">1</span>, <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">c</span>(<span class="st">&#39;setosa&#39;</span>, <span class="st">&#39;versicolor&#39;</span>, <span class="st">&#39;virginica&#39;</span>)[<span class="fu">which.max</span>(x)]))</span>
+<span id="cb245-3"><a href="practical-3.html#cb245-3" tabindex="-1"></a></span>
+<span id="cb245-4"><a href="practical-3.html#cb245-4" tabindex="-1"></a><span class="fu">table</span>(species_predictions, iris_test<span class="sc">$</span>Species)</span></code></pre></div>
+</div>
+<div id="hands-on-1" class="section level4 hasAnchor">
+<h4>Hands-on<a href="practical-3.html#hands-on-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>From the diamonds model, predict the cut</p>
+<p>First divide the data in training and testing datasets</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="practical-3.html#cb246-1" tabindex="-1"></a>diamonds<span class="sc">$</span>train_test <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&#39;train&#39;</span>, <span class="st">&#39;test&#39;</span>), <span class="fu">nrow</span>(diamonds), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>))</span>
+<span id="cb246-2"><a href="practical-3.html#cb246-2" tabindex="-1"></a>diamonds_train <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span> <span class="fu">filter</span>(train_test <span class="sc">==</span> <span class="st">&#39;train&#39;</span>)</span>
+<span id="cb246-3"><a href="practical-3.html#cb246-3" tabindex="-1"></a>diamonds_test <span class="ot">&lt;-</span> diamonds <span class="sc">%&gt;%</span> <span class="fu">filter</span>(train_test <span class="sc">==</span> <span class="st">&#39;test&#39;</span>)</span></code></pre></div>
+</div>
+<div id="hands-on-solution" class="section level4 hasAnchor">
+<h4>Hands on solution<a href="practical-3.html#hands-on-solution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The solutions for this part are in this <a href="./exercises/exercises_module3/results/logistic_regression_answers.Rmd"><strong>script</strong></a>.</p>
+<p>Solution</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="practical-3.html#cb247-1" tabindex="-1"></a>diamonds_multinomial <span class="ot">&lt;-</span> <span class="fu">multinom</span>(cut <span class="sc">~</span> carat <span class="sc">+</span> color <span class="sc">+</span> clarity <span class="sc">+</span> depth,</span>
+<span id="cb247-2"><a href="practical-3.html#cb247-2" tabindex="-1"></a>                             <span class="at">data =</span> diamonds_train)</span>
+<span id="cb247-3"><a href="practical-3.html#cb247-3" tabindex="-1"></a></span>
+<span id="cb247-4"><a href="practical-3.html#cb247-4" tabindex="-1"></a>predictions_diamonds <span class="ot">&lt;-</span> <span class="fu">predict</span>(diamonds_multinomial,</span>
+<span id="cb247-5"><a href="practical-3.html#cb247-5" tabindex="-1"></a>                             diamonds_test,</span>
+<span id="cb247-6"><a href="practical-3.html#cb247-6" tabindex="-1"></a>                             <span class="st">&#39;prob&#39;</span>)</span>
+<span id="cb247-7"><a href="practical-3.html#cb247-7" tabindex="-1"></a></span>
+<span id="cb247-8"><a href="practical-3.html#cb247-8" tabindex="-1"></a><span class="co"># Convert the probabilities to categories</span></span>
+<span id="cb247-9"><a href="practical-3.html#cb247-9" tabindex="-1"></a>categories_predictions <span class="ot">&lt;-</span> predictions_diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb247-10"><a href="practical-3.html#cb247-10" tabindex="-1"></a>  <span class="fu">apply</span>(<span class="dv">1</span>, <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">colnames</span>(predictions_diamonds)[<span class="fu">which.max</span>(x)]))</span>
+<span id="cb247-11"><a href="practical-3.html#cb247-11" tabindex="-1"></a></span>
+<span id="cb247-12"><a href="practical-3.html#cb247-12" tabindex="-1"></a><span class="fu">table</span>(categories_predictions, diamonds_test<span class="sc">$</span>cut)</span></code></pre></div>
+<p>Note: this may not be the overall best solution, it’s only one example</p>
+</div>
 </div>
 <div id="statistical-testing" class="section level3 hasAnchor">
 <h3>Statistical testing<a href="practical-3.html#statistical-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>For this part of the practical, you can download this <a href="./exercises/exercises_module3/scripts/testing.Rmd"><strong>script</strong></a>.</p>
+<div id="loading-libraries-3" class="section level4 hasAnchor">
+<h4>Loading libraries<a href="practical-3.html#loading-libraries-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="practical-3.html#cb248-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+</div>
+<div id="two-samples-t-test" class="section level4 hasAnchor">
+<h4>Two-samples t-test<a href="practical-3.html#two-samples-t-test" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>1- First, we create two random samples from Normal distributions</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="practical-3.html#cb249-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20221011</span>) <span class="co"># Seed for reproducibility</span></span>
+<span id="cb249-2"><a href="practical-3.html#cb249-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># Sample size</span></span>
+<span id="cb249-3"><a href="practical-3.html#cb249-3" tabindex="-1"></a></span>
+<span id="cb249-4"><a href="practical-3.html#cb249-4" tabindex="-1"></a>mu1 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># Mean of sample 1</span></span>
+<span id="cb249-5"><a href="practical-3.html#cb249-5" tabindex="-1"></a>mu2 <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co"># Mean of sample 2</span></span>
+<span id="cb249-6"><a href="practical-3.html#cb249-6" tabindex="-1"></a></span>
+<span id="cb249-7"><a href="practical-3.html#cb249-7" tabindex="-1"></a>sd1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># Standard deviation 1</span></span>
+<span id="cb249-8"><a href="practical-3.html#cb249-8" tabindex="-1"></a>sd2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># Standard deviation 2</span></span></code></pre></div>
+<p>Generate two samples of of size n of normally-distributed data.</p>
+<p>Sample x1 has a mean of mu1 and standard deviation sd1</p>
+<p>Sample x2 has a mean of mu2 and standard deviation sd2</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="practical-3.html#cb250-1" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu1, sd1)</span>
+<span id="cb250-2"><a href="practical-3.html#cb250-2" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu2, sd2)</span></code></pre></div>
+<p>2- We can take a look at the data with boxplots</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="practical-3.html#cb251-1" tabindex="-1"></a>x_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Values =</span> <span class="fu">c</span>(x1,x2),</span>
+<span id="cb251-2"><a href="practical-3.html#cb251-2" tabindex="-1"></a>                   <span class="at">Group =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&#39;G1&#39;</span>,n),<span class="fu">rep</span>(<span class="st">&#39;G2&#39;</span>,n)))</span>
+<span id="cb251-3"><a href="practical-3.html#cb251-3" tabindex="-1"></a><span class="fu">ggplot</span>(x_df) <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Values, <span class="at">color =</span> Group))</span></code></pre></div>
+<p>3- t-test</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="practical-3.html#cb252-1" tabindex="-1"></a><span class="fu">t.test</span>(x1, x2)</span></code></pre></div>
+<p>4- The result of the test is influenced by the sample size</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="practical-3.html#cb253-1" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, mu1, sd1)</span>
+<span id="cb253-2"><a href="practical-3.html#cb253-2" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, mu2, sd2)</span>
+<span id="cb253-3"><a href="practical-3.html#cb253-3" tabindex="-1"></a><span class="fu">t.test</span>(x3, x4)</span></code></pre></div>
+<p>4- We can also do a one-sided test
+Check if group2 is greater than group1 (aka the difference 1-2 is smaller)</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="practical-3.html#cb254-1" tabindex="-1"></a><span class="fu">t.test</span>(x1, x2, <span class="at">alternative =</span> <span class="st">&#39;less&#39;</span>)</span></code></pre></div>
+</div>
+<div id="anova" class="section level4 hasAnchor">
+<h4>ANOVA<a href="practical-3.html#anova" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>1- Create mutliple datasets</p>
+<p>Our artificial data will have three different means</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="practical-3.html#cb255-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20221011</span>)</span>
+<span id="cb255-2"><a href="practical-3.html#cb255-2" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">mean =</span> <span class="dv">25</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb255-3"><a href="practical-3.html#cb255-3" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">mean =</span> <span class="dv">30</span>, <span class="at">sd =</span> <span class="dv">6</span>)</span>
+<span id="cb255-4"><a href="practical-3.html#cb255-4" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">mean =</span> <span class="dv">22</span>, <span class="at">sd =</span> <span class="dv">7</span>)</span>
+<span id="cb255-5"><a href="practical-3.html#cb255-5" tabindex="-1"></a></span>
+<span id="cb255-6"><a href="practical-3.html#cb255-6" tabindex="-1"></a>ms <span class="ot">&lt;-</span> <span class="fu">c</span>(m1, m2, m3) <span class="co"># Combine our three measures into one vector</span></span>
+<span id="cb255-7"><a href="practical-3.html#cb255-7" tabindex="-1"></a></span>
+<span id="cb255-8"><a href="practical-3.html#cb255-8" tabindex="-1"></a><span class="co"># Our vector of group labels A, B, and C</span></span>
+<span id="cb255-9"><a href="practical-3.html#cb255-9" tabindex="-1"></a>ls <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>,<span class="dv">30</span>),<span class="fu">rep</span>(<span class="st">&quot;B&quot;</span>,<span class="dv">30</span>),<span class="fu">rep</span>(<span class="st">&quot;C&quot;</span>,<span class="dv">30</span>)))</span></code></pre></div>
+<p>2- Visualize the data</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="practical-3.html#cb256-1" tabindex="-1"></a>df_anova <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Measure =</span> ms, <span class="at">Group =</span> ls)</span>
+<span id="cb256-2"><a href="practical-3.html#cb256-2" tabindex="-1"></a><span class="fu">ggplot</span>(df_anova) <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Measure, <span class="at">color =</span> Group))</span></code></pre></div>
+<p>3- ANOVA</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="practical-3.html#cb257-1" tabindex="-1"></a>results_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(Measure <span class="sc">~</span> Group, <span class="at">data =</span> df_anova)</span>
+<span id="cb257-2"><a href="practical-3.html#cb257-2" tabindex="-1"></a><span class="fu">summary</span>(results_aov)</span></code></pre></div>
+<p>We can look at the coefficients to find the difference across groups</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="practical-3.html#cb258-1" tabindex="-1"></a>results_aov<span class="sc">$</span>coefficients</span></code></pre></div>
+</div>
+<div id="hands-on-3" class="section level4 hasAnchor">
+<h4>Hands-on<a href="practical-3.html#hands-on-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="anova-vs-multiple-t-tests" class="section level5 hasAnchor">
+<h5>1- ANOVA vs multiple t-tests<a href="practical-3.html#anova-vs-multiple-t-tests" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Data PlantGrowth has multiple groups: one control and two treatments</p>
+<p>Make an ANOVA and consecutive t-tests between the control and each treatment.
+Do they lead to the same conclusion?</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="practical-3.html#cb259-1" tabindex="-1"></a><span class="fu">head</span>(PlantGrowth)</span></code></pre></div>
+</div>
+<div id="multiple-testing-correction" class="section level5 hasAnchor">
+<h5>2- Multiple testing correction<a href="practical-3.html#multiple-testing-correction" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Take the co2 dataset (note: not CO2), that records the CO2 level for each month across several years.
+We want to test if the CO2 levels from 1959 to 1978 were lower than those between 1979 and 1997 for each month separately.
+Then, we correct for multiple testing and compare the results (hint: see p.adjust).
+Do the conclusions change?</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="practical-3.html#cb260-1" tabindex="-1"></a>co2_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(co2, <span class="dv">39</span>, <span class="dv">12</span>), <span class="at">row.names =</span> <span class="fu">as.character</span>(<span class="fu">c</span>(<span class="dv">1959</span><span class="sc">:</span><span class="dv">1997</span>)))</span>
+<span id="cb260-2"><a href="practical-3.html#cb260-2" tabindex="-1"></a><span class="fu">colnames</span>(co2_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Jan&#39;</span>, <span class="st">&#39;Feb&#39;</span>, <span class="st">&#39;Mar&#39;</span>, <span class="st">&#39;Apr&#39;</span>, <span class="st">&#39;May&#39;</span>, <span class="st">&#39;Jun&#39;</span>, <span class="st">&#39;Jul&#39;</span>, <span class="st">&#39;Aug&#39;</span>, <span class="st">&#39;Sep&#39;</span>, <span class="st">&#39;Oct&#39;</span>, <span class="st">&#39;Nov&#39;</span>, <span class="st">&#39;Dec&#39;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="hands-on-solutions-1" class="section level4 hasAnchor">
+<h4>Hands-on solutions<a href="practical-3.html#hands-on-solutions-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The solutions for this part are in this <a href="./exercises/exercises_module3/results/testing_answers.Rmd"><strong>script</strong></a>.</p>
+<div id="anova-vs-multiple-t-tests-1" class="section level5 hasAnchor">
+<h5>1- ANOVA vs multiple t-tests<a href="practical-3.html#anova-vs-multiple-t-tests-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Solution hands on 1</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="practical-3.html#cb261-1" tabindex="-1"></a>results_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span>
+<span id="cb261-2"><a href="practical-3.html#cb261-2" tabindex="-1"></a><span class="fu">summary</span>(results_aov)</span>
+<span id="cb261-3"><a href="practical-3.html#cb261-3" tabindex="-1"></a>results_aov<span class="sc">$</span>coefficients</span>
+<span id="cb261-4"><a href="practical-3.html#cb261-4" tabindex="-1"></a><span class="co"># At least one treatment is different, treatment 1 is lighter than control and</span></span>
+<span id="cb261-5"><a href="practical-3.html#cb261-5" tabindex="-1"></a><span class="co"># treatment 2 is heavier</span></span>
+<span id="cb261-6"><a href="practical-3.html#cb261-6" tabindex="-1"></a></span>
+<span id="cb261-7"><a href="practical-3.html#cb261-7" tabindex="-1"></a><span class="fu">t.test</span>(PlantGrowth<span class="sc">$</span>weight[PlantGrowth<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&#39;ctrl&#39;</span>], PlantGrowth<span class="sc">$</span>weight[PlantGrowth<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&#39;trt1&#39;</span>])</span>
+<span id="cb261-8"><a href="practical-3.html#cb261-8" tabindex="-1"></a><span class="fu">t.test</span>(PlantGrowth<span class="sc">$</span>weight[PlantGrowth<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&#39;ctrl&#39;</span>], PlantGrowth<span class="sc">$</span>weight[PlantGrowth<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&#39;trt2&#39;</span>])</span>
+<span id="cb261-9"><a href="practical-3.html#cb261-9" tabindex="-1"></a><span class="co"># Only treatment 2 is significantly different</span></span></code></pre></div>
+</div>
+<div id="multiple-testing-correction-1" class="section level5 hasAnchor">
+<h5>2- Multiple testing correction<a href="practical-3.html#multiple-testing-correction-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Solution hands on 2</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="practical-3.html#cb262-1" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> co2_df <span class="sc">%&gt;%</span> <span class="fu">apply</span>(<span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="fu">t.test</span>(x[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>], x[<span class="dv">21</span><span class="sc">:</span><span class="dv">39</span>])<span class="sc">$</span>p.value))</span>
+<span id="cb262-2"><a href="practical-3.html#cb262-2" tabindex="-1"></a><span class="fu">sum</span>(p_values <span class="sc">&lt;</span> <span class="fl">0.05</span>) <span class="co"># 9 months are different</span></span>
+<span id="cb262-3"><a href="practical-3.html#cb262-3" tabindex="-1"></a>p_adj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p_values, <span class="at">method =</span> <span class="st">&#39;bonferroni&#39;</span>)</span>
+<span id="cb262-4"><a href="practical-3.html#cb262-4" tabindex="-1"></a><span class="fu">sum</span>(p_adj <span class="sc">&lt;</span> <span class="fl">0.05</span>) <span class="co"># 5 months are different</span></span>
+<span id="cb262-5"><a href="practical-3.html#cb262-5" tabindex="-1"></a>fdr <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p_values, <span class="at">method =</span> <span class="st">&#39;fdr&#39;</span>)</span>
+<span id="cb262-6"><a href="practical-3.html#cb262-6" tabindex="-1"></a><span class="fu">sum</span>(fdr <span class="sc">&lt;</span> <span class="fl">0.05</span>) <span class="co"># 8 months are different</span></span></code></pre></div>
 
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -395,6 +696,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
