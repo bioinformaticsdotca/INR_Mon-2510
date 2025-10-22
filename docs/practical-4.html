@@ -242,7 +242,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="practical-4.html"><a href="practical-4.html#lab-3"><i class="fa fa-check"></i>Lab</a>
 <ul>
 <li class="chapter" data-level="" data-path="practical-4.html"><a href="practical-4.html#data-visualization"><i class="fa fa-check"></i>Data Visualization</a></li>
-<li class="chapter" data-level="" data-path="practical-4.html"><a href="practical-4.html#shiny-app"><i class="fa fa-check"></i>Shiny App</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html"><i class="fa fa-check"></i>Lecture 2 - Factor Analysis for Human Spatial Vision</a>
@@ -315,15 +314,1034 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Data Visualization<a href="practical-4.html#data-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>For the practical, you can download this <a href="./exercises/exercises_module4/data_visualization_code.Rmd"><strong>script</strong></a>.</p>
 <p>You can also use this <a href="./exercises/exercises_module4/cheatsheet/data_visualization_cheatsheet.pdf"><strong>cheatsheet</strong></a>.</p>
+<div id="introduction" class="section level4 hasAnchor">
+<h4>Introduction<a href="practical-4.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Data visualization is a crucial skill in data science and analytics. In this tutorial, we will explore how to create various types of visualizations in R using the ggplot2 package, a powerful tool for creating informative and aesthetically pleasing graphics.</p>
 </div>
-<div id="shiny-app" class="section level3 hasAnchor">
-<h3>Shiny App<a href="practical-4.html#shiny-app" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For this part of the practical, you can download these 3 examples of Shiny App: <br>
-<a href="./exercises/exercises_module4/shiny_app/1_ShinyDemo.R"><strong>Demo 1</strong></a> <br>
-<a href="./exercises/exercises_module4/shiny_app/2_ShinyDemo.R"><strong>Demo 2</strong></a> <br>
-<a href="./exercises/exercises_module4/shiny_app/3_ShinyDemo.R"><strong>Demo 3</strong></a></p>
+<div id="installing-and-loading-required-packages" class="section level4 hasAnchor">
+<h4>Installing and Loading Required Packages<a href="practical-4.html#installing-and-loading-required-packages" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Before we begin, ensure you have the necessary packages installed.</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="practical-4.html#cb263-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb263-2"><a href="practical-4.html#cb263-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb263-3"><a href="practical-4.html#cb263-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb263-4"><a href="practical-4.html#cb263-4" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb263-5"><a href="practical-4.html#cb263-5" tabindex="-1"></a><span class="fu">library</span>(datasauRus)</span>
+<span id="cb263-6"><a href="practical-4.html#cb263-6" tabindex="-1"></a><span class="fu">library</span>(colorspace)</span>
+<span id="cb263-7"><a href="practical-4.html#cb263-7" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
+<span id="cb263-8"><a href="practical-4.html#cb263-8" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb263-9"><a href="practical-4.html#cb263-9" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb263-10"><a href="practical-4.html#cb263-10" tabindex="-1"></a><span class="fu">library</span>(qqman)</span>
+<span id="cb263-11"><a href="practical-4.html#cb263-11" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb263-12"><a href="practical-4.html#cb263-12" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb263-13"><a href="practical-4.html#cb263-13" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb263-14"><a href="practical-4.html#cb263-14" tabindex="-1"></a><span class="fu">library</span>(gifski)</span>
+<span id="cb263-15"><a href="practical-4.html#cb263-15" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb263-16"><a href="practical-4.html#cb263-16" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span></code></pre></div>
+</div>
+<div id="module-1-brief-review-of-basic-visualization-in-r" class="section level4 hasAnchor">
+<h4>Module 1: Brief Review of Basic Visualization in R<a href="practical-4.html#module-1-brief-review-of-basic-visualization-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let’s start with the simple built-in penguins data set to get familiar with the structure of ggplot2.</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="practical-4.html#cb264-1" tabindex="-1"></a><span class="fu">data</span>(penguins)</span>
+<span id="cb264-2"><a href="practical-4.html#cb264-2" tabindex="-1"></a><span class="fu">head</span>(penguins)</span>
+<span id="cb264-3"><a href="practical-4.html#cb264-3" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span>
+<span id="cb264-4"><a href="practical-4.html#cb264-4" tabindex="-1"></a></span>
+<span id="cb264-5"><a href="practical-4.html#cb264-5" tabindex="-1"></a><span class="co"># Basic scatter plot</span></span>
+<span id="cb264-6"><a href="practical-4.html#cb264-6" tabindex="-1"></a><span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb264-7"><a href="practical-4.html#cb264-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb264-8"><a href="practical-4.html#cb264-8" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm))</span></code></pre></div>
+<p>For this tutorial, we will mostly use the built-in gapminder dataset, which contains excerpt of the Gapminder data on life expectancy, GDP per capita, and population by country.</p>
+<p>Let’s explore the gapminder dataset.</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="practical-4.html#cb265-1" tabindex="-1"></a><span class="fu">data</span>(gapminder) <span class="co"># load in dataset</span></span>
+<span id="cb265-2"><a href="practical-4.html#cb265-2" tabindex="-1"></a><span class="fu">head</span>(gapminder, <span class="dv">5</span>) <span class="co"># check the first 5 rows</span></span></code></pre></div>
+<p>Let’s use the gapminder dataset to build different useful plots.</p>
+<div id="bar-plot" class="section level5 hasAnchor">
+<h5>1.1 bar plot<a href="practical-4.html#bar-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Bar plot is used to visually compare categorical data by representing values with rectangular bars.</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="practical-4.html#cb266-1" tabindex="-1"></a><span class="co"># bar plot: discrete variable</span></span>
+<span id="cb266-2"><a href="practical-4.html#cb266-2" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> continent)) <span class="sc">+</span></span>
+<span id="cb266-3"><a href="practical-4.html#cb266-3" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+</div>
+<div id="histogram-frequency-density-plot" class="section level5 hasAnchor">
+<h5>1.2 histogram/ frequency/ density plot<a href="practical-4.html#histogram-frequency-density-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>A histogram, frequency plot, and density plot all visualize the distribution of a dataset, but they differ in how they represent data: a histogram groups data into bins and shows counts, a frequency plot connects points representing counts for each bin, and a density plot estimates the probability density function, providing a smooth representation of distribution shape.</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="practical-4.html#cb267-1" tabindex="-1"></a><span class="co"># histogram plot: continuous variable</span></span>
+<span id="cb267-2"><a href="practical-4.html#cb267-2" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp, <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb267-3"><a href="practical-4.html#cb267-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span>
+<span id="cb267-4"><a href="practical-4.html#cb267-4" tabindex="-1"></a></span>
+<span id="cb267-5"><a href="practical-4.html#cb267-5" tabindex="-1"></a><span class="co"># frequency plot</span></span>
+<span id="cb267-6"><a href="practical-4.html#cb267-6" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp, <span class="at">color =</span> continent)) <span class="sc">+</span></span>
+<span id="cb267-7"><a href="practical-4.html#cb267-7" tabindex="-1"></a>  <span class="fu">geom_freqpoly</span>()</span>
+<span id="cb267-8"><a href="practical-4.html#cb267-8" tabindex="-1"></a></span>
+<span id="cb267-9"><a href="practical-4.html#cb267-9" tabindex="-1"></a><span class="co"># density plot (smooth histogram = density plot)</span></span>
+<span id="cb267-10"><a href="practical-4.html#cb267-10" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> lifeExp, <span class="at">color =</span> continent)) <span class="sc">+</span></span>
+<span id="cb267-11"><a href="practical-4.html#cb267-11" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span></code></pre></div>
+</div>
+<div id="box-plot" class="section level5 hasAnchor">
+<h5>1.3 box plot<a href="practical-4.html#box-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>A box plot is used to summarize the distribution of a dataset by displaying its median, quartiles, and potential outliers, helping to identify variability and skewness.</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="practical-4.html#cb268-1" tabindex="-1"></a><span class="co"># box plot: one discrete variable + one continuous variable</span></span>
+<span id="cb268-2"><a href="practical-4.html#cb268-2" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb268-3"><a href="practical-4.html#cb268-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">group =</span> year))</span></code></pre></div>
+</div>
+<div id="violin-plot" class="section level5 hasAnchor">
+<h5>1.4 violin plot<a href="practical-4.html#violin-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>A violin plot combines aspects of a box plot and a density plot to show the distribution, probability density, and variability of a dataset, making it easier to identify patterns and multimodal distributions.</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="practical-4.html#cb269-1" tabindex="-1"></a><span class="co"># violin plot</span></span>
+<span id="cb269-2"><a href="practical-4.html#cb269-2" tabindex="-1"></a><span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(<span class="at">x =</span> continent, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb269-3"><a href="practical-4.html#cb269-3" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">trim =</span> <span class="cn">FALSE</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb269-4"><a href="practical-4.html#cb269-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb269-5"><a href="practical-4.html#cb269-5" tabindex="-1"></a>    <span class="at">fun =</span> mean,</span>
+<span id="cb269-6"><a href="practical-4.html#cb269-6" tabindex="-1"></a>    <span class="at">fun.max =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb269-7"><a href="practical-4.html#cb269-7" tabindex="-1"></a>      <span class="fu">mean</span>(x) <span class="sc">+</span> <span class="fu">sd</span>(x)</span>
+<span id="cb269-8"><a href="practical-4.html#cb269-8" tabindex="-1"></a>    },</span>
+<span id="cb269-9"><a href="practical-4.html#cb269-9" tabindex="-1"></a>    <span class="at">fun.min =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb269-10"><a href="practical-4.html#cb269-10" tabindex="-1"></a>      <span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb269-11"><a href="practical-4.html#cb269-11" tabindex="-1"></a>    },</span>
+<span id="cb269-12"><a href="practical-4.html#cb269-12" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;pointrange&quot;</span></span>
+<span id="cb269-13"><a href="practical-4.html#cb269-13" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="example-1" class="section level5 hasAnchor">
+<h5>1.5 Example 1<a href="practical-4.html#example-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Let’s see an example of how to improve a data visualization plot step by step. We used the built-in lincoln_weather dataset to investigate the weather distribution of Lincoln. Lincoln weather dataset containing weather information from Lincoln, Nebraska, from 2016.</p>
+<div id="create-the-dataset-we-will-use-in-this-example" class="section level6 hasAnchor">
+<h6>1.5.1 Create the dataset we will use in this example<a href="practical-4.html#create-the-dataset-we-will-use-in-this-example" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="practical-4.html#cb270-1" tabindex="-1"></a>lincoln_df <span class="ot">&lt;-</span> lincoln_weather <span class="sc">%&gt;%</span></span>
+<span id="cb270-2"><a href="practical-4.html#cb270-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb270-3"><a href="practical-4.html#cb270-3" tabindex="-1"></a>    <span class="at">month_short =</span> <span class="fu">fct_recode</span>(</span>
+<span id="cb270-4"><a href="practical-4.html#cb270-4" tabindex="-1"></a>      Month,</span>
+<span id="cb270-5"><a href="practical-4.html#cb270-5" tabindex="-1"></a>      <span class="at">Jan =</span> <span class="st">&quot;January&quot;</span>,</span>
+<span id="cb270-6"><a href="practical-4.html#cb270-6" tabindex="-1"></a>      <span class="at">Feb =</span> <span class="st">&quot;February&quot;</span>,</span>
+<span id="cb270-7"><a href="practical-4.html#cb270-7" tabindex="-1"></a>      <span class="at">Mar =</span> <span class="st">&quot;March&quot;</span>,</span>
+<span id="cb270-8"><a href="practical-4.html#cb270-8" tabindex="-1"></a>      <span class="at">Apr =</span> <span class="st">&quot;April&quot;</span>,</span>
+<span id="cb270-9"><a href="practical-4.html#cb270-9" tabindex="-1"></a>      <span class="at">May =</span> <span class="st">&quot;May&quot;</span>,</span>
+<span id="cb270-10"><a href="practical-4.html#cb270-10" tabindex="-1"></a>      <span class="at">Jun =</span> <span class="st">&quot;June&quot;</span>,</span>
+<span id="cb270-11"><a href="practical-4.html#cb270-11" tabindex="-1"></a>      <span class="at">Jul =</span> <span class="st">&quot;July&quot;</span>,</span>
+<span id="cb270-12"><a href="practical-4.html#cb270-12" tabindex="-1"></a>      <span class="at">Aug =</span> <span class="st">&quot;August&quot;</span>,</span>
+<span id="cb270-13"><a href="practical-4.html#cb270-13" tabindex="-1"></a>      <span class="at">Sep =</span> <span class="st">&quot;September&quot;</span>,</span>
+<span id="cb270-14"><a href="practical-4.html#cb270-14" tabindex="-1"></a>      <span class="at">Oct =</span> <span class="st">&quot;October&quot;</span>,</span>
+<span id="cb270-15"><a href="practical-4.html#cb270-15" tabindex="-1"></a>      <span class="at">Nov =</span> <span class="st">&quot;November&quot;</span>,</span>
+<span id="cb270-16"><a href="practical-4.html#cb270-16" tabindex="-1"></a>      <span class="at">Dec =</span> <span class="st">&quot;December&quot;</span></span>
+<span id="cb270-17"><a href="practical-4.html#cb270-17" tabindex="-1"></a>    )</span>
+<span id="cb270-18"><a href="practical-4.html#cb270-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb270-19"><a href="practical-4.html#cb270-19" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month_short =</span> <span class="fu">fct_rev</span>(month_short)) <span class="sc">%&gt;%</span></span>
+<span id="cb270-20"><a href="practical-4.html#cb270-20" tabindex="-1"></a>  <span class="fu">select</span>(Month, month_short, <span class="st">&#39;Mean Temperature [F]&#39;</span>)</span>
+<span id="cb270-21"><a href="practical-4.html#cb270-21" tabindex="-1"></a></span>
+<span id="cb270-22"><a href="practical-4.html#cb270-22" tabindex="-1"></a><span class="fu">head</span>(lincoln_df)</span></code></pre></div>
+</div>
+<div id="whats-the-problem-of-the-following-plot" class="section level6 hasAnchor">
+<h6>1.5.2 What’s the problem of the following plot?<a href="practical-4.html#whats-the-problem-of-the-following-plot" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="practical-4.html#cb271-1" tabindex="-1"></a><span class="co"># points-errorbars</span></span>
+<span id="cb271-2"><a href="practical-4.html#cb271-2" tabindex="-1"></a>lincoln_errbar <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb271-3"><a href="practical-4.html#cb271-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb271-4"><a href="practical-4.html#cb271-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb271-5"><a href="practical-4.html#cb271-5" tabindex="-1"></a>    <span class="at">fun =</span> mean, </span>
+<span id="cb271-6"><a href="practical-4.html#cb271-6" tabindex="-1"></a>    <span class="at">fun.max =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb271-7"><a href="practical-4.html#cb271-7" tabindex="-1"></a>      <span class="fu">mean</span>(x) <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sd</span>(x)</span>
+<span id="cb271-8"><a href="practical-4.html#cb271-8" tabindex="-1"></a>    },</span>
+<span id="cb271-9"><a href="practical-4.html#cb271-9" tabindex="-1"></a>    <span class="at">fun.min =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb271-10"><a href="practical-4.html#cb271-10" tabindex="-1"></a>      <span class="fu">mean</span>(x) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sd</span>(x)</span>
+<span id="cb271-11"><a href="practical-4.html#cb271-11" tabindex="-1"></a>    }, </span>
+<span id="cb271-12"><a href="practical-4.html#cb271-12" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;pointrange&quot;</span></span>
+<span id="cb271-13"><a href="practical-4.html#cb271-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb271-14"><a href="practical-4.html#cb271-14" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb271-15"><a href="practical-4.html#cb271-15" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb271-16"><a href="practical-4.html#cb271-16" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb271-17"><a href="practical-4.html#cb271-17" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb271-18"><a href="practical-4.html#cb271-18" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb271-19"><a href="practical-4.html#cb271-19" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb271-20"><a href="practical-4.html#cb271-20" tabindex="-1"></a>  )</span>
+<span id="cb271-21"><a href="practical-4.html#cb271-21" tabindex="-1"></a></span>
+<span id="cb271-22"><a href="practical-4.html#cb271-22" tabindex="-1"></a>lincoln_errbar</span></code></pre></div>
+</div>
+<div id="use-boxviolin-plot-to-show-the-distribution" class="section level6 hasAnchor">
+<h6>1.5.3 Use box/violin plot to show the distribution<a href="practical-4.html#use-boxviolin-plot-to-show-the-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="practical-4.html#cb272-1" tabindex="-1"></a><span class="co"># box plot</span></span>
+<span id="cb272-2"><a href="practical-4.html#cb272-2" tabindex="-1"></a>lincoln_box <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb272-3"><a href="practical-4.html#cb272-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb272-4"><a href="practical-4.html#cb272-4" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;grey90&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-5"><a href="practical-4.html#cb272-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-6"><a href="practical-4.html#cb272-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-7"><a href="practical-4.html#cb272-7" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb272-8"><a href="practical-4.html#cb272-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb272-9"><a href="practical-4.html#cb272-9" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb272-10"><a href="practical-4.html#cb272-10" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb272-11"><a href="practical-4.html#cb272-11" tabindex="-1"></a>  )</span>
+<span id="cb272-12"><a href="practical-4.html#cb272-12" tabindex="-1"></a></span>
+<span id="cb272-13"><a href="practical-4.html#cb272-13" tabindex="-1"></a>lincoln_box</span>
+<span id="cb272-14"><a href="practical-4.html#cb272-14" tabindex="-1"></a></span>
+<span id="cb272-15"><a href="practical-4.html#cb272-15" tabindex="-1"></a><span class="co"># violin plot</span></span>
+<span id="cb272-16"><a href="practical-4.html#cb272-16" tabindex="-1"></a>lincoln_violin <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb272-17"><a href="practical-4.html#cb272-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb272-18"><a href="practical-4.html#cb272-18" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">fill =</span> <span class="st">&quot;grey90&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-19"><a href="practical-4.html#cb272-19" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-20"><a href="practical-4.html#cb272-20" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-21"><a href="practical-4.html#cb272-21" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb272-22"><a href="practical-4.html#cb272-22" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb272-23"><a href="practical-4.html#cb272-23" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb272-24"><a href="practical-4.html#cb272-24" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb272-25"><a href="practical-4.html#cb272-25" tabindex="-1"></a>  )</span>
+<span id="cb272-26"><a href="practical-4.html#cb272-26" tabindex="-1"></a></span>
+<span id="cb272-27"><a href="practical-4.html#cb272-27" tabindex="-1"></a>lincoln_violin</span></code></pre></div>
+</div>
+<div id="use-points-to-show-the-original-data" class="section level6 hasAnchor">
+<h6>1.5.4 Use points to show the original data<a href="practical-4.html#use-points-to-show-the-original-data" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="practical-4.html#cb273-1" tabindex="-1"></a><span class="co"># points</span></span>
+<span id="cb273-2"><a href="practical-4.html#cb273-2" tabindex="-1"></a>lincoln_points <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb273-3"><a href="practical-4.html#cb273-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb273-4"><a href="practical-4.html#cb273-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb273-5"><a href="practical-4.html#cb273-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-6"><a href="practical-4.html#cb273-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-7"><a href="practical-4.html#cb273-7" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb273-8"><a href="practical-4.html#cb273-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb273-9"><a href="practical-4.html#cb273-9" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb273-10"><a href="practical-4.html#cb273-10" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb273-11"><a href="practical-4.html#cb273-11" tabindex="-1"></a>  )</span>
+<span id="cb273-12"><a href="practical-4.html#cb273-12" tabindex="-1"></a></span>
+<span id="cb273-13"><a href="practical-4.html#cb273-13" tabindex="-1"></a>lincoln_points</span>
+<span id="cb273-14"><a href="practical-4.html#cb273-14" tabindex="-1"></a></span>
+<span id="cb273-15"><a href="practical-4.html#cb273-15" tabindex="-1"></a><span class="co"># jitter points</span></span>
+<span id="cb273-16"><a href="practical-4.html#cb273-16" tabindex="-1"></a>lincoln_jitter <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb273-17"><a href="practical-4.html#cb273-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb273-18"><a href="practical-4.html#cb273-18" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">width =</span> .<span class="dv">15</span>, <span class="at">height =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">320</span>), <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb273-19"><a href="practical-4.html#cb273-19" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-20"><a href="practical-4.html#cb273-20" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-21"><a href="practical-4.html#cb273-21" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb273-22"><a href="practical-4.html#cb273-22" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb273-23"><a href="practical-4.html#cb273-23" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(</span>
+<span id="cb273-24"><a href="practical-4.html#cb273-24" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb273-25"><a href="practical-4.html#cb273-25" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">12</span></span>
+<span id="cb273-26"><a href="practical-4.html#cb273-26" tabindex="-1"></a>    ),</span>
+<span id="cb273-27"><a href="practical-4.html#cb273-27" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb273-28"><a href="practical-4.html#cb273-28" tabindex="-1"></a>  )</span>
+<span id="cb273-29"><a href="practical-4.html#cb273-29" tabindex="-1"></a></span>
+<span id="cb273-30"><a href="practical-4.html#cb273-30" tabindex="-1"></a>lincoln_jitter</span></code></pre></div>
+</div>
+<div id="use-sina-plot-to-combine-violin-plot-and-jitter-points" class="section level6 hasAnchor">
+<h6>1.5.5 Use sina plot to combine violin plot and jitter points<a href="practical-4.html#use-sina-plot-to-combine-violin-plot-and-jitter-points" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="practical-4.html#cb274-1" tabindex="-1"></a><span class="co"># sina plot</span></span>
+<span id="cb274-2"><a href="practical-4.html#cb274-2" tabindex="-1"></a>lincoln_sina <span class="ot">&lt;-</span> lincoln_df <span class="sc">%&gt;%</span></span>
+<span id="cb274-3"><a href="practical-4.html#cb274-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> month_short, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature [F]</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb274-4"><a href="practical-4.html#cb274-4" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">color =</span> <span class="st">&quot;transparent&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;gray90&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-5"><a href="practical-4.html#cb274-5" tabindex="-1"></a>  <span class="co"># dviz.supp::stat_sina(size = 0.85) +</span></span>
+<span id="cb274-6"><a href="practical-4.html#cb274-6" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb274-7"><a href="practical-4.html#cb274-7" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;month&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-8"><a href="practical-4.html#cb274-8" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;mean temperature (°F)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-9"><a href="practical-4.html#cb274-9" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb274-10"><a href="practical-4.html#cb274-10" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb274-11"><a href="practical-4.html#cb274-11" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(</span>
+<span id="cb274-12"><a href="practical-4.html#cb274-12" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb274-13"><a href="practical-4.html#cb274-13" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">12</span></span>
+<span id="cb274-14"><a href="practical-4.html#cb274-14" tabindex="-1"></a>    ),</span>
+<span id="cb274-15"><a href="practical-4.html#cb274-15" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="fl">1.5</span>)</span>
+<span id="cb274-16"><a href="practical-4.html#cb274-16" tabindex="-1"></a>  )</span>
+<span id="cb274-17"><a href="practical-4.html#cb274-17" tabindex="-1"></a></span>
+<span id="cb274-18"><a href="practical-4.html#cb274-18" tabindex="-1"></a>lincoln_sina</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="module-2-advanced-customization-and-data-transformation" class="section level4 hasAnchor">
+<h4>Module 2: Advanced Customization and Data Transformation<a href="practical-4.html#module-2-advanced-customization-and-data-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="data-transformations-and-faceting" class="section level5 hasAnchor">
+<h5>2.1 Data Transformations and Faceting<a href="practical-4.html#data-transformations-and-faceting" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In data visualization, data transformation is a crucial step to ensure that the data is in the right format and structure for effective visual representation.</p>
+<div id="log-transformation" class="section level6 hasAnchor">
+<h6>2.1.1 Log Transformation<a href="practical-4.html#log-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>There are many different data transformation methods, and the following is an example of log transformation.</p>
+<p>We would like to investigate what is the relationship among GDP per capita, life expectancy, and population across different countries.</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="practical-4.html#cb275-1" tabindex="-1"></a><span class="co"># Step 1: calculate the mean of lifeExp, gdpPercap, pop in different countries</span></span>
+<span id="cb275-2"><a href="practical-4.html#cb275-2" tabindex="-1"></a>newgapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb275-3"><a href="practical-4.html#cb275-3" tabindex="-1"></a>  <span class="fu">group_by</span>(continent, country) <span class="sc">%&gt;%</span> </span>
+<span id="cb275-4"><a href="practical-4.html#cb275-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb275-5"><a href="practical-4.html#cb275-5" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(lifeExp, gdpPercap, pop), mean)</span>
+<span id="cb275-6"><a href="practical-4.html#cb275-6" tabindex="-1"></a>  )</span>
+<span id="cb275-7"><a href="practical-4.html#cb275-7" tabindex="-1"></a>newgapminder</span>
+<span id="cb275-8"><a href="practical-4.html#cb275-8" tabindex="-1"></a></span>
+<span id="cb275-9"><a href="practical-4.html#cb275-9" tabindex="-1"></a><span class="co"># Step 2: draw the plot</span></span>
+<span id="cb275-10"><a href="practical-4.html#cb275-10" tabindex="-1"></a>newgapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb275-11"><a href="practical-4.html#cb275-11" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb275-12"><a href="practical-4.html#cb275-12" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> continent, <span class="at">size =</span> pop))</span>
+<span id="cb275-13"><a href="practical-4.html#cb275-13" tabindex="-1"></a></span>
+<span id="cb275-14"><a href="practical-4.html#cb275-14" tabindex="-1"></a><span class="co"># Step 3: log transformation of x-axis(gdpPercap)</span></span>
+<span id="cb275-15"><a href="practical-4.html#cb275-15" tabindex="-1"></a>newgapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb275-16"><a href="practical-4.html#cb275-16" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb275-17"><a href="practical-4.html#cb275-17" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> continent, <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb275-18"><a href="practical-4.html#cb275-18" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>()</span>
+<span id="cb275-19"><a href="practical-4.html#cb275-19" tabindex="-1"></a></span>
+<span id="cb275-20"><a href="practical-4.html#cb275-20" tabindex="-1"></a><span class="co"># Step 4 (Optional): add dollar format or unit format to label the axis for better interpretation</span></span>
+<span id="cb275-21"><a href="practical-4.html#cb275-21" tabindex="-1"></a>newgapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb275-22"><a href="practical-4.html#cb275-22" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb275-23"><a href="practical-4.html#cb275-23" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> continent, <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb275-24"><a href="practical-4.html#cb275-24" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">10000</span>, <span class="dv">30000</span>),</span>
+<span id="cb275-25"><a href="practical-4.html#cb275-25" tabindex="-1"></a>                  <span class="at">labels =</span> scales<span class="sc">::</span>dollar)</span>
+<span id="cb275-26"><a href="practical-4.html#cb275-26" tabindex="-1"></a></span>
+<span id="cb275-27"><a href="practical-4.html#cb275-27" tabindex="-1"></a>newgapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb275-28"><a href="practical-4.html#cb275-28" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb275-29"><a href="practical-4.html#cb275-29" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> continent, <span class="at">size =</span> pop)) <span class="sc">+</span></span>
+<span id="cb275-30"><a href="practical-4.html#cb275-30" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>(</span>
+<span id="cb275-31"><a href="practical-4.html#cb275-31" tabindex="-1"></a>      <span class="at">name =</span> <span class="st">&quot;GDP per capita&quot;</span>,</span>
+<span id="cb275-32"><a href="practical-4.html#cb275-32" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">3000</span>, <span class="dv">10000</span>, <span class="dv">30000</span>),</span>
+<span id="cb275-33"><a href="practical-4.html#cb275-33" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">unit_format</span>(<span class="at">unit =</span> <span class="st">&quot;dollar&quot;</span>))</span></code></pre></div>
+</div>
+<div id="faceting" class="section level6 hasAnchor">
+<h6>2.1.2 Faceting<a href="practical-4.html#faceting" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Data faceting is used in data visualization to break down data into subsets and display them across multiple smaller plots. This technique helps in revealing patterns, trends, and relationships that might be obscured in a single, aggregated plot. The following is an example of data faceting.</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="practical-4.html#cb276-1" tabindex="-1"></a><span class="co"># facet_grid()：create a grid of graphs, by rows and columns</span></span>
+<span id="cb276-2"><a href="practical-4.html#cb276-2" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb276-3"><a href="practical-4.html#cb276-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb276-4"><a href="practical-4.html#cb276-4" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb276-5"><a href="practical-4.html#cb276-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> continent)</span>
+<span id="cb276-6"><a href="practical-4.html#cb276-6" tabindex="-1"></a></span>
+<span id="cb276-7"><a href="practical-4.html#cb276-7" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb276-8"><a href="practical-4.html#cb276-8" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb276-9"><a href="practical-4.html#cb276-9" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb276-10"><a href="practical-4.html#cb276-10" tabindex="-1"></a>  <span class="fu">facet_grid</span>(continent <span class="sc">~</span> .)</span>
+<span id="cb276-11"><a href="practical-4.html#cb276-11" tabindex="-1"></a></span>
+<span id="cb276-12"><a href="practical-4.html#cb276-12" tabindex="-1"></a><span class="co"># facet_wrap()：create small multiples by “wrapping” a series of plots</span></span>
+<span id="cb276-13"><a href="practical-4.html#cb276-13" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb276-14"><a href="practical-4.html#cb276-14" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb276-15"><a href="practical-4.html#cb276-15" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb276-16"><a href="practical-4.html#cb276-16" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb276-17"><a href="practical-4.html#cb276-17" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent)</span></code></pre></div>
+</div>
+</div>
+<div id="advanced-aesthetic-customization---color" class="section level5 hasAnchor">
+<h5>2.2 Advanced Aesthetic Customization - color<a href="practical-4.html#advanced-aesthetic-customization---color" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Color plays a crucial role in data visualization. We will explore how to use ColorSpace to create plots tailored to different data types.</p>
+<p>Show all available color in colorspace.</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="practical-4.html#cb277-1" tabindex="-1"></a><span class="fu">hcl_palettes</span>(<span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb277-2"><a href="practical-4.html#cb277-2" tabindex="-1"></a></span>
+<span id="cb277-3"><a href="practical-4.html#cb277-3" tabindex="-1"></a><span class="fu">hcl_palettes</span>(<span class="st">&quot;qualitative&quot;</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb277-4"><a href="practical-4.html#cb277-4" tabindex="-1"></a><span class="fu">hcl_palettes</span>(<span class="st">&quot;sequential (single-hue)&quot;</span>, <span class="at">n =</span> <span class="dv">7</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb277-5"><a href="practical-4.html#cb277-5" tabindex="-1"></a><span class="fu">hcl_palettes</span>(<span class="st">&quot;sequential (multi-hue)&quot;</span>, <span class="at">n =</span> <span class="dv">7</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb277-6"><a href="practical-4.html#cb277-6" tabindex="-1"></a><span class="fu">hcl_palettes</span>(<span class="st">&quot;diverging&quot;</span>, <span class="at">n =</span> <span class="dv">7</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="qualitative-colors" class="section level6 hasAnchor">
+<h6>2.2.1 qualitative colors<a href="practical-4.html#qualitative-colors" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Qualitative (iris dataset) : create a scatter plot of Sepal.Length vs. Sepal.Width, coloring points by Species.</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="practical-4.html#cb278-1" tabindex="-1"></a><span class="co"># qualitative colors (Categorical Data)</span></span>
+<span id="cb278-2"><a href="practical-4.html#cb278-2" tabindex="-1"></a><span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb278-3"><a href="practical-4.html#cb278-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb278-4"><a href="practical-4.html#cb278-4" tabindex="-1"></a>  <span class="fu">scale_color_discrete_qualitative</span>(<span class="at">palette =</span> <span class="st">&quot;Dark 3&quot;</span>) <span class="sc">+</span>  <span class="co"># Using discrete qualitative color scale</span></span>
+<span id="cb278-5"><a href="practical-4.html#cb278-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Qualitative Colors Example: Iris Species&quot;</span>)</span></code></pre></div>
+</div>
+<div id="sequentialsingle-hue-colors" class="section level6 hasAnchor">
+<h6>2.2.2 Sequential(single-hue) colors<a href="practical-4.html#sequentialsingle-hue-colors" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Sequential single-hue (mtcars dataset): create a bar plot of car models (rownames(mtcars)) based on their miles per gallon (mpg), using a single-hue sequential color gradient.</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="practical-4.html#cb279-1" tabindex="-1"></a><span class="co"># sequential (single-hue) colors (Ordered Data)</span></span>
+<span id="cb279-2"><a href="practical-4.html#cb279-2" tabindex="-1"></a><span class="co"># Order data by mpg</span></span>
+<span id="cb279-3"><a href="practical-4.html#cb279-3" tabindex="-1"></a>mtcars<span class="sc">$</span>car <span class="ot">&lt;-</span> <span class="fu">rownames</span>(mtcars)</span>
+<span id="cb279-4"><a href="practical-4.html#cb279-4" tabindex="-1"></a>mtcars <span class="ot">&lt;-</span> mtcars[<span class="fu">order</span>(mtcars<span class="sc">$</span>mpg), ]</span>
+<span id="cb279-5"><a href="practical-4.html#cb279-5" tabindex="-1"></a><span class="co"># Create a bar plot</span></span>
+<span id="cb279-6"><a href="practical-4.html#cb279-6" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(car, mpg), <span class="at">y =</span> mpg, <span class="at">fill =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb279-7"><a href="practical-4.html#cb279-7" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb279-8"><a href="practical-4.html#cb279-8" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_sequential</span>(<span class="at">palette =</span> <span class="st">&quot;Blues 3&quot;</span>) <span class="sc">+</span>  <span class="co"># Sequential color for fill</span></span>
+<span id="cb279-9"><a href="practical-4.html#cb279-9" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="co"># Flip for better readability</span></span>
+<span id="cb279-10"><a href="practical-4.html#cb279-10" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sequential (Single-Hue) Colors Example: MPG in mtcars&quot;</span>) <span class="sc">+</span></span>
+<span id="cb279-11"><a href="practical-4.html#cb279-11" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</div>
+<div id="sequential-multi-hue-colors" class="section level6 hasAnchor">
+<h6>2.2.3 Sequential (multi-hue) colors<a href="practical-4.html#sequential-multi-hue-colors" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Sequential multi-hue (volcano dataset): The volcano heatmap provides a 2D topographic view of elevation data using color intensity. It highlights how terrain elevation changes over space.</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="practical-4.html#cb280-1" tabindex="-1"></a><span class="co"># sequential (multi-hue) colors (Ordered Data)</span></span>
+<span id="cb280-2"><a href="practical-4.html#cb280-2" tabindex="-1"></a><span class="co"># Convert volcano dataset to long format for ggplot</span></span>
+<span id="cb280-3"><a href="practical-4.html#cb280-3" tabindex="-1"></a>volcano_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.table</span>(volcano))</span>
+<span id="cb280-4"><a href="practical-4.html#cb280-4" tabindex="-1"></a><span class="fu">colnames</span>(volcano_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;elevation&quot;</span>)</span>
+<span id="cb280-5"><a href="practical-4.html#cb280-5" tabindex="-1"></a><span class="co"># Plot the heatmap</span></span>
+<span id="cb280-6"><a href="practical-4.html#cb280-6" tabindex="-1"></a><span class="fu">ggplot</span>(volcano_df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">fill =</span> elevation)) <span class="sc">+</span></span>
+<span id="cb280-7"><a href="practical-4.html#cb280-7" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb280-8"><a href="practical-4.html#cb280-8" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_sequential</span>(<span class="at">palette =</span> <span class="st">&quot;YlOrRd&quot;</span>) <span class="sc">+</span>  <span class="co"># Sequential multi-hue color scale</span></span>
+<span id="cb280-9"><a href="practical-4.html#cb280-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sequential (Multi-Hue) Colors Example: Volcano Elevation&quot;</span>) <span class="sc">+</span></span>
+<span id="cb280-10"><a href="practical-4.html#cb280-10" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;X Coordinate&quot;</span>) <span class="sc">+</span>  <span class="co"># Add x-axis label</span></span>
+<span id="cb280-11"><a href="practical-4.html#cb280-11" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Y Coordinate&quot;</span>) <span class="sc">+</span>  <span class="co"># Add y-axis label</span></span>
+<span id="cb280-12"><a href="practical-4.html#cb280-12" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb280-13"><a href="practical-4.html#cb280-13" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb280-14"><a href="practical-4.html#cb280-14" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),   <span class="co"># Remove axis text</span></span>
+<span id="cb280-15"><a href="practical-4.html#cb280-15" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>()   <span class="co"># Remove axis ticks</span></span>
+<span id="cb280-16"><a href="practical-4.html#cb280-16" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="diverging-colors" class="section level6 hasAnchor">
+<h6>2.2.4 Diverging colors<a href="practical-4.html#diverging-colors" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Diverging (USArrests dataset): map UrbanPop deviation from the median across states using a diverging color scale. The goal is to understand how each state’s urban population percentage compares to the median urban population percentage. A positive value means the state’s urban population is above the median, while a negative value means it is below the median.</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="practical-4.html#cb281-1" tabindex="-1"></a><span class="co"># diverging colors (USArrest Dataset)</span></span>
+<span id="cb281-2"><a href="practical-4.html#cb281-2" tabindex="-1"></a><span class="co"># Compute deviation from median</span></span>
+<span id="cb281-3"><a href="practical-4.html#cb281-3" tabindex="-1"></a>USArrests<span class="sc">$</span>State <span class="ot">&lt;-</span> <span class="fu">rownames</span>(USArrests)</span>
+<span id="cb281-4"><a href="practical-4.html#cb281-4" tabindex="-1"></a>USArrests<span class="sc">$</span>UrbanPop_dev <span class="ot">&lt;-</span> USArrests<span class="sc">$</span>UrbanPop <span class="sc">-</span> <span class="fu">median</span>(USArrests<span class="sc">$</span>UrbanPop)</span>
+<span id="cb281-5"><a href="practical-4.html#cb281-5" tabindex="-1"></a><span class="co"># Create a bar plot</span></span>
+<span id="cb281-6"><a href="practical-4.html#cb281-6" tabindex="-1"></a><span class="fu">ggplot</span>(USArrests, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(State, UrbanPop_dev), <span class="at">y =</span> UrbanPop_dev, <span class="at">fill =</span> UrbanPop_dev)) <span class="sc">+</span></span>
+<span id="cb281-7"><a href="practical-4.html#cb281-7" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb281-8"><a href="practical-4.html#cb281-8" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_divergingx</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>) <span class="sc">+</span></span>
+<span id="cb281-9"><a href="practical-4.html#cb281-9" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb281-10"><a href="practical-4.html#cb281-10" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Diverging Colors Example: UrbanPop Deviation in USArrests&quot;</span>) <span class="sc">+</span></span>
+<span id="cb281-11"><a href="practical-4.html#cb281-11" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</div>
+</div>
+<div id="example-2" class="section level5 hasAnchor">
+<h5>2.3 Example 2<a href="practical-4.html#example-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Compare the before-and-after heatmaps below to see how color choice enhance readability and perceptual accuracy in data visualization.</p>
+<div id="before" class="section level6 hasAnchor">
+<h6>2.3.1 Before<a href="practical-4.html#before" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Use the default color to create the heatmap.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="practical-4.html#cb282-1" tabindex="-1"></a><span class="co"># before</span></span>
+<span id="cb282-2"><a href="practical-4.html#cb282-2" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb282-3"><a href="practical-4.html#cb282-3" tabindex="-1"></a>  <span class="fu">group_by</span>(continent, year) <span class="sc">%&gt;%</span></span>
+<span id="cb282-4"><a href="practical-4.html#cb282-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_lifeExp =</span> <span class="fu">mean</span>(lifeExp)) <span class="sc">%&gt;%</span></span>
+<span id="cb282-5"><a href="practical-4.html#cb282-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> continent, <span class="at">fill =</span> mean_lifeExp)) <span class="sc">+</span></span>
+<span id="cb282-6"><a href="practical-4.html#cb282-6" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb282-7"><a href="practical-4.html#cb282-7" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
+</div>
+<div id="after" class="section level6 hasAnchor">
+<h6>2.3.2 After<a href="practical-4.html#after" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Use the Sequential color to show the heatmap.</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="practical-4.html#cb283-1" tabindex="-1"></a><span class="co"># color choice 1 (Viridis)</span></span>
+<span id="cb283-2"><a href="practical-4.html#cb283-2" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb283-3"><a href="practical-4.html#cb283-3" tabindex="-1"></a>  <span class="fu">group_by</span>(continent, year) <span class="sc">%&gt;%</span></span>
+<span id="cb283-4"><a href="practical-4.html#cb283-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_lifeExp =</span> <span class="fu">mean</span>(lifeExp)) <span class="sc">%&gt;%</span></span>
+<span id="cb283-5"><a href="practical-4.html#cb283-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> continent, <span class="at">fill =</span> mean_lifeExp)) <span class="sc">+</span></span>
+<span id="cb283-6"><a href="practical-4.html#cb283-6" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb283-7"><a href="practical-4.html#cb283-7" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb283-8"><a href="practical-4.html#cb283-8" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_sequential</span>(<span class="at">palette =</span> <span class="st">&quot;Viridis&quot;</span>, <span class="at">rev =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb283-9"><a href="practical-4.html#cb283-9" tabindex="-1"></a></span>
+<span id="cb283-10"><a href="practical-4.html#cb283-10" tabindex="-1"></a><span class="co"># color choice 2 (Inferno)</span></span>
+<span id="cb283-11"><a href="practical-4.html#cb283-11" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb283-12"><a href="practical-4.html#cb283-12" tabindex="-1"></a>  <span class="fu">group_by</span>(continent, year) <span class="sc">%&gt;%</span></span>
+<span id="cb283-13"><a href="practical-4.html#cb283-13" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_lifeExp =</span> <span class="fu">mean</span>(lifeExp)) <span class="sc">%&gt;%</span></span>
+<span id="cb283-14"><a href="practical-4.html#cb283-14" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> continent, <span class="at">fill =</span> mean_lifeExp)) <span class="sc">+</span></span>
+<span id="cb283-15"><a href="practical-4.html#cb283-15" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb283-16"><a href="practical-4.html#cb283-16" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb283-17"><a href="practical-4.html#cb283-17" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_sequential</span>(<span class="at">palette =</span> <span class="st">&quot;Inferno&quot;</span>, <span class="at">begin =</span> <span class="fl">0.15</span>, <span class="at">rev =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="size-transparency" class="section level5 hasAnchor">
+<h5>2.4 Size &amp; Transparency<a href="practical-4.html#size-transparency" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Explore how to adjust the size and transparency of the points to enhance readability.</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="practical-4.html#cb284-1" tabindex="-1"></a><span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb284-2"><a href="practical-4.html#cb284-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb284-3"><a href="practical-4.html#cb284-3" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb284-4"><a href="practical-4.html#cb284-4" tabindex="-1"></a>                 <span class="at">color =</span> species), </span>
+<span id="cb284-5"><a href="practical-4.html#cb284-5" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>, </span>
+<span id="cb284-6"><a href="practical-4.html#cb284-6" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.4</span>)</span>
+<span id="cb284-7"><a href="practical-4.html#cb284-7" tabindex="-1"></a></span>
+<span id="cb284-8"><a href="practical-4.html#cb284-8" tabindex="-1"></a><span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb284-9"><a href="practical-4.html#cb284-9" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb284-10"><a href="practical-4.html#cb284-10" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb284-11"><a href="practical-4.html#cb284-11" tabindex="-1"></a>                 <span class="at">color =</span> species), </span>
+<span id="cb284-12"><a href="practical-4.html#cb284-12" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">4</span>, </span>
+<span id="cb284-13"><a href="practical-4.html#cb284-13" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>)</span></code></pre></div>
+</div>
+<div id="legend" class="section level5 hasAnchor">
+<h5>2.5 Legend<a href="practical-4.html#legend" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The legend plays a crucial role in interpreting the plot. Below, we will explore how to adjust its appearance, create different legends for different layers, and learn how to delete or merge legends effectively.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="practical-4.html#cb285-1" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb285-2"><a href="practical-4.html#cb285-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<div id="adjust-the-appearance-of-the-legend" class="section level6 hasAnchor">
+<h6>2.5.1 Adjust the appearance of the legend<a href="practical-4.html#adjust-the-appearance-of-the-legend" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="practical-4.html#cb286-1" tabindex="-1"></a><span class="co"># Adjust the appearance of the legend</span></span>
+<span id="cb286-2"><a href="practical-4.html#cb286-2" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb286-3"><a href="practical-4.html#cb286-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb286-4"><a href="practical-4.html#cb286-4" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>,<span class="at">alpha=</span><span class="dv">1</span>)))</span></code></pre></div>
+</div>
+<div id="generate-different-legends-for-different-layers" class="section level6 hasAnchor">
+<h6>2.5.2 Generate different legends for different layers<a href="practical-4.html#generate-different-legends-for-different-layers" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="practical-4.html#cb287-1" tabindex="-1"></a><span class="co"># Generate different legends for different layers</span></span>
+<span id="cb287-2"><a href="practical-4.html#cb287-2" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb287-3"><a href="practical-4.html#cb287-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size  =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb287-4"><a href="practical-4.html#cb287-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb287-5"><a href="practical-4.html#cb287-5" tabindex="-1"></a></span>
+<span id="cb287-6"><a href="practical-4.html#cb287-6" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb287-7"><a href="practical-4.html#cb287-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> <span class="st">&quot;Observed&quot;</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb287-8"><a href="practical-4.html#cb287-8" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(<span class="at">alpha =</span> <span class="st">&quot;Fitted&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb287-9"><a href="practical-4.html#cb287-9" tabindex="-1"></a>  <span class="fu">scale_alpha_manual</span>(</span>
+<span id="cb287-10"><a href="practical-4.html#cb287-10" tabindex="-1"></a>    <span class="at">name =</span> <span class="cn">NULL</span>,</span>
+<span id="cb287-11"><a href="practical-4.html#cb287-11" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb287-12"><a href="practical-4.html#cb287-12" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Observed&quot;</span>, <span class="st">&quot;Fitted&quot;</span>)</span>
+<span id="cb287-13"><a href="practical-4.html#cb287-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb287-14"><a href="practical-4.html#cb287-14" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">alpha =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(</span>
+<span id="cb287-15"><a href="practical-4.html#cb287-15" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb287-16"><a href="practical-4.html#cb287-16" tabindex="-1"></a>    <span class="at">shape =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="cn">NA</span>),</span>
+<span id="cb287-17"><a href="practical-4.html#cb287-17" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb287-18"><a href="practical-4.html#cb287-18" tabindex="-1"></a>  )))</span></code></pre></div>
+</div>
+<div id="delete-legend" class="section level6 hasAnchor">
+<h6>2.5.3 Delete legend<a href="practical-4.html#delete-legend" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="practical-4.html#cb288-1" tabindex="-1"></a><span class="co"># delete legend</span></span>
+<span id="cb288-2"><a href="practical-4.html#cb288-2" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span></span>
+<span id="cb288-3"><a href="practical-4.html#cb288-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species, <span class="at">size =</span> body_mass_g)) <span class="sc">+</span></span>
+<span id="cb288-4"><a href="practical-4.html#cb288-4" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb288-5"><a href="practical-4.html#cb288-5" tabindex="-1"></a></span>
+<span id="cb288-6"><a href="practical-4.html#cb288-6" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span></span>
+<span id="cb288-7"><a href="practical-4.html#cb288-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species, <span class="at">size =</span> body_mass_g)) <span class="sc">+</span></span>
+<span id="cb288-8"><a href="practical-4.html#cb288-8" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb288-9"><a href="practical-4.html#cb288-9" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb288-10"><a href="practical-4.html#cb288-10" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="st">&quot;species&quot;</span>),      <span class="co"># keep</span></span>
+<span id="cb288-11"><a href="practical-4.html#cb288-11" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">&quot;none&quot;</span>                      <span class="co"># remove</span></span>
+<span id="cb288-12"><a href="practical-4.html#cb288-12" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="merge-legend" class="section level6 hasAnchor">
+<h6>2.5.4 Merge legend<a href="practical-4.html#merge-legend" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="practical-4.html#cb289-1" tabindex="-1"></a><span class="co"># merge legend</span></span>
+<span id="cb289-2"><a href="practical-4.html#cb289-2" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb289-3"><a href="practical-4.html#cb289-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb289-4"><a href="practical-4.html#cb289-4" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb289-5"><a href="practical-4.html#cb289-5" tabindex="-1"></a>      <span class="at">color =</span> body_mass_g, <span class="at">size =</span> body_mass_g)</span>
+<span id="cb289-6"><a href="practical-4.html#cb289-6" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb289-7"><a href="practical-4.html#cb289-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb289-8"><a href="practical-4.html#cb289-8" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>()</span>
+<span id="cb289-9"><a href="practical-4.html#cb289-9" tabindex="-1"></a></span>
+<span id="cb289-10"><a href="practical-4.html#cb289-10" tabindex="-1"></a><span class="co"># method 1</span></span>
+<span id="cb289-11"><a href="practical-4.html#cb289-11" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb289-12"><a href="practical-4.html#cb289-12" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb289-13"><a href="practical-4.html#cb289-13" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb289-14"><a href="practical-4.html#cb289-14" tabindex="-1"></a>      <span class="at">color =</span> body_mass_g, <span class="at">size =</span> body_mass_g)</span>
+<span id="cb289-15"><a href="practical-4.html#cb289-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb289-16"><a href="practical-4.html#cb289-16" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb289-17"><a href="practical-4.html#cb289-17" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb289-18"><a href="practical-4.html#cb289-18" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb289-19"><a href="practical-4.html#cb289-19" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">guide_legend</span>(), </span>
+<span id="cb289-20"><a href="practical-4.html#cb289-20" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">guide_legend</span>()</span>
+<span id="cb289-21"><a href="practical-4.html#cb289-21" tabindex="-1"></a>  )</span>
+<span id="cb289-22"><a href="practical-4.html#cb289-22" tabindex="-1"></a></span>
+<span id="cb289-23"><a href="practical-4.html#cb289-23" tabindex="-1"></a><span class="co"># method 2</span></span>
+<span id="cb289-24"><a href="practical-4.html#cb289-24" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb289-25"><a href="practical-4.html#cb289-25" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb289-26"><a href="practical-4.html#cb289-26" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb289-27"><a href="practical-4.html#cb289-27" tabindex="-1"></a>      <span class="at">color =</span> body_mass_g, <span class="at">size =</span> body_mass_g)</span>
+<span id="cb289-28"><a href="practical-4.html#cb289-28" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb289-29"><a href="practical-4.html#cb289-29" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb289-30"><a href="practical-4.html#cb289-30" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">guide =</span> <span class="st">&quot;legend&quot;</span>) </span></code></pre></div>
+</div>
+</div>
+<div id="theme" class="section level5 hasAnchor">
+<h5>2.6 Theme<a href="practical-4.html#theme" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Explore how to change the theme of the plots.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="practical-4.html#cb290-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb290-2"><a href="practical-4.html#cb290-2" tabindex="-1"></a>base <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb290-3"><a href="practical-4.html#cb290-3" tabindex="-1"></a><span class="co"># default theme</span></span>
+<span id="cb290-4"><a href="practical-4.html#cb290-4" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_grey</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_grey()&quot;</span>)</span>
+<span id="cb290-5"><a href="practical-4.html#cb290-5" tabindex="-1"></a><span class="co"># other built-in themes in ggplot2</span></span>
+<span id="cb290-6"><a href="practical-4.html#cb290-6" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_bw()&quot;</span>)</span>
+<span id="cb290-7"><a href="practical-4.html#cb290-7" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_linedraw</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_linedraw()&quot;</span>)</span>
+<span id="cb290-8"><a href="practical-4.html#cb290-8" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_light</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_light()&quot;</span>)</span>
+<span id="cb290-9"><a href="practical-4.html#cb290-9" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_dark</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_dark()&quot;</span>)</span>
+<span id="cb290-10"><a href="practical-4.html#cb290-10" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_minimal</span>()  <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_minimal()&quot;</span>)</span>
+<span id="cb290-11"><a href="practical-4.html#cb290-11" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_classic()&quot;</span>)</span>
+<span id="cb290-12"><a href="practical-4.html#cb290-12" tabindex="-1"></a>base <span class="sc">+</span> <span class="fu">theme_void</span>() <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;theme_void()&quot;</span>)</span></code></pre></div>
+</div>
+<div id="exercise-1" class="section level5 hasAnchor">
+<h5>2.7 Exercise 1<a href="practical-4.html#exercise-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Improve the plot based on the following requirements.</p>
+<ol style="list-style-type: decimal">
+<li>Improving the axes and legend labels</li>
+<li>Adding a title for the plot</li>
+<li>Tweaking the color scale to your favorite palette</li>
+<li>The background should be white, not pale grey</li>
+<li>Major gridlines should be a pale grey and minor gridlines should be removed</li>
+<li>The plot title should be centered in 12pt bold text</li>
+</ol>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="practical-4.html#cb291-1" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb291-2"><a href="practical-4.html#cb291-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p>The answer is as follows. Do not open the answer code block before completing this exercise.</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="practical-4.html#cb292-1" tabindex="-1"></a><span class="co"># answer</span></span>
+<span id="cb292-2"><a href="practical-4.html#cb292-2" tabindex="-1"></a></span>
+<span id="cb292-3"><a href="practical-4.html#cb292-3" tabindex="-1"></a><span class="co"># 1.Improving the axes and legend labels</span></span>
+<span id="cb292-4"><a href="practical-4.html#cb292-4" tabindex="-1"></a></span>
+<span id="cb292-5"><a href="practical-4.html#cb292-5" tabindex="-1"></a><span class="co"># 2.Adding a title for the plot</span></span>
+<span id="cb292-6"><a href="practical-4.html#cb292-6" tabindex="-1"></a></span>
+<span id="cb292-7"><a href="practical-4.html#cb292-7" tabindex="-1"></a><span class="co"># 3.Tweaking the color scale to your favorite palette</span></span>
+<span id="cb292-8"><a href="practical-4.html#cb292-8" tabindex="-1"></a></span>
+<span id="cb292-9"><a href="practical-4.html#cb292-9" tabindex="-1"></a><span class="co"># 4.The background should be white, not pale grey</span></span>
+<span id="cb292-10"><a href="practical-4.html#cb292-10" tabindex="-1"></a></span>
+<span id="cb292-11"><a href="practical-4.html#cb292-11" tabindex="-1"></a><span class="co"># 5.Major gridlines should be a pale grey and minor gridlines should be removed</span></span>
+<span id="cb292-12"><a href="practical-4.html#cb292-12" tabindex="-1"></a></span>
+<span id="cb292-13"><a href="practical-4.html#cb292-13" tabindex="-1"></a><span class="co"># 6.The plot title should be centered in 12pt bold text</span></span>
+<span id="cb292-14"><a href="practical-4.html#cb292-14" tabindex="-1"></a></span>
+<span id="cb292-15"><a href="practical-4.html#cb292-15" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb292-16"><a href="practical-4.html#cb292-16" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb292-17"><a href="practical-4.html#cb292-17" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb292-18"><a href="practical-4.html#cb292-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Penguin Bill Length vs. Depth&quot;</span>,  <span class="co"># Add title</span></span>
+<span id="cb292-19"><a href="practical-4.html#cb292-19" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Bill Length (mm)&quot;</span>,  <span class="co"># Improve x-axis label</span></span>
+<span id="cb292-20"><a href="practical-4.html#cb292-20" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Bill Depth (mm)&quot;</span>,   <span class="co"># Improve y-axis label</span></span>
+<span id="cb292-21"><a href="practical-4.html#cb292-21" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Species&quot;</span>        <span class="co"># Improve legend label</span></span>
+<span id="cb292-22"><a href="practical-4.html#cb292-22" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb292-23"><a href="practical-4.html#cb292-23" tabindex="-1"></a>  <span class="fu">scale_color_discrete_qualitative</span>(<span class="at">palette =</span> <span class="st">&quot;Dark 3&quot;</span>) <span class="sc">+</span> <span class="co"># Choose a favorite color palette</span></span>
+<span id="cb292-24"><a href="practical-4.html#cb292-24" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span>  <span class="co"># Set white background and base size</span></span>
+<span id="cb292-25"><a href="practical-4.html#cb292-25" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb292-26"><a href="practical-4.html#cb292-26" tabindex="-1"></a>    <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>),  <span class="co"># Adjust legend positioning</span></span>
+<span id="cb292-27"><a href="practical-4.html#cb292-27" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),  <span class="co"># Set legend title font size</span></span>
+<span id="cb292-28"><a href="practical-4.html#cb292-28" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),   <span class="co"># Set legend text font size</span></span>
+<span id="cb292-29"><a href="practical-4.html#cb292-29" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),  <span class="co"># Title centered in 12pt bold</span></span>
+<span id="cb292-30"><a href="practical-4.html#cb292-30" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;grey90&quot;</span>),  <span class="co"># Pale grey major gridlines</span></span>
+<span id="cb292-31"><a href="practical-4.html#cb292-31" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),  <span class="co"># Remove minor gridlines</span></span>
+<span id="cb292-32"><a href="practical-4.html#cb292-32" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>()  <span class="co"># Set background to white</span></span>
+<span id="cb292-33"><a href="practical-4.html#cb292-33" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+</div>
+<div id="module-3.-advanced-visualization-techniques" class="section level4 hasAnchor">
+<h4>Module 3. Advanced Visualization Techniques<a href="practical-4.html#module-3.-advanced-visualization-techniques" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Next, we will explore some specialized plots and learn which types of data are best suited for each.</p>
+<div id="specialized-plot---heatmaps" class="section level5 hasAnchor">
+<h5>3.1 Specialized plot - heatmaps<a href="practical-4.html#specialized-plot---heatmaps" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="practical-4.html#cb293-1" tabindex="-1"></a><span class="co"># base R: heatmap() function</span></span>
+<span id="cb293-2"><a href="practical-4.html#cb293-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">nrow =</span> <span class="dv">10</span>)</span>
+<span id="cb293-3"><a href="practical-4.html#cb293-3" tabindex="-1"></a><span class="fu">rownames</span>(data) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Row&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb293-4"><a href="practical-4.html#cb293-4" tabindex="-1"></a><span class="fu">colnames</span>(data) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Col&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb293-5"><a href="practical-4.html#cb293-5" tabindex="-1"></a><span class="fu">heatmap</span>(data)</span>
+<span id="cb293-6"><a href="practical-4.html#cb293-6" tabindex="-1"></a></span>
+<span id="cb293-7"><a href="practical-4.html#cb293-7" tabindex="-1"></a><span class="co"># ggplot2 with geom_tile()</span></span>
+<span id="cb293-8"><a href="practical-4.html#cb293-8" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">Row =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">Column =</span> LETTERS[<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb293-9"><a href="practical-4.html#cb293-9" tabindex="-1"></a>data<span class="sc">$</span>Value <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fu">nrow</span>(data), <span class="dv">1</span>, <span class="dv">100</span>)</span>
+<span id="cb293-10"><a href="practical-4.html#cb293-10" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Column, <span class="at">y =</span> Row, <span class="at">fill =</span> Value)) <span class="sc">+</span></span>
+<span id="cb293-11"><a href="practical-4.html#cb293-11" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb293-12"><a href="practical-4.html#cb293-12" tabindex="-1"></a>  <span class="fu">scale_fill_continuous_sequential</span>(<span class="at">palette =</span> <span class="st">&quot;Inferno&quot;</span>, <span class="at">rev =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb293-13"><a href="practical-4.html#cb293-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Heatmap using ggplot2&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Columns&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Rows&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">+</span></span>
+<span id="cb293-14"><a href="practical-4.html#cb293-14" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb293-15"><a href="practical-4.html#cb293-15" tabindex="-1"></a></span>
+<span id="cb293-16"><a href="practical-4.html#cb293-16" tabindex="-1"></a><span class="co"># pheatmap for annotated heatmaps</span></span>
+<span id="cb293-17"><a href="practical-4.html#cb293-17" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">nrow =</span> <span class="dv">10</span>)</span>
+<span id="cb293-18"><a href="practical-4.html#cb293-18" tabindex="-1"></a><span class="fu">rownames</span>(data) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Gene&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb293-19"><a href="practical-4.html#cb293-19" tabindex="-1"></a><span class="fu">colnames</span>(data) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Sample&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb293-20"><a href="practical-4.html#cb293-20" tabindex="-1"></a><span class="fu">pheatmap</span>(data, <span class="at">color =</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;red&quot;</span>))(<span class="dv">50</span>))</span></code></pre></div>
+</div>
+<div id="specialized-plot---km-curve" class="section level5 hasAnchor">
+<h5>3.2 Specialized plot - KM Curve<a href="practical-4.html#specialized-plot---km-curve" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="practical-4.html#cb294-1" tabindex="-1"></a><span class="co"># Load the lung dataset</span></span>
+<span id="cb294-2"><a href="practical-4.html#cb294-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;lung&quot;</span>)</span>
+<span id="cb294-3"><a href="practical-4.html#cb294-3" tabindex="-1"></a></span>
+<span id="cb294-4"><a href="practical-4.html#cb294-4" tabindex="-1"></a><span class="co"># Create a survival object</span></span>
+<span id="cb294-5"><a href="practical-4.html#cb294-5" tabindex="-1"></a>surv_object <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span> lung<span class="sc">$</span>time, <span class="at">event =</span> lung<span class="sc">$</span>status)</span>
+<span id="cb294-6"><a href="practical-4.html#cb294-6" tabindex="-1"></a></span>
+<span id="cb294-7"><a href="practical-4.html#cb294-7" tabindex="-1"></a><span class="co"># Fit a Kaplan-Meier survival curve by group</span></span>
+<span id="cb294-8"><a href="practical-4.html#cb294-8" tabindex="-1"></a>km_fit_group <span class="ot">&lt;-</span> <span class="fu">survfit</span>(surv_object <span class="sc">~</span> sex, <span class="at">data =</span> lung)</span>
+<span id="cb294-9"><a href="practical-4.html#cb294-9" tabindex="-1"></a></span>
+<span id="cb294-10"><a href="practical-4.html#cb294-10" tabindex="-1"></a><span class="co"># Plot the Kaplan-Meier curves for groups</span></span>
+<span id="cb294-11"><a href="practical-4.html#cb294-11" tabindex="-1"></a><span class="fu">ggsurvplot</span>(</span>
+<span id="cb294-12"><a href="practical-4.html#cb294-12" tabindex="-1"></a>  km_fit_group,</span>
+<span id="cb294-13"><a href="practical-4.html#cb294-13" tabindex="-1"></a>  <span class="at">data =</span> lung,</span>
+<span id="cb294-14"><a href="practical-4.html#cb294-14" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb294-15"><a href="practical-4.html#cb294-15" tabindex="-1"></a>  <span class="at">pval =</span> <span class="cn">TRUE</span>,              <span class="co"># Add p-value from log-rank test</span></span>
+<span id="cb294-16"><a href="practical-4.html#cb294-16" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Time (days)&quot;</span>,</span>
+<span id="cb294-17"><a href="practical-4.html#cb294-17" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Survival Probability&quot;</span>,</span>
+<span id="cb294-18"><a href="practical-4.html#cb294-18" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Kaplan-Meier Curve by Sex&quot;</span>,</span>
+<span id="cb294-19"><a href="practical-4.html#cb294-19" tabindex="-1"></a>  <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="co"># Different colors for groups</span></span>
+<span id="cb294-20"><a href="practical-4.html#cb294-20" tabindex="-1"></a>  <span class="at">legend.labs =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>), <span class="co"># Custom legend labels</span></span>
+<span id="cb294-21"><a href="practical-4.html#cb294-21" tabindex="-1"></a>  <span class="at">ggtheme =</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb294-22"><a href="practical-4.html#cb294-22" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="specialized-plot---manhattan-plot" class="section level5 hasAnchor">
+<h5>3.3 Specialized plot - Manhattan plot<a href="practical-4.html#specialized-plot---manhattan-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="practical-4.html#cb295-1" tabindex="-1"></a><span class="co"># Load the geuvadis dataset</span></span>
+<span id="cb295-2"><a href="practical-4.html#cb295-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;gwasResults&quot;</span>)</span>
+<span id="cb295-3"><a href="practical-4.html#cb295-3" tabindex="-1"></a></span>
+<span id="cb295-4"><a href="practical-4.html#cb295-4" tabindex="-1"></a><span class="co"># Inspect the first few rows</span></span>
+<span id="cb295-5"><a href="practical-4.html#cb295-5" tabindex="-1"></a><span class="fu">head</span>(gwasResults)</span>
+<span id="cb295-6"><a href="practical-4.html#cb295-6" tabindex="-1"></a></span>
+<span id="cb295-7"><a href="practical-4.html#cb295-7" tabindex="-1"></a><span class="co"># Structure of the data</span></span>
+<span id="cb295-8"><a href="practical-4.html#cb295-8" tabindex="-1"></a><span class="co"># SNP: SNP identifier</span></span>
+<span id="cb295-9"><a href="practical-4.html#cb295-9" tabindex="-1"></a><span class="co"># CHR: Chromosome</span></span>
+<span id="cb295-10"><a href="practical-4.html#cb295-10" tabindex="-1"></a><span class="co"># BP: Base-pair position</span></span>
+<span id="cb295-11"><a href="practical-4.html#cb295-11" tabindex="-1"></a><span class="co"># P: P-value</span></span>
+<span id="cb295-12"><a href="practical-4.html#cb295-12" tabindex="-1"></a></span>
+<span id="cb295-13"><a href="practical-4.html#cb295-13" tabindex="-1"></a><span class="fu">manhattan</span>(</span>
+<span id="cb295-14"><a href="practical-4.html#cb295-14" tabindex="-1"></a>  gwasResults,</span>
+<span id="cb295-15"><a href="practical-4.html#cb295-15" tabindex="-1"></a>  <span class="at">chr =</span> <span class="st">&quot;CHR&quot;</span>,       <span class="co"># Chromosome column</span></span>
+<span id="cb295-16"><a href="practical-4.html#cb295-16" tabindex="-1"></a>  <span class="at">bp =</span> <span class="st">&quot;BP&quot;</span>,         <span class="co"># Base-pair position column</span></span>
+<span id="cb295-17"><a href="practical-4.html#cb295-17" tabindex="-1"></a>  <span class="at">p =</span> <span class="st">&quot;P&quot;</span>,           <span class="co"># P-value column</span></span>
+<span id="cb295-18"><a href="practical-4.html#cb295-18" tabindex="-1"></a>  <span class="at">snp =</span> <span class="st">&quot;SNP&quot;</span>,       <span class="co"># SNP column</span></span>
+<span id="cb295-19"><a href="practical-4.html#cb295-19" tabindex="-1"></a>  <span class="at">genomewideline =</span> <span class="sc">-</span><span class="fu">log10</span>(<span class="fl">5e-8</span>),  <span class="co"># Genome-wide significance threshold</span></span>
+<span id="cb295-20"><a href="practical-4.html#cb295-20" tabindex="-1"></a>  <span class="at">suggestiveline =</span> <span class="sc">-</span><span class="fu">log10</span>(<span class="fl">1e-5</span>),  <span class="co"># Suggestive significance threshold</span></span>
+<span id="cb295-21"><a href="practical-4.html#cb295-21" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Manhattan Plot&quot;</span>, <span class="co"># Title</span></span>
+<span id="cb295-22"><a href="practical-4.html#cb295-22" tabindex="-1"></a>  <span class="at">annotatePval =</span> <span class="fl">0.01</span></span>
+<span id="cb295-23"><a href="practical-4.html#cb295-23" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="specialized-plot---2d-density-plot" class="section level5 hasAnchor">
+<h5>3.4 Specialized plot - 2d density plot<a href="practical-4.html#specialized-plot---2d-density-plot" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="practical-4.html#cb296-1" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb296-2"><a href="practical-4.html#cb296-2" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> carat, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb296-3"><a href="practical-4.html#cb296-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb296-4"><a href="practical-4.html#cb296-4" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb296-5"><a href="practical-4.html#cb296-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simple 2D Density Plot&quot;</span>,</span>
+<span id="cb296-6"><a href="practical-4.html#cb296-6" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Carat&quot;</span>,</span>
+<span id="cb296-7"><a href="practical-4.html#cb296-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Price&quot;</span>)</span>
+<span id="cb296-8"><a href="practical-4.html#cb296-8" tabindex="-1"></a></span>
+<span id="cb296-9"><a href="practical-4.html#cb296-9" tabindex="-1"></a><span class="co"># 2D density plot</span></span>
+<span id="cb296-10"><a href="practical-4.html#cb296-10" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x =</span> carat, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb296-11"><a href="practical-4.html#cb296-11" tabindex="-1"></a>  <span class="fu">geom_bin2d</span>(<span class="at">bins =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb296-12"><a href="practical-4.html#cb296-12" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">type =</span> <span class="st">&quot;viridis&quot;</span>) <span class="sc">+</span></span>
+<span id="cb296-13"><a href="practical-4.html#cb296-13" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb296-14"><a href="practical-4.html#cb296-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simple 2D Density Plot&quot;</span>,</span>
+<span id="cb296-15"><a href="practical-4.html#cb296-15" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Carat&quot;</span>,</span>
+<span id="cb296-16"><a href="practical-4.html#cb296-16" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Price&quot;</span>)</span></code></pre></div>
+</div>
+<div id="interactive-plot---plotly" class="section level5 hasAnchor">
+<h5>3.5 Interactive plot - plotly<a href="practical-4.html#interactive-plot---plotly" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Interactive plots allow users to explore data more deeply through actions like clicking, zooming, or hovering, providing richer insights and making the data more understandable and engaging. Next, we will explore how to make plots interactive.</p>
+<div id="ggplotly" class="section level6 hasAnchor">
+<h6>3.5.1 ggplotly<a href="practical-4.html#ggplotly" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="practical-4.html#cb297-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb297-2"><a href="practical-4.html#cb297-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb297-3"><a href="practical-4.html#cb297-3" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb297-4"><a href="practical-4.html#cb297-4" tabindex="-1"></a>                 <span class="at">color =</span> species))</span>
+<span id="cb297-5"><a href="practical-4.html#cb297-5" tabindex="-1"></a></span>
+<span id="cb297-6"><a href="practical-4.html#cb297-6" tabindex="-1"></a><span class="fu">ggplotly</span>(p)</span></code></pre></div>
+</div>
+<div id="customize-tooltip" class="section level6 hasAnchor">
+<h6>3.5.2 Customize tooltip<a href="practical-4.html#customize-tooltip" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>What if we are interested in which island the penguin lives or any other information?</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="practical-4.html#cb298-1" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb298-2"><a href="practical-4.html#cb298-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">paste</span>(</span>
+<span id="cb298-3"><a href="practical-4.html#cb298-3" tabindex="-1"></a>    <span class="st">&quot;Island: &quot;</span>, island,</span>
+<span id="cb298-4"><a href="practical-4.html#cb298-4" tabindex="-1"></a>    <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Species: &quot;</span>, species,</span>
+<span id="cb298-5"><a href="practical-4.html#cb298-5" tabindex="-1"></a>    <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Bill Length (mm): &quot;</span>, bill_length_mm,</span>
+<span id="cb298-6"><a href="practical-4.html#cb298-6" tabindex="-1"></a>    <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Bill Depth (mm): &quot;</span>, bill_depth_mm,</span>
+<span id="cb298-7"><a href="practical-4.html#cb298-7" tabindex="-1"></a>    <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Flipper Length (mm): &quot;</span>,flipper_length_mm,</span>
+<span id="cb298-8"><a href="practical-4.html#cb298-8" tabindex="-1"></a>    <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Body Mass (g): &quot;</span>, body_mass_g, <span class="at">sep=</span><span class="st">&quot;&quot;</span></span>
+<span id="cb298-9"><a href="practical-4.html#cb298-9" tabindex="-1"></a>  ))</span>
+<span id="cb298-10"><a href="practical-4.html#cb298-10" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb298-11"><a href="practical-4.html#cb298-11" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb298-12"><a href="practical-4.html#cb298-12" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb298-13"><a href="practical-4.html#cb298-13" tabindex="-1"></a>                 <span class="at">color =</span> species,</span>
+<span id="cb298-14"><a href="practical-4.html#cb298-14" tabindex="-1"></a>                 <span class="at">text =</span> text)) <span class="sc">+</span></span>
+<span id="cb298-15"><a href="practical-4.html#cb298-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb298-16"><a href="practical-4.html#cb298-16" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip=</span><span class="st">&quot;text&quot;</span>)</span></code></pre></div>
+</div>
+<div id="more-advanced-customization" class="section level6 hasAnchor">
+<h6>3.5.3 More advanced customization<a href="practical-4.html#more-advanced-customization" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Adjust the tooltip based on the following requests.</p>
+<ol style="list-style-type: decimal">
+<li><p>Use bold text to make the tooltip more readable</p></li>
+<li><p>Add a title to the tooltip</p></li>
+<li><p>Change the background color of the tooltip to white</p></li>
+<li><p>Change the font color of the tooltip to black</p></li>
+</ol>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="practical-4.html#cb299-1" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb299-2"><a href="practical-4.html#cb299-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">paste</span>(</span>
+<span id="cb299-3"><a href="practical-4.html#cb299-3" tabindex="-1"></a>    <span class="st">&quot;&lt;span style=&#39;font-size:16px;&#39;&gt;&lt;b&gt;&quot;</span>, species, <span class="st">&quot;&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&quot;</span>,</span>
+<span id="cb299-4"><a href="practical-4.html#cb299-4" tabindex="-1"></a>    <span class="st">&quot;&lt;br&gt;&lt;b&gt;Island:&lt;/b&gt; &quot;</span>, island,</span>
+<span id="cb299-5"><a href="practical-4.html#cb299-5" tabindex="-1"></a>    <span class="st">&quot;&lt;br&gt;&lt;b&gt;Bill Length (mm):&lt;/b&gt; &quot;</span>, bill_length_mm,</span>
+<span id="cb299-6"><a href="practical-4.html#cb299-6" tabindex="-1"></a>    <span class="st">&quot;&lt;br&gt;&lt;b&gt;Bill Depth (mm):&lt;/b&gt; &quot;</span>, bill_depth_mm,</span>
+<span id="cb299-7"><a href="practical-4.html#cb299-7" tabindex="-1"></a>    <span class="st">&quot;&lt;br&gt;&lt;b&gt;Flipper Length (mm):&lt;/b&gt; &quot;</span>,flipper_length_mm,</span>
+<span id="cb299-8"><a href="practical-4.html#cb299-8" tabindex="-1"></a>    <span class="st">&quot;&lt;br&gt;&lt;b&gt;Body Mass (g):&lt;/b&gt; &quot;</span>, body_mass_g, </span>
+<span id="cb299-9"><a href="practical-4.html#cb299-9" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;&quot;</span></span>
+<span id="cb299-10"><a href="practical-4.html#cb299-10" tabindex="-1"></a>  ))</span>
+<span id="cb299-11"><a href="practical-4.html#cb299-11" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb299-12"><a href="practical-4.html#cb299-12" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, </span>
+<span id="cb299-13"><a href="practical-4.html#cb299-13" tabindex="-1"></a>                 <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb299-14"><a href="practical-4.html#cb299-14" tabindex="-1"></a>                 <span class="at">color =</span> species,</span>
+<span id="cb299-15"><a href="practical-4.html#cb299-15" tabindex="-1"></a>                 <span class="at">text =</span> text)) <span class="sc">+</span></span>
+<span id="cb299-16"><a href="practical-4.html#cb299-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb299-17"><a href="practical-4.html#cb299-17" tabindex="-1"></a>pp <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(p, <span class="at">tooltip=</span><span class="st">&quot;text&quot;</span>)</span>
+<span id="cb299-18"><a href="practical-4.html#cb299-18" tabindex="-1"></a>pp <span class="ot">&lt;-</span> pp <span class="sc">%&gt;%</span></span>
+<span id="cb299-19"><a href="practical-4.html#cb299-19" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb299-20"><a href="practical-4.html#cb299-20" tabindex="-1"></a>    <span class="at">hoverlabel =</span> <span class="fu">list</span>(<span class="at">bgcolor =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb299-21"><a href="practical-4.html#cb299-21" tabindex="-1"></a>                      <span class="at">font =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>))</span>
+<span id="cb299-22"><a href="practical-4.html#cb299-22" tabindex="-1"></a>  )</span>
+<span id="cb299-23"><a href="practical-4.html#cb299-23" tabindex="-1"></a>pp</span></code></pre></div>
+</div>
+</div>
+<div id="animated-plot---gganimate" class="section level5 hasAnchor">
+<h5>3.6 Animated plot - gganimate<a href="practical-4.html#animated-plot---gganimate" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Using gganimate to create animated plots helps visualize changes over time, making it easier to understand dynamic patterns and trends in data. It adds an extra layer of clarity by showing how variables evolve, which can be especially useful for time-series data.</p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="practical-4.html#cb300-1" tabindex="-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb300-2"><a href="practical-4.html#cb300-2" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gapminder, <span class="fu">aes</span>(gdpPercap, lifeExp, <span class="at">size =</span> pop, <span class="at">colour =</span> country)) <span class="sc">+</span></span>
+<span id="cb300-3"><a href="practical-4.html#cb300-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb300-4"><a href="practical-4.html#cb300-4" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> country_colors) <span class="sc">+</span></span>
+<span id="cb300-5"><a href="practical-4.html#cb300-5" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb300-6"><a href="practical-4.html#cb300-6" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb300-7"><a href="practical-4.html#cb300-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent) <span class="sc">+</span></span>
+<span id="cb300-8"><a href="practical-4.html#cb300-8" tabindex="-1"></a>  <span class="co"># Here comes the gganimate specific bits</span></span>
+<span id="cb300-9"><a href="practical-4.html#cb300-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&#39;Year: {frame_time}&#39;</span>, <span class="at">x =</span> <span class="st">&#39;GDP per capita&#39;</span>, <span class="at">y =</span> <span class="st">&#39;life expectancy&#39;</span>) <span class="sc">+</span></span>
+<span id="cb300-10"><a href="practical-4.html#cb300-10" tabindex="-1"></a>  <span class="fu">transition_time</span>(year) <span class="sc">+</span></span>
+<span id="cb300-11"><a href="practical-4.html#cb300-11" tabindex="-1"></a>  <span class="fu">ease_aes</span>(<span class="st">&#39;linear&#39;</span>)</span>
+<span id="cb300-12"><a href="practical-4.html#cb300-12" tabindex="-1"></a></span>
+<span id="cb300-13"><a href="practical-4.html#cb300-13" tabindex="-1"></a><span class="co"># Save at gif:</span></span>
+<span id="cb300-14"><a href="practical-4.html#cb300-14" tabindex="-1"></a><span class="fu">animate</span>(plot, <span class="at">width =</span> <span class="dv">500</span>, <span class="at">height =</span> <span class="dv">357</span>, <span class="at">renderer =</span> <span class="fu">gifski_renderer</span>())</span>
+<span id="cb300-15"><a href="practical-4.html#cb300-15" tabindex="-1"></a><span class="fu">anim_save</span>(<span class="st">&quot;output.gif&quot;</span>)</span></code></pre></div>
+</div>
+<div id="shiny-app" class="section level5 hasAnchor">
+<h5>3.7 Shiny app<a href="practical-4.html#shiny-app" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>For this part of the practical, we will use 3 examples of Shiny App.</p>
 <p>You can also use this <a href="./exercises/exercises_module4/cheatsheet/shiny_cheatsheet.pdf"><strong>cheatsheet</strong></a>.</p>
+<div id="demo-1" class="section level6 hasAnchor">
+<h6>3.7.1 Demo 1<a href="practical-4.html#demo-1" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>You can download the .R file of the demo 1 of Shiny App <a href="./exercises/exercises_module4/shiny_app/1_ShinyDemo.R">here</a>.</p>
+<p>Here is the code for the Demo 1:</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="practical-4.html#cb301-1" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb301-2"><a href="practical-4.html#cb301-2" tabindex="-1"></a></span>
+<span id="cb301-3"><a href="practical-4.html#cb301-3" tabindex="-1"></a></span>
+<span id="cb301-4"><a href="practical-4.html#cb301-4" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb301-5"><a href="practical-4.html#cb301-5" tabindex="-1"></a>  <span class="co"># Define UI components </span></span>
+<span id="cb301-6"><a href="practical-4.html#cb301-6" tabindex="-1"></a>  </span>
+<span id="cb301-7"><a href="practical-4.html#cb301-7" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb301-8"><a href="practical-4.html#cb301-8" tabindex="-1"></a>    </span>
+<span id="cb301-9"><a href="practical-4.html#cb301-9" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb301-10"><a href="practical-4.html#cb301-10" tabindex="-1"></a>      <span class="st">&quot;This is the sidebar&quot;</span>,</span>
+<span id="cb301-11"><a href="practical-4.html#cb301-11" tabindex="-1"></a>      </span>
+<span id="cb301-12"><a href="practical-4.html#cb301-12" tabindex="-1"></a>      <span class="co"># textbox that accepts both numeric and alphanumeric input</span></span>
+<span id="cb301-13"><a href="practical-4.html#cb301-13" tabindex="-1"></a>      <span class="fu">textInput</span>(<span class="at">inputId =</span> <span class="st">&quot;title&quot;</span>, <span class="at">label=</span><span class="st">&quot;Text box title&quot;</span>, <span class="at">value =</span> <span class="st">&quot;Text box content&quot;</span>),</span>
+<span id="cb301-14"><a href="practical-4.html#cb301-14" tabindex="-1"></a>      </span>
+<span id="cb301-15"><a href="practical-4.html#cb301-15" tabindex="-1"></a>      <span class="co"># textbox that only accepts numeric data between 1 and 30</span></span>
+<span id="cb301-16"><a href="practical-4.html#cb301-16" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="at">inputId =</span> <span class="st">&quot;num&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Number of cars to show&quot;</span>, <span class="at">value =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> <span class="dv">30</span>),</span>
+<span id="cb301-17"><a href="practical-4.html#cb301-17" tabindex="-1"></a>      </span>
+<span id="cb301-18"><a href="practical-4.html#cb301-18" tabindex="-1"></a>      <span class="co"># slider that goes from 35 to 42 degrees with increments of 0.1</span></span>
+<span id="cb301-19"><a href="practical-4.html#cb301-19" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">&quot;temperature&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Body temperature&quot;</span>, <span class="at">min =</span> <span class="dv">35</span>, <span class="at">max =</span> <span class="dv">42</span>, <span class="at">value =</span> <span class="fl">37.5</span>, <span class="at">step =</span> <span class="fl">0.1</span>),</span>
+<span id="cb301-20"><a href="practical-4.html#cb301-20" tabindex="-1"></a>      </span>
+<span id="cb301-21"><a href="practical-4.html#cb301-21" tabindex="-1"></a>      <span class="co"># slider that allows the user to set a range (rather than a single value)</span></span>
+<span id="cb301-22"><a href="practical-4.html#cb301-22" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">&quot;price&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Price (€)&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">39</span>, <span class="dv">69</span>), <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">99</span>),</span>
+<span id="cb301-23"><a href="practical-4.html#cb301-23" tabindex="-1"></a>      </span>
+<span id="cb301-24"><a href="practical-4.html#cb301-24" tabindex="-1"></a>      <span class="co"># input field that allows for a single selection</span></span>
+<span id="cb301-25"><a href="practical-4.html#cb301-25" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="at">inputId =</span> <span class="st">&quot;radio&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Choose your preferred time slot&quot;</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;09:00 - 09:30&quot;</span>, <span class="st">&quot;09:30 - 10:00&quot;</span>, <span class="st">&quot;10:00 - 10:30&quot;</span>, <span class="st">&quot;10:30 - 11:00&quot;</span>, <span class="st">&quot;11:00 - 11:30&quot;</span>), <span class="at">selected =</span> <span class="st">&quot;10:00 - 10:30&quot;</span>),</span>
+<span id="cb301-26"><a href="practical-4.html#cb301-26" tabindex="-1"></a>      </span>
+<span id="cb301-27"><a href="practical-4.html#cb301-27" tabindex="-1"></a>      <span class="co"># a dropdown menu is useful when you have plenty of options and you don&#39;t want to list them all below one another</span></span>
+<span id="cb301-28"><a href="practical-4.html#cb301-28" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="at">inputId =</span> <span class="st">&quot;major&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Major&quot;</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Business Administration&quot;</span>, <span class="st">&quot;Data Science&quot;</span>, <span class="st">&quot;Econometrics &amp; Operations Research&quot;</span>, <span class="st">&quot;Economics&quot;</span>, <span class="st">&quot;Liberal Arts&quot;</span>, <span class="st">&quot;Industrial Engineering&quot;</span>, <span class="st">&quot;Marketing Management&quot;</span>, <span class="st">&quot;Marketing Analytics&quot;</span>, <span class="st">&quot;Psychology&quot;</span>),</span>
+<span id="cb301-29"><a href="practical-4.html#cb301-29" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;Marketing Analytics&quot;</span>),</span>
+<span id="cb301-30"><a href="practical-4.html#cb301-30" tabindex="-1"></a>      </span>
+<span id="cb301-31"><a href="practical-4.html#cb301-31" tabindex="-1"></a>      <span class="co"># dropdown menu that allows for multiple selections (e.g., both R and JavaScript)</span></span>
+<span id="cb301-32"><a href="practical-4.html#cb301-32" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="at">inputId =</span> <span class="st">&quot;programming_language&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Programming Languages&quot;</span>,</span>
+<span id="cb301-33"><a href="practical-4.html#cb301-33" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;HTML&quot;</span>, <span class="st">&quot;CSS&quot;</span>, <span class="st">&quot;JavaScript&quot;</span>, <span class="st">&quot;Python&quot;</span>, <span class="st">&quot;R&quot;</span>, <span class="st">&quot;Stata&quot;</span>),</span>
+<span id="cb301-34"><a href="practical-4.html#cb301-34" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;R&quot;</span>, <span class="at">multiple =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb301-35"><a href="practical-4.html#cb301-35" tabindex="-1"></a>      </span>
+<span id="cb301-36"><a href="practical-4.html#cb301-36" tabindex="-1"></a>      <span class="co"># chekcbox: often used to let the user confirm their agreement</span></span>
+<span id="cb301-37"><a href="practical-4.html#cb301-37" tabindex="-1"></a>      <span class="fu">checkboxInput</span>(<span class="at">inputId =</span> <span class="st">&quot;agree&quot;</span>, <span class="at">label =</span> <span class="st">&quot;I agree to the terms and conditions&quot;</span>, <span class="at">value=</span><span class="cn">TRUE</span>)</span>
+<span id="cb301-38"><a href="practical-4.html#cb301-38" tabindex="-1"></a>      </span>
+<span id="cb301-39"><a href="practical-4.html#cb301-39" tabindex="-1"></a>    ),</span>
+<span id="cb301-40"><a href="practical-4.html#cb301-40" tabindex="-1"></a>    </span>
+<span id="cb301-41"><a href="practical-4.html#cb301-41" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb301-42"><a href="practical-4.html#cb301-42" tabindex="-1"></a>      <span class="st">&quot;Main panel goes here&quot;</span>,</span>
+<span id="cb301-43"><a href="practical-4.html#cb301-43" tabindex="-1"></a>      </span>
+<span id="cb301-44"><a href="practical-4.html#cb301-44" tabindex="-1"></a>      <span class="fu">tabsetPanel</span>(</span>
+<span id="cb301-45"><a href="practical-4.html#cb301-45" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;tab 1&quot;</span>,</span>
+<span id="cb301-46"><a href="practical-4.html#cb301-46" tabindex="-1"></a>                 <span class="fu">h1</span>(<span class="st">&quot;Overview&quot;</span>),</span>
+<span id="cb301-47"><a href="practical-4.html#cb301-47" tabindex="-1"></a>                 <span class="st">&quot;Content goes here&quot;</span>),</span>
+<span id="cb301-48"><a href="practical-4.html#cb301-48" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;tab 2&quot;</span>, <span class="st">&quot;The content of the second tab&quot;</span>),</span>
+<span id="cb301-49"><a href="practical-4.html#cb301-49" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;tab 3&quot;</span>, <span class="st">&quot;The content of the third tab&quot;</span>)</span>
+<span id="cb301-50"><a href="practical-4.html#cb301-50" tabindex="-1"></a>      )</span>
+<span id="cb301-51"><a href="practical-4.html#cb301-51" tabindex="-1"></a>    )</span>
+<span id="cb301-52"><a href="practical-4.html#cb301-52" tabindex="-1"></a>  )</span>
+<span id="cb301-53"><a href="practical-4.html#cb301-53" tabindex="-1"></a>  </span>
+<span id="cb301-54"><a href="practical-4.html#cb301-54" tabindex="-1"></a>  </span>
+<span id="cb301-55"><a href="practical-4.html#cb301-55" tabindex="-1"></a>)</span>
+<span id="cb301-56"><a href="practical-4.html#cb301-56" tabindex="-1"></a></span>
+<span id="cb301-57"><a href="practical-4.html#cb301-57" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output){</span>
+<span id="cb301-58"><a href="practical-4.html#cb301-58" tabindex="-1"></a>  <span class="co"># Implement server logic here</span></span>
+<span id="cb301-59"><a href="practical-4.html#cb301-59" tabindex="-1"></a>}</span>
+<span id="cb301-60"><a href="practical-4.html#cb301-60" tabindex="-1"></a></span>
+<span id="cb301-61"><a href="practical-4.html#cb301-61" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div>
+</div>
+<div id="demo-2" class="section level6 hasAnchor">
+<h6>3.7.2 Demo 2<a href="practical-4.html#demo-2" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>You can download the .R file of the demo 2 of Shiny App <a href="./exercises/exercises_module4/shiny_app/2_ShinyDemo.R">here</a>.</p>
+<p>Here is the code for the Demo 2:</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="practical-4.html#cb302-1" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb302-2"><a href="practical-4.html#cb302-2" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb302-3"><a href="practical-4.html#cb302-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb302-4"><a href="practical-4.html#cb302-4" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb302-5"><a href="practical-4.html#cb302-5" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb302-6"><a href="practical-4.html#cb302-6" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb302-7"><a href="practical-4.html#cb302-7" tabindex="-1"></a></span>
+<span id="cb302-8"><a href="practical-4.html#cb302-8" tabindex="-1"></a><span class="co"># UI - Define the layout of the app</span></span>
+<span id="cb302-9"><a href="practical-4.html#cb302-9" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb302-10"><a href="practical-4.html#cb302-10" tabindex="-1"></a>  </span>
+<span id="cb302-11"><a href="practical-4.html#cb302-11" tabindex="-1"></a>  <span class="co"># App title</span></span>
+<span id="cb302-12"><a href="practical-4.html#cb302-12" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">&quot;Interactive Gapminder Dashboard&quot;</span>),</span>
+<span id="cb302-13"><a href="practical-4.html#cb302-13" tabindex="-1"></a>  </span>
+<span id="cb302-14"><a href="practical-4.html#cb302-14" tabindex="-1"></a>  <span class="co"># Sidebar layout with input and output definitions</span></span>
+<span id="cb302-15"><a href="practical-4.html#cb302-15" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb302-16"><a href="practical-4.html#cb302-16" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb302-17"><a href="practical-4.html#cb302-17" tabindex="-1"></a>      </span>
+<span id="cb302-18"><a href="practical-4.html#cb302-18" tabindex="-1"></a>      <span class="co"># Select country or countries</span></span>
+<span id="cb302-19"><a href="practical-4.html#cb302-19" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;countries&quot;</span>, </span>
+<span id="cb302-20"><a href="practical-4.html#cb302-20" tabindex="-1"></a>                  <span class="at">label =</span> <span class="st">&quot;Select Country/Countries&quot;</span>,</span>
+<span id="cb302-21"><a href="practical-4.html#cb302-21" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">unique</span>(gapminder<span class="sc">$</span>country),</span>
+<span id="cb302-22"><a href="practical-4.html#cb302-22" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;United States&quot;</span>,</span>
+<span id="cb302-23"><a href="practical-4.html#cb302-23" tabindex="-1"></a>                  <span class="at">multiple =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb302-24"><a href="practical-4.html#cb302-24" tabindex="-1"></a>      </span>
+<span id="cb302-25"><a href="practical-4.html#cb302-25" tabindex="-1"></a>      <span class="co"># Select variable for y-axis</span></span>
+<span id="cb302-26"><a href="practical-4.html#cb302-26" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;yvar&quot;</span>, </span>
+<span id="cb302-27"><a href="practical-4.html#cb302-27" tabindex="-1"></a>                  <span class="at">label =</span> <span class="st">&quot;Select Y Variable&quot;</span>,</span>
+<span id="cb302-28"><a href="practical-4.html#cb302-28" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Life Expectancy&quot;</span> <span class="ot">=</span> <span class="st">&quot;lifeExp&quot;</span>, </span>
+<span id="cb302-29"><a href="practical-4.html#cb302-29" tabindex="-1"></a>                              <span class="st">&quot;GDP per Capita&quot;</span> <span class="ot">=</span> <span class="st">&quot;gdpPercap&quot;</span>, </span>
+<span id="cb302-30"><a href="practical-4.html#cb302-30" tabindex="-1"></a>                              <span class="st">&quot;Population&quot;</span> <span class="ot">=</span> <span class="st">&quot;pop&quot;</span>),</span>
+<span id="cb302-31"><a href="practical-4.html#cb302-31" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;lifeExp&quot;</span>),</span>
+<span id="cb302-32"><a href="practical-4.html#cb302-32" tabindex="-1"></a>      </span>
+<span id="cb302-33"><a href="practical-4.html#cb302-33" tabindex="-1"></a>      <span class="co"># Select year range</span></span>
+<span id="cb302-34"><a href="practical-4.html#cb302-34" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="st">&quot;yearRange&quot;</span>, </span>
+<span id="cb302-35"><a href="practical-4.html#cb302-35" tabindex="-1"></a>                  <span class="at">label =</span> <span class="st">&quot;Select Year Range&quot;</span>, </span>
+<span id="cb302-36"><a href="practical-4.html#cb302-36" tabindex="-1"></a>                  <span class="at">min =</span> <span class="fu">min</span>(gapminder<span class="sc">$</span>year), </span>
+<span id="cb302-37"><a href="practical-4.html#cb302-37" tabindex="-1"></a>                  <span class="at">max =</span> <span class="fu">max</span>(gapminder<span class="sc">$</span>year), </span>
+<span id="cb302-38"><a href="practical-4.html#cb302-38" tabindex="-1"></a>                  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1952</span>, <span class="dv">2007</span>), </span>
+<span id="cb302-39"><a href="practical-4.html#cb302-39" tabindex="-1"></a>                  <span class="at">step =</span> <span class="dv">5</span>)</span>
+<span id="cb302-40"><a href="practical-4.html#cb302-40" tabindex="-1"></a>    ),</span>
+<span id="cb302-41"><a href="practical-4.html#cb302-41" tabindex="-1"></a>    </span>
+<span id="cb302-42"><a href="practical-4.html#cb302-42" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb302-43"><a href="practical-4.html#cb302-43" tabindex="-1"></a>      <span class="co"># Output for the plot</span></span>
+<span id="cb302-44"><a href="practical-4.html#cb302-44" tabindex="-1"></a>      <span class="fu">plotOutput</span>(<span class="st">&quot;trendPlot&quot;</span>),</span>
+<span id="cb302-45"><a href="practical-4.html#cb302-45" tabindex="-1"></a>      </span>
+<span id="cb302-46"><a href="practical-4.html#cb302-46" tabindex="-1"></a>      <span class="co"># Output for the data table</span></span>
+<span id="cb302-47"><a href="practical-4.html#cb302-47" tabindex="-1"></a>      <span class="fu">DTOutput</span>(<span class="st">&quot;dataTable&quot;</span>)</span>
+<span id="cb302-48"><a href="practical-4.html#cb302-48" tabindex="-1"></a>    )</span>
+<span id="cb302-49"><a href="practical-4.html#cb302-49" tabindex="-1"></a>  )</span>
+<span id="cb302-50"><a href="practical-4.html#cb302-50" tabindex="-1"></a>)</span>
+<span id="cb302-51"><a href="practical-4.html#cb302-51" tabindex="-1"></a></span>
+<span id="cb302-52"><a href="practical-4.html#cb302-52" tabindex="-1"></a><span class="co"># Server - Define the logic of the app</span></span>
+<span id="cb302-53"><a href="practical-4.html#cb302-53" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb302-54"><a href="practical-4.html#cb302-54" tabindex="-1"></a>  </span>
+<span id="cb302-55"><a href="practical-4.html#cb302-55" tabindex="-1"></a>  <span class="co"># Filtered dataset based on user inputs</span></span>
+<span id="cb302-56"><a href="practical-4.html#cb302-56" tabindex="-1"></a>  filteredData <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb302-57"><a href="practical-4.html#cb302-57" tabindex="-1"></a>    gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb302-58"><a href="practical-4.html#cb302-58" tabindex="-1"></a>      <span class="fu">filter</span>(country <span class="sc">%in%</span> input<span class="sc">$</span>countries,</span>
+<span id="cb302-59"><a href="practical-4.html#cb302-59" tabindex="-1"></a>             year <span class="sc">&gt;=</span> input<span class="sc">$</span>yearRange[<span class="dv">1</span>], </span>
+<span id="cb302-60"><a href="practical-4.html#cb302-60" tabindex="-1"></a>             year <span class="sc">&lt;=</span> input<span class="sc">$</span>yearRange[<span class="dv">2</span>])</span>
+<span id="cb302-61"><a href="practical-4.html#cb302-61" tabindex="-1"></a>  })</span>
+<span id="cb302-62"><a href="practical-4.html#cb302-62" tabindex="-1"></a>  </span>
+<span id="cb302-63"><a href="practical-4.html#cb302-63" tabindex="-1"></a>  <span class="co"># Render the trend plot</span></span>
+<span id="cb302-64"><a href="practical-4.html#cb302-64" tabindex="-1"></a>  output<span class="sc">$</span>trendPlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb302-65"><a href="practical-4.html#cb302-65" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">filteredData</span>(), <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> .data[[input<span class="sc">$</span>yvar]], <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb302-66"><a href="practical-4.html#cb302-66" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb302-67"><a href="practical-4.html#cb302-67" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb302-68"><a href="practical-4.html#cb302-68" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>, </span>
+<span id="cb302-69"><a href="practical-4.html#cb302-69" tabindex="-1"></a>           <span class="at">y =</span> input<span class="sc">$</span>yvar, </span>
+<span id="cb302-70"><a href="practical-4.html#cb302-70" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;Country&quot;</span>,</span>
+<span id="cb302-71"><a href="practical-4.html#cb302-71" tabindex="-1"></a>           <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Trend of&quot;</span>, input<span class="sc">$</span>yvar, <span class="st">&quot;Over Time&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb302-72"><a href="practical-4.html#cb302-72" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()</span>
+<span id="cb302-73"><a href="practical-4.html#cb302-73" tabindex="-1"></a>  })</span>
+<span id="cb302-74"><a href="practical-4.html#cb302-74" tabindex="-1"></a>  </span>
+<span id="cb302-75"><a href="practical-4.html#cb302-75" tabindex="-1"></a>  <span class="co"># Render the data table</span></span>
+<span id="cb302-76"><a href="practical-4.html#cb302-76" tabindex="-1"></a>  output<span class="sc">$</span>dataTable <span class="ot">&lt;-</span> <span class="fu">renderDT</span>({</span>
+<span id="cb302-77"><a href="practical-4.html#cb302-77" tabindex="-1"></a>    <span class="fu">datatable</span>(<span class="fu">filteredData</span>())</span>
+<span id="cb302-78"><a href="practical-4.html#cb302-78" tabindex="-1"></a>  })</span>
+<span id="cb302-79"><a href="practical-4.html#cb302-79" tabindex="-1"></a>}</span>
+<span id="cb302-80"><a href="practical-4.html#cb302-80" tabindex="-1"></a></span>
+<span id="cb302-81"><a href="practical-4.html#cb302-81" tabindex="-1"></a><span class="co"># Run the app</span></span>
+<span id="cb302-82"><a href="practical-4.html#cb302-82" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div>
+</div>
+<div id="demo-3" class="section level6 hasAnchor">
+<h6>3.7.3 Demo 3<a href="practical-4.html#demo-3" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>You can download the .R file of the demo 3 of Shiny App <a href="./exercises/exercises_module4/shiny_app/3_ShinyDemo.R">here</a>.</p>
+<p>Here is the code for the Demo 3:</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="practical-4.html#cb303-1" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
+<span id="cb303-2"><a href="practical-4.html#cb303-2" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb303-3"><a href="practical-4.html#cb303-3" tabindex="-1"></a><span class="fu">library</span>(shinydashboard)</span>
+<span id="cb303-4"><a href="practical-4.html#cb303-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb303-5"><a href="practical-4.html#cb303-5" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb303-6"><a href="practical-4.html#cb303-6" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb303-7"><a href="practical-4.html#cb303-7" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb303-8"><a href="practical-4.html#cb303-8" tabindex="-1"></a></span>
+<span id="cb303-9"><a href="practical-4.html#cb303-9" tabindex="-1"></a><span class="co"># Define UI components for App 1</span></span>
+<span id="cb303-10"><a href="practical-4.html#cb303-10" tabindex="-1"></a>app1_ui <span class="ot">&lt;-</span> <span class="fu">tabItem</span>(</span>
+<span id="cb303-11"><a href="practical-4.html#cb303-11" tabindex="-1"></a>  <span class="at">tabName =</span> <span class="st">&quot;app1&quot;</span>,</span>
+<span id="cb303-12"><a href="practical-4.html#cb303-12" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb303-13"><a href="practical-4.html#cb303-13" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb303-14"><a href="practical-4.html#cb303-14" tabindex="-1"></a>      <span class="st">&quot;This is the sidebar&quot;</span>,</span>
+<span id="cb303-15"><a href="practical-4.html#cb303-15" tabindex="-1"></a>      <span class="fu">textInput</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;Text box title&quot;</span>, <span class="st">&quot;Text box content&quot;</span>),</span>
+<span id="cb303-16"><a href="practical-4.html#cb303-16" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">&quot;num&quot;</span>, <span class="st">&quot;Number of cars to show&quot;</span>, <span class="dv">10</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> <span class="dv">30</span>),</span>
+<span id="cb303-17"><a href="practical-4.html#cb303-17" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="st">&quot;temperature&quot;</span>, <span class="st">&quot;Body temperature&quot;</span>, <span class="at">min =</span> <span class="dv">35</span>, <span class="at">max =</span> <span class="dv">42</span>, <span class="at">value =</span> <span class="fl">37.5</span>, <span class="at">step =</span> <span class="fl">0.1</span>),</span>
+<span id="cb303-18"><a href="practical-4.html#cb303-18" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="st">&quot;price&quot;</span>, <span class="st">&quot;Price (€)&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">39</span>, <span class="dv">69</span>), <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">99</span>),</span>
+<span id="cb303-19"><a href="practical-4.html#cb303-19" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">&quot;radio&quot;</span>, <span class="st">&quot;Choose your preferred time slot&quot;</span>, </span>
+<span id="cb303-20"><a href="practical-4.html#cb303-20" tabindex="-1"></a>                   <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;09:00 - 09:30&quot;</span>, <span class="st">&quot;09:30 - 10:00&quot;</span>, <span class="st">&quot;10:00 - 10:30&quot;</span>, </span>
+<span id="cb303-21"><a href="practical-4.html#cb303-21" tabindex="-1"></a>                               <span class="st">&quot;10:30 - 11:00&quot;</span>, <span class="st">&quot;11:00 - 11:30&quot;</span>), </span>
+<span id="cb303-22"><a href="practical-4.html#cb303-22" tabindex="-1"></a>                   <span class="at">selected =</span> <span class="st">&quot;10:00 - 10:30&quot;</span>),</span>
+<span id="cb303-23"><a href="practical-4.html#cb303-23" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;major&quot;</span>, <span class="st">&quot;Major&quot;</span>, </span>
+<span id="cb303-24"><a href="practical-4.html#cb303-24" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Business Administration&quot;</span>, <span class="st">&quot;Data Science&quot;</span>, <span class="st">&quot;Econometrics &amp; Operations Research&quot;</span>, </span>
+<span id="cb303-25"><a href="practical-4.html#cb303-25" tabindex="-1"></a>                              <span class="st">&quot;Economics&quot;</span>, <span class="st">&quot;Liberal Arts&quot;</span>, <span class="st">&quot;Industrial Engineering&quot;</span>, <span class="st">&quot;Marketing Management&quot;</span>, </span>
+<span id="cb303-26"><a href="practical-4.html#cb303-26" tabindex="-1"></a>                              <span class="st">&quot;Marketing Analytics&quot;</span>, <span class="st">&quot;Psychology&quot;</span>),</span>
+<span id="cb303-27"><a href="practical-4.html#cb303-27" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;Marketing Analytics&quot;</span>),</span>
+<span id="cb303-28"><a href="practical-4.html#cb303-28" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;programming_language&quot;</span>, <span class="st">&quot;Programming Languages&quot;</span>,</span>
+<span id="cb303-29"><a href="practical-4.html#cb303-29" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;HTML&quot;</span>, <span class="st">&quot;CSS&quot;</span>, <span class="st">&quot;JavaScript&quot;</span>, <span class="st">&quot;Python&quot;</span>, <span class="st">&quot;R&quot;</span>, <span class="st">&quot;Stata&quot;</span>),</span>
+<span id="cb303-30"><a href="practical-4.html#cb303-30" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;R&quot;</span>, <span class="at">multiple =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb303-31"><a href="practical-4.html#cb303-31" tabindex="-1"></a>      <span class="fu">checkboxInput</span>(<span class="st">&quot;agree&quot;</span>, <span class="st">&quot;I agree to the terms and conditions&quot;</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb303-32"><a href="practical-4.html#cb303-32" tabindex="-1"></a>    ),</span>
+<span id="cb303-33"><a href="practical-4.html#cb303-33" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb303-34"><a href="practical-4.html#cb303-34" tabindex="-1"></a>      <span class="fu">tabsetPanel</span>(</span>
+<span id="cb303-35"><a href="practical-4.html#cb303-35" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">&quot;tab 1&quot;</span>, <span class="fu">h1</span>(<span class="st">&quot;Overview&quot;</span>), <span class="st">&quot;Content goes here&quot;</span>),</span>
+<span id="cb303-36"><a href="practical-4.html#cb303-36" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">&quot;tab 2&quot;</span>, <span class="st">&quot;The content of the second tab&quot;</span>),</span>
+<span id="cb303-37"><a href="practical-4.html#cb303-37" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">&quot;tab 3&quot;</span>, <span class="st">&quot;The content of the third tab&quot;</span>)</span>
+<span id="cb303-38"><a href="practical-4.html#cb303-38" tabindex="-1"></a>      )</span>
+<span id="cb303-39"><a href="practical-4.html#cb303-39" tabindex="-1"></a>    )</span>
+<span id="cb303-40"><a href="practical-4.html#cb303-40" tabindex="-1"></a>  )</span>
+<span id="cb303-41"><a href="practical-4.html#cb303-41" tabindex="-1"></a>)</span>
+<span id="cb303-42"><a href="practical-4.html#cb303-42" tabindex="-1"></a></span>
+<span id="cb303-43"><a href="practical-4.html#cb303-43" tabindex="-1"></a><span class="co"># Define UI components for App 2</span></span>
+<span id="cb303-44"><a href="practical-4.html#cb303-44" tabindex="-1"></a>app2_ui <span class="ot">&lt;-</span> <span class="fu">tabItem</span>(</span>
+<span id="cb303-45"><a href="practical-4.html#cb303-45" tabindex="-1"></a>  <span class="at">tabName =</span> <span class="st">&quot;app2&quot;</span>,</span>
+<span id="cb303-46"><a href="practical-4.html#cb303-46" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb303-47"><a href="practical-4.html#cb303-47" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb303-48"><a href="practical-4.html#cb303-48" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;countries&quot;</span>, <span class="st">&quot;Select Country/Countries&quot;</span>,</span>
+<span id="cb303-49"><a href="practical-4.html#cb303-49" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">unique</span>(gapminder<span class="sc">$</span>country),</span>
+<span id="cb303-50"><a href="practical-4.html#cb303-50" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;United States&quot;</span>,</span>
+<span id="cb303-51"><a href="practical-4.html#cb303-51" tabindex="-1"></a>                  <span class="at">multiple =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb303-52"><a href="practical-4.html#cb303-52" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">&quot;yvar&quot;</span>, <span class="st">&quot;Select Y Variable&quot;</span>,</span>
+<span id="cb303-53"><a href="practical-4.html#cb303-53" tabindex="-1"></a>                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Life Expectancy&quot;</span> <span class="ot">=</span> <span class="st">&quot;lifeExp&quot;</span>, </span>
+<span id="cb303-54"><a href="practical-4.html#cb303-54" tabindex="-1"></a>                              <span class="st">&quot;GDP per Capita&quot;</span> <span class="ot">=</span> <span class="st">&quot;gdpPercap&quot;</span>, </span>
+<span id="cb303-55"><a href="practical-4.html#cb303-55" tabindex="-1"></a>                              <span class="st">&quot;Population&quot;</span> <span class="ot">=</span> <span class="st">&quot;pop&quot;</span>),</span>
+<span id="cb303-56"><a href="practical-4.html#cb303-56" tabindex="-1"></a>                  <span class="at">selected =</span> <span class="st">&quot;lifeExp&quot;</span>),</span>
+<span id="cb303-57"><a href="practical-4.html#cb303-57" tabindex="-1"></a>      <span class="fu">sliderInput</span>(<span class="st">&quot;yearRange&quot;</span>, <span class="st">&quot;Select Year Range&quot;</span>, </span>
+<span id="cb303-58"><a href="practical-4.html#cb303-58" tabindex="-1"></a>                  <span class="at">min =</span> <span class="fu">min</span>(gapminder<span class="sc">$</span>year), </span>
+<span id="cb303-59"><a href="practical-4.html#cb303-59" tabindex="-1"></a>                  <span class="at">max =</span> <span class="fu">max</span>(gapminder<span class="sc">$</span>year), </span>
+<span id="cb303-60"><a href="practical-4.html#cb303-60" tabindex="-1"></a>                  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1952</span>, <span class="dv">2007</span>), </span>
+<span id="cb303-61"><a href="practical-4.html#cb303-61" tabindex="-1"></a>                  <span class="at">step =</span> <span class="dv">5</span>)</span>
+<span id="cb303-62"><a href="practical-4.html#cb303-62" tabindex="-1"></a>    ),</span>
+<span id="cb303-63"><a href="practical-4.html#cb303-63" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb303-64"><a href="practical-4.html#cb303-64" tabindex="-1"></a>      <span class="fu">plotOutput</span>(<span class="st">&quot;trendPlot&quot;</span>),</span>
+<span id="cb303-65"><a href="practical-4.html#cb303-65" tabindex="-1"></a>      <span class="fu">DTOutput</span>(<span class="st">&quot;dataTable&quot;</span>)</span>
+<span id="cb303-66"><a href="practical-4.html#cb303-66" tabindex="-1"></a>    )</span>
+<span id="cb303-67"><a href="practical-4.html#cb303-67" tabindex="-1"></a>  )</span>
+<span id="cb303-68"><a href="practical-4.html#cb303-68" tabindex="-1"></a>)</span>
+<span id="cb303-69"><a href="practical-4.html#cb303-69" tabindex="-1"></a></span>
+<span id="cb303-70"><a href="practical-4.html#cb303-70" tabindex="-1"></a><span class="co"># Define Dashboard UI</span></span>
+<span id="cb303-71"><a href="practical-4.html#cb303-71" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">dashboardPage</span>(</span>
+<span id="cb303-72"><a href="practical-4.html#cb303-72" tabindex="-1"></a>  </span>
+<span id="cb303-73"><a href="practical-4.html#cb303-73" tabindex="-1"></a>  <span class="co"># Defines the app&#39;s title and the navigation bar.</span></span>
+<span id="cb303-74"><a href="practical-4.html#cb303-74" tabindex="-1"></a>  <span class="fu">dashboardHeader</span>(<span class="at">title =</span> <span class="st">&quot;Multi-Page Shiny App&quot;</span>),</span>
+<span id="cb303-75"><a href="practical-4.html#cb303-75" tabindex="-1"></a>  </span>
+<span id="cb303-76"><a href="practical-4.html#cb303-76" tabindex="-1"></a>  <span class="co"># Creates a sidebar menu for navigating between different pages.</span></span>
+<span id="cb303-77"><a href="practical-4.html#cb303-77" tabindex="-1"></a>  <span class="fu">dashboardSidebar</span>(</span>
+<span id="cb303-78"><a href="practical-4.html#cb303-78" tabindex="-1"></a>    <span class="fu">sidebarMenu</span>(</span>
+<span id="cb303-79"><a href="practical-4.html#cb303-79" tabindex="-1"></a>      <span class="fu">menuItem</span>(<span class="st">&quot;demo&quot;</span>, <span class="at">tabName =</span> <span class="st">&quot;app1&quot;</span>, <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">&quot;list&quot;</span>)),</span>
+<span id="cb303-80"><a href="practical-4.html#cb303-80" tabindex="-1"></a>      <span class="fu">menuItem</span>(<span class="st">&quot;Gapminder Dashboard&quot;</span>, <span class="at">tabName =</span> <span class="st">&quot;app2&quot;</span>, <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">&quot;chart-line&quot;</span>))</span>
+<span id="cb303-81"><a href="practical-4.html#cb303-81" tabindex="-1"></a>    )</span>
+<span id="cb303-82"><a href="practical-4.html#cb303-82" tabindex="-1"></a>  ),</span>
+<span id="cb303-83"><a href="practical-4.html#cb303-83" tabindex="-1"></a>  </span>
+<span id="cb303-84"><a href="practical-4.html#cb303-84" tabindex="-1"></a>  <span class="co"># Displays the corresponding content for each selected page.</span></span>
+<span id="cb303-85"><a href="practical-4.html#cb303-85" tabindex="-1"></a>  <span class="fu">dashboardBody</span>(</span>
+<span id="cb303-86"><a href="practical-4.html#cb303-86" tabindex="-1"></a>    <span class="fu">tabItems</span>(</span>
+<span id="cb303-87"><a href="practical-4.html#cb303-87" tabindex="-1"></a>      app1_ui,</span>
+<span id="cb303-88"><a href="practical-4.html#cb303-88" tabindex="-1"></a>      app2_ui</span>
+<span id="cb303-89"><a href="practical-4.html#cb303-89" tabindex="-1"></a>    )</span>
+<span id="cb303-90"><a href="practical-4.html#cb303-90" tabindex="-1"></a>  )</span>
+<span id="cb303-91"><a href="practical-4.html#cb303-91" tabindex="-1"></a>)</span>
+<span id="cb303-92"><a href="practical-4.html#cb303-92" tabindex="-1"></a></span>
+<span id="cb303-93"><a href="practical-4.html#cb303-93" tabindex="-1"></a><span class="co"># Define server logic</span></span>
+<span id="cb303-94"><a href="practical-4.html#cb303-94" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb303-95"><a href="practical-4.html#cb303-95" tabindex="-1"></a>  <span class="co"># Filtered dataset based on user inputs for App 2</span></span>
+<span id="cb303-96"><a href="practical-4.html#cb303-96" tabindex="-1"></a>  filteredData <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb303-97"><a href="practical-4.html#cb303-97" tabindex="-1"></a>    gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb303-98"><a href="practical-4.html#cb303-98" tabindex="-1"></a>      <span class="fu">filter</span>(country <span class="sc">%in%</span> input<span class="sc">$</span>countries,</span>
+<span id="cb303-99"><a href="practical-4.html#cb303-99" tabindex="-1"></a>             year <span class="sc">&gt;=</span> input<span class="sc">$</span>yearRange[<span class="dv">1</span>], </span>
+<span id="cb303-100"><a href="practical-4.html#cb303-100" tabindex="-1"></a>             year <span class="sc">&lt;=</span> input<span class="sc">$</span>yearRange[<span class="dv">2</span>])</span>
+<span id="cb303-101"><a href="practical-4.html#cb303-101" tabindex="-1"></a>  })</span>
+<span id="cb303-102"><a href="practical-4.html#cb303-102" tabindex="-1"></a>  </span>
+<span id="cb303-103"><a href="practical-4.html#cb303-103" tabindex="-1"></a>  <span class="co"># Render the trend plot for App 2</span></span>
+<span id="cb303-104"><a href="practical-4.html#cb303-104" tabindex="-1"></a>  output<span class="sc">$</span>trendPlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb303-105"><a href="practical-4.html#cb303-105" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">filteredData</span>(), <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> .data[[input<span class="sc">$</span>yvar]], <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb303-106"><a href="practical-4.html#cb303-106" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb303-107"><a href="practical-4.html#cb303-107" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb303-108"><a href="practical-4.html#cb303-108" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>, </span>
+<span id="cb303-109"><a href="practical-4.html#cb303-109" tabindex="-1"></a>           <span class="at">y =</span> input<span class="sc">$</span>yvar, </span>
+<span id="cb303-110"><a href="practical-4.html#cb303-110" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;Country&quot;</span>,</span>
+<span id="cb303-111"><a href="practical-4.html#cb303-111" tabindex="-1"></a>           <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Trend of&quot;</span>, input<span class="sc">$</span>yvar, <span class="st">&quot;Over Time&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb303-112"><a href="practical-4.html#cb303-112" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()</span>
+<span id="cb303-113"><a href="practical-4.html#cb303-113" tabindex="-1"></a>  })</span>
+<span id="cb303-114"><a href="practical-4.html#cb303-114" tabindex="-1"></a>  </span>
+<span id="cb303-115"><a href="practical-4.html#cb303-115" tabindex="-1"></a>  <span class="co"># Render the data table for App 2</span></span>
+<span id="cb303-116"><a href="practical-4.html#cb303-116" tabindex="-1"></a>  output<span class="sc">$</span>dataTable <span class="ot">&lt;-</span> <span class="fu">renderDT</span>({</span>
+<span id="cb303-117"><a href="practical-4.html#cb303-117" tabindex="-1"></a>    <span class="fu">datatable</span>(<span class="fu">filteredData</span>())</span>
+<span id="cb303-118"><a href="practical-4.html#cb303-118" tabindex="-1"></a>  })</span>
+<span id="cb303-119"><a href="practical-4.html#cb303-119" tabindex="-1"></a>}</span>
+<span id="cb303-120"><a href="practical-4.html#cb303-120" tabindex="-1"></a></span>
+<span id="cb303-121"><a href="practical-4.html#cb303-121" tabindex="-1"></a><span class="co"># Run the app</span></span>
+<span id="cb303-122"><a href="practical-4.html#cb303-122" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div>
 
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
