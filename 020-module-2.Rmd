@@ -36,6 +36,7 @@ Select permits to extract, and potentially rename, one or more columns of a data
 ```{r select doc, eval = F}
 help(select)
 ```
+
 ##### Examples
 Select the column "Species" from data frame iris
 ```{r select 1, eval = F}
@@ -56,6 +57,7 @@ Extract rows of a data frame, based on some conditions they need to meet.
 ```{r filter doc, eval = F}
 help(filter)
 ```
+
 ##### Examples
 Select rows of Species "versicolor"
 ```{r filter 1, eval = F}
@@ -72,6 +74,7 @@ Split a data frame in parts, based on the values contained in a column.
 ```{r groupby doc, eval = F}
 help(group_by)
 ```
+
 ##### Example
 Group by Species
 ```{r groupby 1, eval = F}
@@ -84,6 +87,7 @@ Group by the values in a column, then produce a specified summary statistic.
 ```{r summarize doc, eval = F}
 help(summarize)
 ```
+
 ##### Examples
 Get the mean Petal.Length
 ```{r summarize 1, eval = F}
@@ -103,6 +107,7 @@ Count the number of individuals (rows) in a given category.
 ```{r count doc, eval = F}
 help(count)
 ```
+
 ##### Examples
 Count the number of individual in each species
 ```{r count 1, eval = F}
@@ -123,6 +128,7 @@ Transform, combine and do operations on columns
 ```{r mutate doc, eval = F}
 help(mutate)
 ```
+
 ##### Examples
 Compute the Petal area (assuming diamond shapes)
 ```{r mutate 1, eval = F}
@@ -142,6 +148,7 @@ https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
 ### Piping functions
 
 Say that we want to group the iris data frame by species, then create summary statistics. We can do it...
+
 #### ...Witout piping
 ```{r no piping, eval = F}
 grouped_by_species <- group_by(iris, Species)
@@ -171,18 +178,11 @@ summarize(ratio_mpg_wt,
           Mean_mpg = mean(mpg),
           Mean_ratio = mean(ratio)) # summarize statistics
 ```
-Solution
-```{r hands on 1 exercise, eval = F}
 
-```
 
 #### Hands on 2:
 Count the number of cars with (1) a sum of gears (gear) and carburators (carb) >= 6, (2) a number of cylinders (cyl) < 8 and (3) stratified by engine shape (vs)
 
-Solution
-```{r hands on 2 exercise, eval = F}
-
-```
 
 #### Hands on 3: Find the errors
 We want to get the number of flowers with a sepal area (assuming area = width * length / 2) > 10, stratified by species
@@ -192,10 +192,7 @@ iris %>%
   group_by(Species) %>%
   summarize(sum(area))
 ```
-Solution
-```{r hands on 3.1 exercise, eval = F}
 
-```
 
 We want summary statistics by brand
 ```{r hands on 3.2, eval = F}
@@ -206,11 +203,6 @@ We want summary statistics by brand
 
 # ERROR
 ```
-Solution
-```{r hands on 3.2 exercise, eval = F}
-
-```
-
 
 
 ### tidyr pivot functions
@@ -260,6 +252,7 @@ who2 %>%
   summarize(Mean = mean(sp_m_014),
             SD = sd(sp_m_014))
 ```
+
 With na.rm
 ```{r ignoring na 2, eval = F}
 who2 %>%
@@ -295,6 +288,7 @@ names(replacing_list) <- colnames(who2)
 replacing_list['country'] <- 'unknown'
 replacing_list['year'] <- 'unknown'
 ```
+
 Then, we replace the NAs in the data frame
 ```{r replacing na 2, eval = F}
 who2 %>% replace_na(replacing_list)
@@ -316,10 +310,8 @@ who2_ho4 <- who2[,grep('rel', colnames(who2), invert = TRUE)]
 ## 4- Produce statistics of your choice
 ## 5- Re-pivot to wide
 ```
-Solution
-```{r hands on 4 exercise, eval = F}
 
-```
+
 
 ## Solutions
 
@@ -336,6 +328,7 @@ summarize(ratio_mpg_wt,
           Mean_mpg = mean(mpg),
           Mean_ratio = mean(ratio)) # summarize statistics
 ```
+
 Solution
 ```{r hands on 1 solution, eval = F}
 mtcars %>%
@@ -363,6 +356,7 @@ iris %>%
   group_by(Species) %>%
   summarize(sum(area))
 ```
+
 Solution
 ```{r hands on 3.1 solution, eval = F}
 iris %>%
@@ -380,6 +374,7 @@ We want summary statistics by brand
 
 # ERROR
 ```
+
 Solution
 ```{r hands on 3.2 solution, eval = F}
 mtcars %>%
@@ -399,6 +394,7 @@ who2_ho4 <- who2[,grep('rel', colnames(who2), invert = TRUE)]
 ## 4- Produce statistics of your choice
 ## 5- Re-pivot to wide
 ```
+
 Solution
 ```{r hands on 4 solution, eval = F}
 ## 1- Drop the relapse columns

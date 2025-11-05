@@ -43,6 +43,7 @@ The data seems to be linearly correlated. The species have different ranges of s
 
 
 #### Fitting with MLE
+
 ##### 1- Estimating beta1
 $$\hat{\beta_1} = \frac{\sum^{N}_{i=1}(x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N}(x_{i} - \bar{x})^{2}} = \frac{SS_{xy}}{SS_{xx}}$$
 
@@ -53,11 +54,13 @@ numerator = sum((iris$Petal.Length - mean_x) * (iris$Petal.Width - mean_y))
 denominator = sum((iris$Petal.Length - mean_x)**2)
 beta1 = numerator / denominator
 ```
+
 ##### 2- Estimating beta0
 $$\hat{\beta_0} = \bar{y} - \hat{\beta_{1}}\bar{x}$$
 ```{r beta0 estimation linear regr, eval = F}
 beta0 = mean_y - beta1*mean_x
 ```
+
 ##### 3- Visualize the regression
 ```{r visualization linear regr, eval = F}
 regression_df = data.frame(x = 1:7, y = beta0+c(1:7)*beta1)
@@ -88,20 +91,24 @@ Say we remove the versicolor species during model construction,  can we predict 
 iris_subset <- iris %>% filter(Species != 'versicolor')
 iris_model <- lm(Petal.Width ~ Petal.Length, data = iris_subset)
 ```
+
 2- We extract the versicolor Petal Length
 ```{r pred 2.1 linear regr, eval = F}
 versicolor_p <- iris %>% filter(Species == 'versicolor') %>%
                           mutate(Predicted_pw = iris_model$coefficients[1] + Petal.Length*iris_model$coefficients[2])
 ```
+
 Alternatively
 ```{r pred 2.2 linear regr, eval = F}
 predict.lm(iris_model, versicolor_p, type = 'response')
 ```
+
 3- Plot the results
 ```{r pred 3 linear regr, eval = F}
 ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
   geom_point(aes(Petal.Length, Predicted_pw), data = versicolor_p, color = 'darkgreen', shape = '+', size = 5)
 ```
+
 4- Compute the MSE
 ```{r pred 4 linear regr, eval = F}
 MSE = mean((versicolor_p$Petal.Width - versicolor_p$Predicted_pw)**2)
@@ -116,6 +123,7 @@ What if we also use the Sepal values to predict the Petal Width?
 ```{r multi vars 1 linear regr, eval = F}
 iris_model2 <- lm(Petal.Width ~ Petal.Length + Sepal.Length + Sepal.Width, data = iris_subset)
 ```
+
 2- We extract the versicolor Petal Length
 ```{r multi vars 2 linear regr, eval = F}
 versicolor_p2 <- iris %>% filter(Species == 'versicolor') %>%
@@ -124,6 +132,7 @@ versicolor_p2 <- iris %>% filter(Species == 'versicolor') %>%
                         Sepal.Length*iris_model2$coefficients[3] +
                         Sepal.Width*iris_model2$coefficients[4])
 ```
+
 3- Plot the results
 ```{r multi vars 3 linear regr, eval = F}
 ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
@@ -135,13 +144,15 @@ ggplot(iris) + geom_point(aes(Petal.Length, Petal.Width, col = Species)) +
 MSE2 = mean((versicolor_p2$Petal.Width - versicolor_p2$Predicted_pw)**2)
 print(MSE2)
 ```
-In this case, the MSE is a lot larger than the previous model, so adding more variables did not help. WWhat are the correlations between the variables?
+
+In this case, the MSE is a lot larger than the previous model, so adding more variables did not help. What are the correlations between the variables?
 ```{r multi vars 5 linear regr, eval = F}
 ggplot(iris) + geom_point(aes(Sepal.Width, Petal.Width, col = Species))
 cor(iris$Sepal.Width, iris$Petal.Width)
 ggplot(iris) + geom_point(aes(Sepal.Length, Petal.Width, col = Species))
 cor(iris$Sepal.Length, iris$Petal.Width)
 ```
+
 Quick test with only the Petal Length and Sepal Length
 ```{r multi vars 6 linear regr, eval = F}
 iris_model3 <- lm(Petal.Width ~ Petal.Length + Sepal.Length, data = iris_subset)
