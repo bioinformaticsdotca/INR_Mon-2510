@@ -247,7 +247,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html"><i class="fa fa-check"></i>Lecture 2 - Factor Analysis for Human Spatial Vision</a>
 <ul>
 <li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#lecture-5"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#lab-4"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#lab-4"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#chapter-13-plotting-the-contrast-sensitivity-function"><i class="fa fa-check"></i>Chapter 13: Plotting the Contrast Sensitivity Function</a></li>
+<li class="chapter" data-level="" data-path="lecture-2---factor-analysis-for-human-spatial-vision.html"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#chapter-16-factor-analysis-and-csf"><i class="fa fa-check"></i>Chapter 16: Factor Analysis and CSF</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html"><i class="fa fa-check"></i>Practical 5</a>
 <ul>
@@ -311,8 +315,708 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="lab-4" class="section level2 hasAnchor">
 <h2>Lab<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#lab-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Materials for this practical can be downloaded <a href="">from here</a>. The data required can be downloaded <a href="">here</a>.</p>
+<div id="chapter-13-plotting-the-contrast-sensitivity-function" class="section level3 hasAnchor">
+<h3>Chapter 13: Plotting the Contrast Sensitivity Function<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#chapter-13-plotting-the-contrast-sensitivity-function" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="citing-the-guide-and-the-package" class="section level4 unnumbered hasAnchor">
+<h4>Citing the Guide and the Package<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#citing-the-guide-and-the-package" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If you have used the <strong>smCSF</strong> package for your research, please cite the paper below:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Min, S. H.</strong>, &amp; Reynaud, A. (2024). Applying Resampling and Visualization Methods in Factor Analysis to Model Human Spatial Vision. <strong><em>Investigative Ophthalmology &amp; Visual Science</em></strong>, 65(1), 17-17.</li>
+</ol>
+</div>
+<div id="getting-started" class="section level4 unnumbered hasAnchor">
+<h4>Getting Started<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <strong>smCSF</strong> package will be used in this chapter, so readers should directly download it from my GitHub page using the code below.</p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb304-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb304-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb304-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;smin95/smCSF&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Also, we will use the data of achromatic contrast sensitivity from 51 normal observers from this paper (a subset of the entire dataset):</p>
+<p>Kim, Y. J., Reynaud, A., Hess, R. F., &amp; Mullen, K. T. (2017). A normative data set for the clinical assessment of achromatic and chromatic contrast sensitivity using a qCSF approach. <strong><em>Investigative Ophthalmology &amp; Visual Science</em></strong>, 58(9), 3628-3636.</p>
+<p>Luckily, the data are publicly available. I have reorganized the data so that we could easily use them in the form of a data frame. Let’s load the data from online.</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb305-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb305-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb305-2" tabindex="-1"></a><span class="fu">library</span>(smplot2)</span>
+<span id="cb305-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb305-3" tabindex="-1"></a><span class="fu">library</span>(smCSF)</span></code></pre></div>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb306-1" tabindex="-1"></a>ACh <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./exercises/exercises_lecture2/data_Ach.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 1224 Columns: 4
+## ── Column specification ─────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): Subject
+## dbl (3): Repetition, SpatialFreq, Sensitivity
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb308-1" tabindex="-1"></a><span class="fu">head</span>(ACh)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   Subject Repetition SpatialFreq Sensitivity
+##   &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 S1               1        0.25       23.8 
+## 2 S2               1        0.25       18.0 
+## 3 S3               1        0.25       14.2 
+## 4 S4               1        0.25        5.14
+## 5 S5               1        0.25       16.0 
+## 6 S6               1        0.25       10.9</code></pre>
+<p>There are four columns in this data frame:</p>
+<ul>
+<li><p>First, <code>Subject</code> refers to each participant. There are 51 participants total in the .csv file.</p></li>
+<li><p>Next, <code>Repetition</code> refers to each repetition of the measurement The participants performed two repetitions of the contrast sensitivity measurement.</p></li>
+<li><p><code>SpatialFreq</code> refers to spatial frequency of the stimuli that were shown to test the observers’ contrast sensitivity. There are a total of 12 spatial frequencies.</p></li>
+<li><p>The <code>Sensitivity</code> column refers to the linear values of the contrast sensitivity.</p></li>
+</ul>
+</div>
+<div id="brief-introduction" class="section level4 hasAnchor">
+<h4>Brief Introduction<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#brief-introduction" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The contrast sensitivity function (CSF) how the observer is sensitive to an image. This image could be large (low spatial frequency) or small (high spatal frequency). To obtain the CSF, the measurement test must measure the threshold. Threshold refers to the difference in stimulus magnitude between the states of presence and absence. If the observer can just barely discriminate between these two states of the visual stimulus, this can be described as the threshold for detection.</p>
+</div>
+<div id="data-visualization-1" class="section level4 hasAnchor">
+<h4>Data Visualization<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#data-visualization-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>First, let’s compute the average, standard errors and standard deviation using the dataset. It is recommended that the reader has read Chapters 5 and 6 already. Understanding of <code>summarise()</code>, <code>filter()</code>, <code>mutate()</code> and <code>%&gt;%</code> is assumed.</p>
+<p>The code below reorganizes the <code>ACh</code> dataset so that instead of containing the data of each subject, it now contains the averaged data across <code>Repetition</code> and <code>SpatialFreq</code> as well as their standard errors and standard deviations. We use <code>mean()</code> to compute the mean, <code>sm_stdErr()</code> the standard error, and <code>sd()</code> the standard deviation.</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-1" tabindex="-1"></a>ACh_avg <span class="ot">&lt;-</span> ACh <span class="sc">%&gt;%</span></span>
+<span id="cb310-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Repetition, SpatialFreq) <span class="sc">%&gt;%</span></span>
+<span id="cb310-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb310-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-4" tabindex="-1"></a>    <span class="at">avgSens =</span> <span class="fu">mean</span>(Sensitivity),</span>
+<span id="cb310-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-5" tabindex="-1"></a>    <span class="at">stdErrSens =</span> <span class="fu">sm_stdErr</span>(Sensitivity),</span>
+<span id="cb310-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-6" tabindex="-1"></a>    <span class="at">stdDevSens =</span> <span class="fu">sd</span>(Sensitivity)</span>
+<span id="cb310-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb310-7" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by
+## &#39;Repetition&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb312-1" tabindex="-1"></a>ACh_avg</span></code></pre></div>
+<pre><code>## # A tibble: 24 × 5
+## # Groups:   Repetition [2]
+##    Repetition SpatialFreq avgSens stdErrSens stdDevSens
+##         &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1          1        0.25    12.6      0.743       5.31
+##  2          1        0.35    14.7      0.777       5.55
+##  3          1        0.49    18.6      0.993       7.09
+##  4          1        0.68    23.7      1.22        8.71
+##  5          1        0.94    28.7      1.36        9.68
+##  6          1        1.31    32.0      1.40        9.99
+##  7          1        1.83    32.4      1.43       10.2 
+##  8          1        2.54    29.6      1.39        9.93
+##  9          1        3.54    24.3      1.22        8.70
+## 10          1        4.93    18.1      0.960       6.85
+## # ℹ 14 more rows</code></pre>
+<p>Let’s create a variable that stores the data for each <code>Repetition</code>. Before we do that, however, it is important that we convert the data type of the <code>Repetition</code> column from <code>&lt;dbl&gt;</code> to <code>&lt;fct&gt;</code>, which refers from <strong>double</strong> to <strong>factor</strong>. <strong>Double</strong> refers to continuous data, whereas <strong>factor</strong> refers to categorical data.</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb314-1" tabindex="-1"></a>ACh_avg<span class="sc">$</span>Repetition <span class="ot">&lt;-</span> <span class="fu">factor</span>(ACh_avg<span class="sc">$</span>Repetition) <span class="co"># factor</span></span>
+<span id="cb314-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb314-2" tabindex="-1"></a></span>
+<span id="cb314-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb314-3" tabindex="-1"></a>ACh_avg1 <span class="ot">&lt;-</span> ACh_avg <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Repetition <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># repetition 1</span></span>
+<span id="cb314-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb314-4" tabindex="-1"></a>ACh_avg2 <span class="ot">&lt;-</span> ACh_avg <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Repetition <span class="sc">==</span> <span class="dv">2</span>) <span class="co"># repetition 2</span></span></code></pre></div>
+<p>Let’s now plot the data for each repetition using <strong>ggplot2</strong>. Understanding of Chapters 1-4 is assumed.</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb315-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb315-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-3" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb315-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-4" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb315-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-5" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb315-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb315-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 1 (n=51)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-250-1.png" width="336" /></p>
+<p>So far, this graph does not show the contrast sensitivity function, which has a rotund shape. Instead, if we connect the points, we get this plot instead.</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb316-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb316-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb316-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb316-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb316-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb316-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb316-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 1 (n=51)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-251-1.png" width="336" /></p>
+<p>The function is still not a smooth, rotund shape. This is because it is standard to plot the contrast sensitivity function in log10 scales in both x and y axes. The code below shows the plot in the log scale.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb317-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb317-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-3" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb317-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb317-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb317-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb317-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 1 (n=51)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb317-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb317-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb317-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-252-1.png" width="336" /></p>
+<p>This plot shows the averaged sensitivity for each spatial frequency during the first repetition. However, the contrast sensitivity function is still missing because this plot instead shows the plot that is connected between a pair of the points. To plot the contrast sensitivity function with the data, <code>sm_CSF()</code> is required.</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb318-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb318-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb318-2" tabindex="-1"></a>  <span class="fu">sm_CSF</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-253-1.png" width="336" /></p>
+<p>Notice that even if the data frame contains data in <strong>linear units</strong>, the plotted data from <code>sm_CSF()</code> are in log10 scales. It shows a nice, rotund shape that is typical of the contrast sensitivity function. The function can also plot the linear curve by setting <code>sm_CSF(logXY = FALSE)</code>. The default is <code>sm_CSF(logXY = TRUE)</code>.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb319-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb319-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb319-2" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">logXY =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-254-1.png" width="336" /></p>
+<p>Now let’s plot a prettier contrast sensitivity function.</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb320-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-2" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb320-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb320-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb320-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb320-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb320-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb320-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 1 (n=51)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-255-1.png" width="336" /></p>
+<p>We can also plot the data using <code>ACh_avg2</code>, which contains data from the second repetition rather than first.</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-1" tabindex="-1"></a>ACh_avg2 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb321-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-2" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb321-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;viridian&quot;</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb321-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb321-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb321-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb321-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb321-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 2 (n=51)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-256-1.png" width="336" /></p>
+<p>Notice that <code>sm_CSF()</code> is written first because the curve has to appear before the points (<code>geom_point()</code>); else, the points will be covered by the CSF curve. This example is shown below.</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-1" tabindex="-1"></a>ACh_avg2 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb322-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;viridian&quot;</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb322-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb322-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb322-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb322-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb322-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb322-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 2 (n=51)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-257-1.png" width="336" /></p>
+<p>The curve appears later in this plot, so it covers some overlapping points.</p>
+<p><strong>smCSF</strong> also offers a function that fill the area of the CSF curve. This function is <code>sm_areaCSF()</code>. The default is set to plot the area in log10 scales, <code>sm_areaCSF(logXY = TRUE)</code>.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb323-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb323-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb323-2" tabindex="-1"></a>  <span class="fu">sm_areaCSF</span>() <span class="sc">+</span></span>
+<span id="cb323-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb323-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-258-1.png" width="336" /></p>
+<p>To plot the linear CSF and its area, <code>logXY = FALSE</code> has to be set <code>FALSE</code> in both <code>sm_areaCSF()</code> and <code>sm_CSF()</code>. The functions of <code>smCSF</code> have defaults <code>logXY = TRUE</code>, therefore, it is recommended that the user uploads a data frame that contains the linear data of spatial frequencies and contrast sensitivities. The functions then will convert them into log scale by default.</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb324-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb324-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb324-2" tabindex="-1"></a>  <span class="fu">sm_areaCSF</span>(<span class="at">logXY =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb324-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb324-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">logXY =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-259-1.png" width="336" /></p>
+<p>We can make the area plot prettier.</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-1" tabindex="-1"></a>ACh_avg2 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb325-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-2" tabindex="-1"></a>  <span class="fu">sm_areaCSF</span>(<span class="at">fill =</span> <span class="fu">sm_color</span>(<span class="st">&quot;lightgreen&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb325-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;viridian&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb325-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-4" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb325-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-5" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb325-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb325-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 2 (n=51)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb325-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-8" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb325-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb325-9" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">0.9</span>, <span class="at">y =</span> <span class="fl">1.3</span>, <span class="at">label =</span> <span class="st">&quot;Area under Log CSF&quot;</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-260-1.png" width="336" /></p>
+<p>You might get a warning that says <code>Scale for 'y' is already present. Adding another scale for 'y', which will replace the existing scale</code>. You can ignore this warning and not be worried about it. This is because we used the function <code>scale_y_log10()</code> on top of <code>sm_CSF()</code>, which actually calls forth the function <code>scale_y_continuous()</code> to convert the plot into log scales. Hence, there are two functions that serve the same purpose here, so the warning message is printed.</p>
+<p>The <strong>smCSF</strong> package also offers a function that draws a ribbon shade to denote standard error or standard deviation. This function works exactly the same as <code>geom_ribbon()</code>. It requires the uses to specify <code>ymin</code> and <code>ymax</code>. The example below plots standard deviation using <code>sm_ribbonCSF()</code>, where <code>ymin = avgSens - stdDevSens</code> and <code>ymax = avgSens + stdDevSens</code>. As before, its default is <code>logXY = TRUE</code>. Therefore, even if <code>ACh_avg2</code> contains data in linear units, the ribbon shade that is generated by <code>sm_ribbonCSF()</code> will be in log unit.</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb327-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-2" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb327-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-3" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb327-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-4" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb327-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-5" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb327-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-6" tabindex="-1"></a>  <span class="fu">sm_CSF</span>() <span class="sc">+</span></span>
+<span id="cb327-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb327-7" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-261-1.png" width="336" /></p>
+<p>Let’s make the plot prettier using <strong>smplot</strong>.</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-1" tabindex="-1"></a>ACh_avg1 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb329-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-2" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(</span>
+<span id="cb329-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-3" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb329-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-4" tabindex="-1"></a>      <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb329-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-5" tabindex="-1"></a>      <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb329-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-6" tabindex="-1"></a>    ),</span>
+<span id="cb329-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-7" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb329-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-8" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb329-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-9" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb329-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-10" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb329-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-11" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb329-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-12" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Repetition 1 (n=51)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb329-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-13" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb329-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb329-14" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-262-1.png" width="336" /></p>
+<p>You can also shade standard error instead, but the ribbon is barely visible.</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-1" tabindex="-1"></a>ACh_avg2 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb331-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-2" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb331-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-3" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdErrSens,</span>
+<span id="cb331-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-4" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdErrSens</span>
+<span id="cb331-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-5" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb331-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-6" tabindex="-1"></a>  <span class="fu">sm_CSF</span>() <span class="sc">+</span></span>
+<span id="cb331-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb331-7" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-263-1.png" width="336" /></p>
+<p>As practice, let’s plot the averaged data across all repetitions.</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-1" tabindex="-1"></a>ACh_avg_final <span class="ot">&lt;-</span> ACh <span class="sc">%&gt;%</span></span>
+<span id="cb333-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-2" tabindex="-1"></a>  <span class="fu">group_by</span>(SpatialFreq) <span class="sc">%&gt;%</span></span>
+<span id="cb333-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb333-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-4" tabindex="-1"></a>    <span class="at">avgSens =</span> <span class="fu">mean</span>(Sensitivity),</span>
+<span id="cb333-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-5" tabindex="-1"></a>    <span class="at">stdErrSens =</span> <span class="fu">sm_stdErr</span>(Sensitivity),</span>
+<span id="cb333-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-6" tabindex="-1"></a>    <span class="at">stdDevSens =</span> <span class="fu">sd</span>(Sensitivity)</span>
+<span id="cb333-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-7" tabindex="-1"></a>  )</span>
+<span id="cb333-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-8" tabindex="-1"></a></span>
+<span id="cb333-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb333-9" tabindex="-1"></a><span class="fu">head</span>(ACh_avg_final)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   SpatialFreq avgSens stdErrSens stdDevSens
+##         &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1        0.25    13.2      0.536       5.41
+## 2        0.35    15.2      0.568       5.74
+## 3        0.49    19.1      0.698       7.05
+## 4        0.68    24.3      0.836       8.44
+## 5        0.94    29.4      0.938       9.48
+## 6        1.31    33.0      0.977       9.87</code></pre>
+<p>Here is the new data frame <code>ACh_avg_final</code>.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-1" tabindex="-1"></a>ACh_avg_final <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb335-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-2" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(</span>
+<span id="cb335-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-3" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb335-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-4" tabindex="-1"></a>      <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb335-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-5" tabindex="-1"></a>      <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb335-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-6" tabindex="-1"></a>    ),</span>
+<span id="cb335-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-7" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">sm_color</span>(<span class="st">&quot;skyblue&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.25</span></span>
+<span id="cb335-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-8" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb335-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-9" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(</span>
+<span id="cb335-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-10" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb335-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-11" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.4</span></span>
+<span id="cb335-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-12" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb335-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-13" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb335-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-14" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb335-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-15" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Contrast Sensitivity (n=51)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb335-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-16" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb335-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-17" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="fu">sm_color</span>(<span class="st">&quot;blue&quot;</span>), <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb335-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb335-18" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-265-1.png" width="336" /></p>
+<p>The standard deviation seems to be still broad.</p>
+</div>
+<div id="facetting-the-contrast-sensitivity-functions" class="section level4 hasAnchor">
+<h4>Facetting the Contrast Sensitivity Functions<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#facetting-the-contrast-sensitivity-functions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To facet means to split the plot into multiple plots based on a categorical variable (i.e., <strong>factor</strong>). We will facet the contrast sensitivity function plot above (the blue curve) into two panels based on two repetitions (red and green below).</p>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-266-1.png" width="624" /></p>
+<p>To facet the plot, you need to have a data frame that has data with a column that specifies the categorical variable. For instance, let’s look at the data frame <code>ACh_avg</code>.</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb338-1" tabindex="-1"></a>ACh_avg</span></code></pre></div>
+<pre><code>## # A tibble: 24 × 5
+## # Groups:   Repetition [2]
+##    Repetition SpatialFreq avgSens stdErrSens stdDevSens
+##    &lt;fct&gt;            &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1 1                 0.25    12.6      0.743       5.31
+##  2 1                 0.35    14.7      0.777       5.55
+##  3 1                 0.49    18.6      0.993       7.09
+##  4 1                 0.68    23.7      1.22        8.71
+##  5 1                 0.94    28.7      1.36        9.68
+##  6 1                 1.31    32.0      1.40        9.99
+##  7 1                 1.83    32.4      1.43       10.2 
+##  8 1                 2.54    29.6      1.39        9.93
+##  9 1                 3.54    24.3      1.22        8.70
+## 10 1                 4.93    18.1      0.960       6.85
+## # ℹ 14 more rows</code></pre>
+<p>We see that the first column of <code>Ach_avg</code> has a column named <code>Repetition</code> which stores whether the given data are from the first or second repetition. To see all the unique levels of <code>Repetition</code>, we can use the function <code>unique()</code>.</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb340-1" tabindex="-1"></a><span class="fu">unique</span>(ACh_avg<span class="sc">$</span>Repetition)</span></code></pre></div>
+<pre><code>## [1] 1 2
+## Levels: 1 2</code></pre>
+<p>To facet a plot using ggplot2, the function <code>facet_wrap()</code> has to be used.</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb342-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb342-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb342-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb342-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb342-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>() <span class="sc">+</span></span>
+<span id="cb342-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb342-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Repetition)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-269-1.png" width="624" /></p>
+<p>The argument inside <code>facet_wrap</code> has to include the tilde (<code>~</code>). The right side the tilde (<code>~</code>) should be the name of the categorical variable by which you wish to facet the plot. If the variable however happens to be continuous, <code>facet_wrap()</code> would not work properly.</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb343-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb343-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb343-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens)) <span class="sc">+</span></span>
+<span id="cb343-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb343-3" tabindex="-1"></a>  <span class="fu">sm_CSF</span>() <span class="sc">+</span></span>
+<span id="cb343-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb343-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>stdErrSens)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-270-1.png" width="624" /></p>
+<p>However, I do not often use <code>facet_wrap()</code> because the plot often ends up not being pretty. Let’s try to make it prettier.</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb344-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb344-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-3" tabindex="-1"></a>    <span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens,</span>
+<span id="cb344-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-4" tabindex="-1"></a>    <span class="at">group =</span> Repetition, <span class="at">color =</span> Repetition,</span>
+<span id="cb344-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-5" tabindex="-1"></a>    <span class="at">fill =</span> Repetition</span>
+<span id="cb344-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-6" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb344-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-7" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb344-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-8" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb344-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-9" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb344-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-10" tabindex="-1"></a>  ), <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb344-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-11" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb344-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-12" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb344-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb344-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb344-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;viridian&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb344-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-16" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb344-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-17" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb344-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-18" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Repetition) <span class="sc">+</span></span>
+<span id="cb344-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb344-19" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>))</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-271-1.png" width="624" /></p>
+<p>Personally, I do not like the grey-filled header of each panel. Since I personally will find myself repeatedly bypassing the default grey color into a color of my choice, I have created the function myself <code>sm_facet_header()</code> as part of the <strong>smCSF</strong> package.</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb346-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb346-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-3" tabindex="-1"></a>    <span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens,</span>
+<span id="cb346-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-4" tabindex="-1"></a>    <span class="at">group =</span> Repetition, <span class="at">color =</span> Repetition,</span>
+<span id="cb346-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-5" tabindex="-1"></a>    <span class="at">fill =</span> Repetition</span>
+<span id="cb346-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-6" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb346-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-7" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb346-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-8" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb346-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-9" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb346-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-10" tabindex="-1"></a>  ), <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb346-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-11" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb346-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-12" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb346-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb346-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb346-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;viridian&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb346-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-16" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb346-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-17" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb346-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-18" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Repetition) <span class="sc">+</span></span>
+<span id="cb346-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-19" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb346-20"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb346-20" tabindex="-1"></a>  <span class="fu">sm_facet_header</span>()</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-272-1.png" width="624" /></p>
+<p>Now the title of each plot has been bolded and the filled color is white. I personally think that this plot is a lot cleaner than the default one.</p>
+<p>Next, I wish to change the titles of each panel because <code>1</code> and <code>2</code> are not descriptive. To do so, we need to use the argument <code>labeller</code> within <code>facet_wrap()</code> to specify the title of each panel.</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb348-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb348-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-3" tabindex="-1"></a>    <span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens,</span>
+<span id="cb348-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-4" tabindex="-1"></a>    <span class="at">group =</span> Repetition, <span class="at">color =</span> Repetition,</span>
+<span id="cb348-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-5" tabindex="-1"></a>    <span class="at">fill =</span> Repetition</span>
+<span id="cb348-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-6" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb348-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-7" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb348-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-8" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb348-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-9" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb348-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-10" tabindex="-1"></a>  ), <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb348-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-11" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb348-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-12" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb348-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb348-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb348-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;viridian&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb348-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-16" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb348-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-17" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb348-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-18" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Repetition,</span>
+<span id="cb348-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-19" tabindex="-1"></a>    <span class="at">labeller =</span> <span class="fu">as_labeller</span>(<span class="fu">c</span>(</span>
+<span id="cb348-20"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-20" tabindex="-1"></a>      <span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 1&quot;</span>,</span>
+<span id="cb348-21"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-21" tabindex="-1"></a>      <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 2&quot;</span></span>
+<span id="cb348-22"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-22" tabindex="-1"></a>    ))</span>
+<span id="cb348-23"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-23" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb348-24"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-24" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb348-25"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb348-25" tabindex="-1"></a>  <span class="fu">sm_facet_header</span>(<span class="at">font_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-273-1.png" width="624" /></p>
+<p>We use the function <code>as_labeller()</code> as part of the argument <code>labeller()</code> inside <code>facet_wrap()</code> to specify that factor level <code>1</code> should be shown as <code>Repetition 1</code> and <code>2</code> as <code>Repetition 2</code>.</p>
+<p>We can also change the number of rows and columns using <code>facet_wrap()</code>. Lets make a data frame that has 4 repetitions instead of 2.</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb350-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-2" tabindex="-1"></a>spatFreqNum <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(ACh_avg<span class="sc">$</span>SpatialFreq))</span>
+<span id="cb350-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-3" tabindex="-1"></a>ACh_avg_4rep <span class="ot">&lt;-</span> <span class="fu">rbind</span>(ACh_avg, ACh_avg)</span>
+<span id="cb350-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-4" tabindex="-1"></a>ACh_avg_4rep<span class="sc">$</span>Repetition <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> spatFreqNum)</span>
+<span id="cb350-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-5" tabindex="-1"></a>ACh_avg_4rep[<span class="dv">25</span><span class="sc">:</span><span class="fu">nrow</span>(ACh_avg_4rep), <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> ACh_avg_4rep[<span class="dv">25</span><span class="sc">:</span><span class="fu">nrow</span>(ACh_avg_4rep), <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">+</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">24</span>), <span class="dv">1</span>)</span>
+<span id="cb350-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb350-6" tabindex="-1"></a>ACh_avg_4rep<span class="sc">$</span>Repetition <span class="ot">&lt;-</span> <span class="fu">factor</span>(ACh_avg_4rep<span class="sc">$</span>Repetition)</span></code></pre></div>
+<p>We can specify the number of columns (ex. <code>ncol = 2</code>) and rows (ex. <code>nrow = 2</code>) inside the function <code>facet_wrap()</code>, as shown in the example below.</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-1" tabindex="-1"></a>ACh_avg_4rep <span class="sc">%&gt;%</span></span>
+<span id="cb351-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb351-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-3" tabindex="-1"></a>    <span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens,</span>
+<span id="cb351-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-4" tabindex="-1"></a>    <span class="at">group =</span> Repetition, <span class="at">color =</span> Repetition,</span>
+<span id="cb351-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-5" tabindex="-1"></a>    <span class="at">fill =</span> Repetition,</span>
+<span id="cb351-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-6" tabindex="-1"></a>    <span class="at">alpha =</span> Repetition</span>
+<span id="cb351-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-7" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb351-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-8" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb351-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-9" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb351-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-10" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb351-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-11" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb351-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-12" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb351-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-13" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb351-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-14" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb351-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-15" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;yelloworange&quot;</span>, <span class="st">&quot;crimson&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb351-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-16" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;viridian&quot;</span>, <span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb351-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-17" tabindex="-1"></a>  <span class="fu">scale_alpha_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb351-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-18" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb351-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-19" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb351-20"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-20" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Repetition,</span>
+<span id="cb351-21"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-21" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb351-22"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-22" tabindex="-1"></a>    <span class="at">labeller =</span> <span class="fu">as_labeller</span>(<span class="fu">c</span>(</span>
+<span id="cb351-23"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-23" tabindex="-1"></a>      <span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 1&quot;</span>,</span>
+<span id="cb351-24"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-24" tabindex="-1"></a>      <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 2&quot;</span>,</span>
+<span id="cb351-25"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-25" tabindex="-1"></a>      <span class="st">&quot;3&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 3&quot;</span>,</span>
+<span id="cb351-26"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-26" tabindex="-1"></a>      <span class="st">&quot;4&quot;</span> <span class="ot">=</span> <span class="st">&quot;Repetition 4&quot;</span></span>
+<span id="cb351-27"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-27" tabindex="-1"></a>    ))</span>
+<span id="cb351-28"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-28" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb351-29"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-29" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb351-30"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb351-30" tabindex="-1"></a>  <span class="fu">sm_facet_header</span>(<span class="at">font_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-275-1.png" width="624" /></p>
+<p>Notice that when <code>facet_wrap()</code> is used, there is no need to create variable for each plot like we have done in Chapter 5 and use <code>sm_common_axis()</code>. The preference can vary depending on the user. Rather than using <code>facet_wrap()</code>, however, I still prefer to store each plot separately so that I can have freedom to decide where to place each panel wherever I want using <code>sm_common_axis()</code>.</p>
+<p>Also, make sure that when you combine the plots using <code>facet_wrap()</code> you set the size of the figure properly within the <code>save_plot()</code> function or else the figure will appear to be too crowded. You can use <code>base_height</code> and <code>base_width</code> arguments within <code>facet_wrap()</code>.</p>
+<p>Another issue with plotting each contrast sensitivity function per panel is that it is visually difficult to compare whether the functions between the panels are different. One way to overcome this problem is to plot all the plots together. In this case, legend is necessary, which can be generated using <code>sm_hgrid(legends = TRUE)</code>. Let’s use the data frame <code>ACh_avg</code> which has two levels in the <code>Repetition</code> column.</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-1" tabindex="-1"></a>ACh_avg <span class="sc">%&gt;%</span></span>
+<span id="cb353-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb353-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-3" tabindex="-1"></a>    <span class="at">x =</span> SpatialFreq, <span class="at">y =</span> avgSens,</span>
+<span id="cb353-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-4" tabindex="-1"></a>    <span class="at">group =</span> Repetition, <span class="at">color =</span> Repetition,</span>
+<span id="cb353-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-5" tabindex="-1"></a>    <span class="at">fill =</span> Repetition</span>
+<span id="cb353-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-6" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb353-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-7" tabindex="-1"></a>  <span class="fu">sm_ribbonCSF</span>(<span class="fu">aes</span>(</span>
+<span id="cb353-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-8" tabindex="-1"></a>    <span class="at">ymin =</span> avgSens <span class="sc">-</span> stdDevSens,</span>
+<span id="cb353-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-9" tabindex="-1"></a>    <span class="at">ymax =</span> avgSens <span class="sc">+</span> stdDevSens</span>
+<span id="cb353-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-10" tabindex="-1"></a>  ), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb353-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-11" tabindex="-1"></a>  <span class="fu">sm_CSF</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb353-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-12" tabindex="-1"></a>  <span class="fu">sm_hgrid</span>(<span class="at">legends =</span> T) <span class="sc">+</span></span>
+<span id="cb353-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;wine&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb353-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-14" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">sm_color</span>(<span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;viridian&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb353-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Spatial frequency (c/deg)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb353-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-16" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Averaged sensitivity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb353-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-17" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb353-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>)) <span class="sc">+</span></span>
+<span id="cb353-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb353-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Achromatic CSF (n=51)&quot;</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace
+## the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-276-1.png" width="336" /></p>
+<p>We see that these two curves are nearly identical, except that the green curve is uniformly higher than the red curve. In the next chapter, we will discuss about some techniques on how to analyze contrast sensitivity data.</p>
+</div>
+</div>
+<div id="chapter-16-factor-analysis-and-csf" class="section level3 hasAnchor">
+<h3>Chapter 16: Factor Analysis and CSF<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#chapter-16-factor-analysis-and-csf" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="citing-the-guide-and-the-package-1" class="section level4 unnumbered hasAnchor">
+<h4>Citing the Guide and the Package<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#citing-the-guide-and-the-package-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If you have used the <strong>smCSF</strong> package for your research, please cite the paper below:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Min, S. H.</strong>, &amp; Reynaud, A. (2024). Applying Resampling and Visualization Methods in Factor Analysis to Model Human Spatial Vision. <strong><em>Investigative Ophthalmology &amp; Visual Science</em></strong>, 65(1), 17-17.</li>
+</ol>
+</div>
+<div id="getting-started-1" class="section level4 unnumbered hasAnchor">
+<h4>Getting Started<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#getting-started-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb355-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb355-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb355-2" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb355-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb355-3" tabindex="-1"></a><span class="fu">library</span>(smplot2)</span>
+<span id="cb355-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb355-4" tabindex="-1"></a><span class="fu">library</span>(smCSF)</span>
+<span id="cb355-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb355-5" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div>
+<p>In this chapter, we will use a public dataset of achromatic contrast sensitivity from 51 normally sighted observers.</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;./exercises/exercises_lecture2/data_ACh.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb356-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Subject, SpatialFreq) <span class="sc">%&gt;%</span></span>
+<span id="cb356-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb356-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-4" tabindex="-1"></a>    <span class="at">Sensitivity =</span> <span class="fu">mean</span>(Sensitivity),</span>
+<span id="cb356-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-5" tabindex="-1"></a>    <span class="at">Repetition =</span> <span class="st">&quot;avg&quot;</span></span>
+<span id="cb356-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb356-6" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Factor analysis is a technique to identify latent factors that produce local patterns/correlations in a high-dimensional dataset. In other words, it aims to reduce the number of dimensions in the data.</p>
+<p>In this dataset, there are 12 unique spatial frequencies. The sensitivity data were collected at these spatial frequencies to produce the contrast sensitivity function, which has a peak and has an asymmetrical shape. There are 12 dimensions total.</p>
+<p>Can the curve be summarised using less than 12 dimensions? This is the purpose of factor analysis.</p>
+<p>One way to extract an adequate number of factors/dimensions is to draw a scree plot.</p>
+</div>
+<div id="eigenvalues" class="section level4 hasAnchor">
+<h4>Eigenvalues<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#eigenvalues" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The scree plot has a y-axis of the <strong>eigenvalue</strong>, which refers the amount of variance of the data from the factor of interest. Essentially, the higher the eigenvalue, the more important the factor is in the dataset.</p>
+<p>Some methods for factor analysis determine the number of factors in a potential factor model based on eigenvalues. The Guttman Rule (i.e. K1) extracts all factors with eigenvalues larger than 1.</p>
+<p>Another method that relies on eigenvalues to determine the number of factors is parallel analysis.</p>
+</div>
+<div id="parallel-analysis" class="section level4 hasAnchor">
+<h4>Parallel analysis<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#parallel-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Parallel analysis by Horn is a statistical method to determine the number of factors in an exploratory factor model. It uses Monte Carlo simulation to generate a dataset of random numbers. This random dataset has the same size of the real dataset. Eigenvalues are obtained from the random dataset.</p>
+<p>We will use <code>psych</code> package’s function <code>fa.parallel</code> to perform parallel analysis.</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb357-1" tabindex="-1"></a>df_mat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://www.smin95.com/data_ACh_mat.csv&quot;</span>) <span class="co"># ACh data in matrix form</span></span>
+<span id="cb357-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb357-2" tabindex="-1"></a>df_mat1 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df_mat[, <span class="sc">-</span><span class="dv">1</span>])</span></code></pre></div>
+<p>After we have extracted the data that are in matrix form (not data frame), which is required to properly use functions of the <code>psych</code> package, we can then perform parallel analysis.</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb358-1" tabindex="-1"></a><span class="fu">fa.parallel</span>(df_mat1, <span class="at">fa =</span> <span class="st">&quot;fa&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-280-1.png" width="403.2" /></p>
+<pre><code>## Parallel analysis suggests that the number of factors =  2  and the number of components =  NA</code></pre>
+<p>Based on the parallel analysis, we see that there are two factors with eigenvalues larger than those from the random data. Therefore, it supports a two-factor model.</p>
+</div>
+<div id="non-parametric-bootstrapping" class="section level4 hasAnchor">
+<h4>Non-parametric bootstrapping<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#non-parametric-bootstrapping" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Guttman rule can suggest different numbers of factors depending on the sample. For example, in one dataset, factor A can have an eigenvalue larger than 1 but in another dataset from another population factor B can have an eigenvalue lower than 1. Therefore the number of factors that is extracted can vary depending on the local sample. This creates variability in results. This issue can also be observed in parallel analysis.</p>
+<p>Therefore, it might be better to include a range of uncertainty of eigenvalues so that one can better be informed about the possible range of eigenvalues in a population. This can be done by plotting 95% confidence interval of eigenvalues.</p>
+<p>In this section, we will perform non-parametric bootstrapping to compute the confidence intervals of the eigenvalues. However, it turns out, if we resample the contrast sensitivity data directly, it removes the local correlation and therefore the influence of latent factors on the dataset, thereby erasing covariance from its existence.</p>
+<p>Here is the original data set’s covariance of achromatic sensitivity.</p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb360-1" tabindex="-1"></a><span class="fu">cov</span>(df_mat1)</span></code></pre></div>
+<pre><code>##           0.25ACh   0.35ACh   0.48ACh   0.68ACh   0.94ACh   1.31ACh  1.83ACh
+## 0.25ACh 22.553853 23.429188 24.498759 26.144819 27.119722 25.625359 21.60603
+## 0.35ACh 23.429188 28.352093 33.069624 35.968829 36.247616 32.082207 24.74990
+## 0.48ACh 24.498759 33.069624 43.379601 49.569655 50.700145 44.517286 33.59999
+## 0.68ACh 26.144819 35.968829 49.569655 60.799455 65.982921 61.091867 49.19744
+## 0.94ACh 27.119722 36.247616 50.700145 65.982921 76.568315 75.668977 65.44809
+## 1.31ACh 25.625359 32.082207 44.517286 61.091867 75.668977 80.867183 76.21127
+## 1.83ACh 21.606032 24.749903 33.599993 49.197444 65.448091 76.211272 78.52685
+## 2.54ACh 16.122200 16.586739 21.887087 34.913235 50.230931 63.817194 71.38985
+## 3.54ACh 10.666987  9.723740 12.519950 22.282367 34.652600 47.611582 57.03988
+## 4.93ACh  6.315921  5.102076  6.577193 13.174275 21.766266 31.660552 39.90512
+## 6.87ACh  3.399220  2.468148  3.327873  7.293607 12.380894 18.588982 24.32394
+## 9.57ACh  1.687677  1.094862  1.576529  3.604515  6.087617  9.344805 12.76669
+##          2.54ACh  3.54ACh   4.93ACh   6.87ACh   9.57ACh
+## 0.25ACh 16.12220 10.66699  6.315921  3.399220  1.687677
+## 0.35ACh 16.58674  9.72374  5.102076  2.468148  1.094862
+## 0.48ACh 21.88709 12.51995  6.577193  3.327873  1.576529
+## 0.68ACh 34.91323 22.28237 13.174275  7.293607  3.604515
+## 0.94ACh 50.23093 34.65260 21.766266 12.380894  6.087617
+## 1.31ACh 63.81719 47.61158 31.660552 18.588982  9.344805
+## 1.83ACh 71.38985 57.03988 39.905123 24.323943 12.766688
+## 2.54ACh 69.65836 59.06055 43.467590 27.852288 15.605554
+## 3.54ACh 59.06055 52.88406 41.115079 28.023283 16.971267
+## 4.93ACh 43.46759 41.11508 34.012289 24.895661 16.353468
+## 6.87ACh 27.85229 28.02328 24.895661 19.676502 13.963902
+## 9.57ACh 15.60555 16.97127 16.353468 13.963902 10.614072</code></pre>
+<p>Covariance is high. If the dataset’s covariance is high, then it is suitable for factor analysis, as demonstrated by Kaiser, Meyer and Olkin test.</p>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb362-1" tabindex="-1"></a><span class="fu">KMO</span>(df_mat1)</span></code></pre></div>
+<pre><code>## Kaiser-Meyer-Olkin factor adequacy
+## Call: KMO(r = df_mat1)
+## Overall MSA =  0.58
+## MSA for each item = 
+## 0.25ACh 0.35ACh 0.48ACh 0.68ACh 0.94ACh 1.31ACh 1.83ACh 2.54ACh 3.54ACh 4.93ACh 
+##    0.64    0.62    0.66    0.68    0.65    0.77    0.61    0.54    0.50    0.49 
+## 6.87ACh 9.57ACh 
+##    0.47    0.43</code></pre>
+<p>The test reveals that covariance is adequately high (test score &gt; 0.5) at most spatial frequencies, suggesting that factor analysis is suitable.</p>
+<p>Now I demonstrate what happens to covariance after resampling with replacement.</p>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
+<span id="cb364-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-2" tabindex="-1"></a></span>
+<span id="cb364-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-3" tabindex="-1"></a>nObs <span class="ot">&lt;-</span> <span class="dv">51</span></span>
+<span id="cb364-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-4" tabindex="-1"></a>nSF <span class="ot">&lt;-</span> <span class="fu">ncol</span>(df_mat1) <span class="co"># 12 SFs total</span></span>
+<span id="cb364-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-5" tabindex="-1"></a>resampled_ACh <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> nObs, <span class="at">ncol =</span> nSF)</span>
+<span id="cb364-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-6" tabindex="-1"></a></span>
+<span id="cb364-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-7" tabindex="-1"></a><span class="cf">for</span> (iSF <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSF) {</span>
+<span id="cb364-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-8" tabindex="-1"></a>  resampled_ACh[, iSF] <span class="ot">&lt;-</span> <span class="fu">sample</span>(df_mat1[, iSF], nObs, <span class="at">replace =</span> T)</span>
+<span id="cb364-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb364-9" tabindex="-1"></a>}</span></code></pre></div>
+<p>Here is the re-sampled data set. We can also plot the re-sampled data against the experimental data using base <code>R</code> (not <code>ggplot2</code>) since we are using matrices to store data. Plotting in base <code>R</code> can be more tedious but it can be quite fun as you can control every aspect of the plot.</p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-1" tabindex="-1"></a>avgs_expt <span class="ot">&lt;-</span> avgs_resampled <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">&quot;double&quot;</span>, nSF)</span>
+<span id="cb365-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-2" tabindex="-1"></a></span>
+<span id="cb365-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-3" tabindex="-1"></a><span class="cf">for</span> (iSF <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSF) {</span>
+<span id="cb365-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-4" tabindex="-1"></a>  avgs_resampled[[iSF]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(resampled_ACh[, iSF])</span>
+<span id="cb365-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-5" tabindex="-1"></a>  avgs_expt[[iSF]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(df_mat1[, iSF])</span>
+<span id="cb365-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-6" tabindex="-1"></a>}</span>
+<span id="cb365-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-7" tabindex="-1"></a></span>
+<span id="cb365-8"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="fl">4.1</span>, <span class="fl">1.2</span>, <span class="fl">1.2</span>))</span>
+<span id="cb365-9"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-9" tabindex="-1"></a></span>
+<span id="cb365-10"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-10" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq), <span class="fu">log</span>(avgs_resampled),</span>
+<span id="cb365-11"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-11" tabindex="-1"></a>  <span class="at">log =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb365-12"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-12" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fu">max</span>(<span class="fu">log</span>(<span class="fu">c</span>(avgs_resampled, avgs_expt))) <span class="sc">+</span> <span class="dv">1</span>),</span>
+<span id="cb365-13"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-13" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Spatial frequency&quot;</span>,</span>
+<span id="cb365-14"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-14" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Contrast sensitivity&quot;</span>, <span class="at">col =</span> <span class="fu">sm_color</span>(<span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb365-15"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-15" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">15</span>, <span class="at">cex =</span> <span class="fl">1.4</span></span>
+<span id="cb365-16"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-16" tabindex="-1"></a>)</span>
+<span id="cb365-17"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-17" tabindex="-1"></a></span>
+<span id="cb365-18"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-18" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq), <span class="fu">log</span>(avgs_resampled),</span>
+<span id="cb365-19"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-19" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">sm_color</span>(<span class="st">&quot;blue&quot;</span>), <span class="at">cex =</span> <span class="dv">2</span></span>
+<span id="cb365-20"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-20" tabindex="-1"></a>)</span>
+<span id="cb365-21"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-21" tabindex="-1"></a></span>
+<span id="cb365-22"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-22" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq) <span class="sc">+</span> <span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq) <span class="sc">*</span> <span class="fl">0.1</span>,</span>
+<span id="cb365-23"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-23" tabindex="-1"></a>  <span class="fu">log</span>(avgs_expt),</span>
+<span id="cb365-24"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-24" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="fu">sm_color</span>(<span class="st">&quot;red&quot;</span>), <span class="at">cex =</span> <span class="fl">1.4</span></span>
+<span id="cb365-25"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-25" tabindex="-1"></a>)</span>
+<span id="cb365-26"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-26" tabindex="-1"></a></span>
+<span id="cb365-27"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-27" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq) <span class="sc">+</span> <span class="fu">unique</span>(df<span class="sc">$</span>SpatialFreq) <span class="sc">*</span> <span class="fl">0.1</span>,</span>
+<span id="cb365-28"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-28" tabindex="-1"></a>  <span class="fu">log</span>(avgs_expt),</span>
+<span id="cb365-29"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-29" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">sm_color</span>(<span class="st">&quot;red&quot;</span>), <span class="at">cex =</span> <span class="dv">2</span></span>
+<span id="cb365-30"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-30" tabindex="-1"></a>)</span>
+<span id="cb365-31"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-31" tabindex="-1"></a></span>
+<span id="cb365-32"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-32" tabindex="-1"></a><span class="fu">legend</span>(<span class="fl">0.3</span>, <span class="fl">1.5</span>,</span>
+<span id="cb365-33"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-33" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Resampled data&quot;</span>, <span class="st">&quot;Real data&quot;</span>),</span>
+<span id="cb365-34"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-34" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">sm_color</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">pch =</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">pt.cex =</span> <span class="fl">1.8</span>,</span>
+<span id="cb365-35"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-35" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span></span>
+<span id="cb365-36"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb365-36" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-284-1.png" width="345.6" /></p>
+<p>The two data sets look very similar, however, we will see that one of them (real data) can be used for factor analysis because it properly retains covariance. Therefore, it seems that factor analysis captures the <em>invisible</em> pattern of the data.</p>
+<p>The covariance of the re-sampled data is shown below.</p>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb366-1" tabindex="-1"></a><span class="fu">cov</span>(resampled_ACh)</span></code></pre></div>
+<pre><code>##             [,1]      [,2]         [,3]      [,4]       [,5]       [,6]
+##  [1,] 21.4627680  5.494515 10.221965102  2.729971 -8.5757210  7.4823660
+##  [2,]  5.4945145 22.568920  4.826946260 -5.207635 -3.0187011  2.6928204
+##  [3,] 10.2219651  4.826946 25.536795106  4.487807  4.5788106  0.9115256
+##  [4,]  2.7299707 -5.207635  4.487807344 64.213237 -6.6327835 -4.6702260
+##  [5,] -8.5757210 -3.018701  4.578810639 -6.632783 70.0085470 -0.9150367
+##  [6,]  7.4823660  2.692820  0.911525567 -4.670226 -0.9150367 76.9832954
+##  [7,] -2.6890863 -1.019733  1.061256799  6.332680 -7.8498872  1.1816949
+##  [8,] -4.4720287  2.642418 -0.625930137 -1.147609 -0.6128172 15.0063584
+##  [9,] -2.1897953 -3.724741  2.939968833 -6.660292 -0.1807790 -8.3721325
+## [10,]  1.8767583 -0.745601 -0.429574950 -5.335867  3.9479842  1.3837711
+## [11,] -2.6829180 -2.175812 -0.008150298  2.882779  2.7068057 -0.1694499
+## [12,]  0.7907782  3.129077  2.218694747  5.489131  3.3182865 -4.0557000
+##             [,7]       [,8]       [,9]      [,10]        [,11]      [,12]
+##  [1,] -2.6890863 -4.4720287 -2.1897953  1.8767583 -2.682918028  0.7907782
+##  [2,] -1.0197334  2.6424185 -3.7247411 -0.7456010 -2.175812094  3.1290769
+##  [3,]  1.0612568 -0.6259301  2.9399688 -0.4295749 -0.008150298  2.2186947
+##  [4,]  6.3326798 -1.1476088 -6.6602917 -5.3358669  2.882779438  5.4891305
+##  [5,] -7.8498872 -0.6128172 -0.1807790  3.9479842  2.706805733  3.3182865
+##  [6,]  1.1816949 15.0063584 -8.3721325  1.3837711 -0.169449871 -4.0557000
+##  [7,] 54.0277401 -4.2848924  3.0920237 -0.4751554 -0.748155767 -2.4362892
+##  [8,] -4.2848924 58.1828473  5.0594523  0.9514982  1.830535708  2.3200300
+##  [9,]  3.0920237  5.0594523 45.7463808  7.9552430 -2.847712952 -0.8958255
+## [10,] -0.4751554  0.9514982  7.9552430 31.6710052 -0.171881025 -4.3512357
+## [11,] -0.7481558  1.8305357 -2.8477130 -0.1718810  9.950180547 -0.8796060
+## [12,] -2.4362892  2.3200300 -0.8958255 -4.3512357 -0.879605958  9.2390137</code></pre>
+<p>We now see that the re-sampled data set has a much lower covariance in general. Since covariance is too low, it is not suitable to perform factor analysis.</p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb368-1" tabindex="-1"></a><span class="fu">KMO</span>(resampled_ACh)</span></code></pre></div>
+<pre><code>## Kaiser-Meyer-Olkin factor adequacy
+## Call: KMO(r = resampled_ACh)
+## Overall MSA =  0.41
+## MSA for each item = 
+##  [1] 0.43 0.51 0.42 0.41 0.28 0.37 0.34 0.32 0.39 0.43 0.48 0.44</code></pre>
+<p>The values from the KMO test are lower than 0.5 at most spatial frequencies, suggesting the data set is not suitable for factor analysis.</p>
+<p>We can still try parallel analysis and see what happens.</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb370-1" tabindex="-1"></a><span class="fu">fa.parallel</span>(resampled_ACh, <span class="at">fa =</span> <span class="st">&quot;fa&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-287-1.png" width="403.2" /></p>
+<pre><code>## Parallel analysis suggests that the number of factors =  1  and the number of components =  NA</code></pre>
+<p>There is no identified factor because there is no covariance. However, re-sampling is required to compute 95% confidence interval.</p>
+<p>A solution is to use a model that captures the contrast sensitivity function, compute parameters that retain the overall characteristic of the curve for each subject, and then re-sample the parameters with replacement. Then using the re-sampled parameters, one can refit the sensitivity data. In this example, we will re-sample for 100 times (<code>nSim &lt;- 100</code>).</p>
+<p>Calculation of the parameters from a data frame that contains contrast sensitivity data can be perfomed with <code>sm_params_list()</code>.</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-1" tabindex="-1"></a>param_res <span class="ot">&lt;-</span> <span class="fu">sm_params_list</span>(</span>
+<span id="cb372-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-2" tabindex="-1"></a>  <span class="at">subjects =</span> <span class="st">&quot;Subject&quot;</span>,</span>
+<span id="cb372-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-3" tabindex="-1"></a>  <span class="at">conditions =</span> <span class="st">&quot;Repetition&quot;</span>,</span>
+<span id="cb372-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-4" tabindex="-1"></a>  <span class="at">x =</span> <span class="st">&quot;SpatialFreq&quot;</span>,</span>
+<span id="cb372-5"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-5" tabindex="-1"></a>  <span class="at">values =</span> <span class="st">&quot;Sensitivity&quot;</span>,</span>
+<span id="cb372-6"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-6" tabindex="-1"></a>  <span class="at">data =</span> df</span>
+<span id="cb372-7"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb372-7" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] &quot;CSF parameters = Sensitivity ~ SpatialFreq&quot;</code></pre>
+<p>After we compute the four parameters of the parabola model of CSF for each subject, we resample them with replacement. Note that the sample size with resampled data should be identical to the original sample size (<code>nObs &lt;- 51</code>).</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb374-1" tabindex="-1"></a>nObs <span class="ot">&lt;-</span> <span class="dv">51</span></span>
+<span id="cb374-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb374-2" tabindex="-1"></a>nSim <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># 100 simulations</span></span></code></pre></div>
+<p>Then, we can perform non-parametric bootstrapping and obtain 95% confidence interval of the eigenvalues using <code>sm_np_boot()</code>. It produces a data frame with the confidence intervals from re-sampling and mean eigenvalue from the multiple rounds of re-sampling. This is stored on <code>boot_res</code>.</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb375-1" tabindex="-1"></a>boot_res <span class="ot">&lt;-</span> <span class="fu">sm_np_boot</span>(param_res, <span class="at">n =</span> nObs, <span class="at">nSim =</span> nSim)</span>
+<span id="cb375-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb375-2" tabindex="-1"></a>boot_res</span></code></pre></div>
+<pre><code>## # A tibble: 24 × 5
+##       mean downCI    upCI group  nFac
+##      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+##  1  8.51    7.36   9.75   data      1
+##  2  2.09    1.25   3.07   data      2
+##  3  0.417   0.140  0.765  data      3
+##  4 -0.0858 -0.152 -0.0413 data      4
+##  5 -0.116  -0.174 -0.0798 data      5
+##  6 -0.150  -0.214 -0.101  data      6
+##  7 -0.207  -0.296 -0.132  data      7
+##  8 -0.253  -0.378 -0.156  data      8
+##  9 -0.319  -0.438 -0.200  data      9
+## 10 -0.380  -0.539 -0.231  data     10
+## # ℹ 14 more rows</code></pre>
+<p>By using <code>sm_plot_boot()</code>, we can then draw the scree plot with the eigenvalues and their 95% confidence intervals. It draws it by using <code>ggplot2</code>, so you can customise the aesthetics by adding (<code>+</code>) ggplot2 functions as I have done here with <code>ylab()</code>.</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb377-1" tabindex="-1"></a><span class="fu">sm_plot_boot</span>(boot_res, <span class="at">shapes =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb377-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb377-2" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Eigenvalue&quot;</span>) <span class="ot">-&gt;</span> eigen1</span>
+<span id="cb377-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb377-3" tabindex="-1"></a></span>
+<span id="cb377-4"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb377-4" tabindex="-1"></a>eigen1</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-292-1.png" width="364.8" /></p>
+<p>We can then extract the number of factors where the 95% confidence intervals of the eigenvalues from the observed data do not overlap with those from randomly generated data from parallel analysis. In this example, we can develop an exploratory model with two factors.</p>
+</div>
+<div id="factor-analysis" class="section level4 hasAnchor">
+<h4>Factor Analysis<a href="lecture-2---factor-analysis-for-human-spatial-vision.html#factor-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Now, we perform factor analysis with two factors. In this example, we perform varimax rotation to increase the interpretability of the results from factor analysis.</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb378-1" tabindex="-1"></a>nFac <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb378-2"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb378-2" tabindex="-1"></a>fa_res <span class="ot">&lt;-</span> <span class="fu">fa</span>(df_mat1, nFac, <span class="at">fm =</span> <span class="st">&quot;minres&quot;</span>, <span class="at">rotate =</span> <span class="st">&quot;varimax&quot;</span>)</span>
+<span id="cb378-3"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb378-3" tabindex="-1"></a><span class="fu">print</span>(fa_res<span class="sc">$</span>loadings, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## 
+## Loadings:
+##         MR1    MR2   
+## 0.25ACh  0.778       
+## 0.35ACh  0.926       
+## 0.48ACh  0.967       
+## 0.68ACh  0.957       
+## 0.94ACh  0.903       
+## 1.31ACh  0.797  0.524
+## 1.83ACh  0.628  0.707
+## 2.54ACh         0.844
+## 3.54ACh         0.947
+## 4.93ACh         0.997
+## 6.87ACh         0.950
+## 9.57ACh         0.810
+## 
+##                  MR1   MR2
+## SS loadings    5.442 5.085
+## Proportion Var 0.453 0.424
+## Cumulative Var 0.453 0.877</code></pre>
+<p>It seems that two factors can describe enough of the achromatic data. The proportion of variance from these two factors are 87.7%. However, there needs some more work to do to confirm whether a two-factor model adequately captures the covariance of the achromatic data.</p>
 
+</div>
+</div>
 </div>
 </div>
             </section>

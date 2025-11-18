@@ -45,12 +45,18 @@ library(smplot2)
 library(smCSF)
 ```
 
+```{r, include=F}
+library(tidyverse)
+library(smplot2)
+library(smCSF)
+```
+
 ```{r, eval = F}
-ACh <- read_csv("https://www.smin95.com/data_ACh.csv")
+ACh <- read_csv("./exercises/exercises_lecture2/data_Ach.csv")
 ```
 
 ```{r, echo = F}
-ACh <- read_csv("data_Ach.csv")
+ACh <- read_csv("./exercises/exercises_lecture2/data_Ach.csv")
 ```
 
 ```{r}
@@ -546,7 +552,7 @@ library(psych)
 In this chapter, we will use a public dataset of achromatic contrast sensitivity from 51 normally sighted observers.
 
 ```{r, message=F, warning=F}
-df <- read_csv("https://www.smin95.com/data_ACh.csv") %>%
+df <- read_csv("./exercises/exercises_lecture2/data_ACh.csv") %>%
   group_by(Subject, SpatialFreq) %>%
   summarise(
     Sensitivity = mean(Sensitivity),
@@ -720,7 +726,7 @@ boot_res
 ```
 
 ```{r, echo = F, message=F, warning=F}
-boot_res <- read_csv("boot_res.csv")
+boot_res <- read_csv("./exercises/exercises_lecture2/boot_res.csv")
 boot_res
 ```
 
