@@ -23,4 +23,69 @@ You will also need a [GitHub account](http://github.com/).
 
 ## Lab
 
-Materials from this section can be downloaded [from here](https://github.com/aosakwe/CBW-INR-Git-With-R).
+<!--Materials from this section can be downloaded [from here](https://github.com/aosakwe/CBW-INR-Git-With-R).-->
+
+### Activity 0: Initialize a Git Repository
+
+Step 1: Create a new R Project using the project icon in the top-right
+
+Step 2: Select "Create new repository"
+
+Step 3: Select "Quarto Website", name the project and check the "create a git repository" box
+
+You should now see a git tab in your top-right pane for this new RStudio project.
+
+In case the ‘create a git repository’ does not appear, click to Tools tab in the top of the window:
+1. Select Version Control and set the version control system to Git
+2. You should now see a Git tab in the top-right pane
+
+You can now go check the index.qmd file and click "render". It will automatically open your browser and show the Website that you just created.
+
+For indication: <br>
+- index.qmd: Home page <br>
+- about.qmd: About page
+
+
+### Activity 1: Create and track a Text File with Git
+
+Step 1: Create a text file (or code script) within the project
+
+Step 2: Open the Git tab and see if the file is detected. If yes, create a commit.
+
+Step 3: Look at your commit history to see your commit!
+
+Step 4: Modify the file and commit the changes. Try and make informative commit messages!
+
+You can use the Module 5' files to make your changes.
+
+### Activity 2 – Revert a file to a previous commit
+
+Step 1: Make an unwanted change to your file
+
+Step 2: Use your staging area to discard the changes
+
+Step 3: Make another unwanted change and commit it
+
+Step 4: Now use your commit history to revert the commit!
+
+Extra Step: Try using the reset feature – when would this be helpful?
+
+### Activity 3 – Create a new branch
+
+Step 1: Click the “new branch” button in the Git tab
+
+Step 2: Make changes to your file in the new branch and commit it
+
+Step 3: Switch back to the main branch and open the file, what do you notice?
+
+### Activity 4 – Merging Branches
+
+Step 1: Switch to the main branch
+
+Step 2: Open the terminal in the console
+
+Step 3: Run ```git merge other_branch_name```
+
+Step 4: Compare both branches – they should now be identical!
+
+

@@ -256,7 +256,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html"><i class="fa fa-check"></i>Practical 5</a>
 <ul>
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lecture-6"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-script"><i class="fa fa-check"></i>Example Script</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-notebook"><i class="fa fa-check"></i>Example Notebook</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="lecture-3---smoothing-curves-for-dna-methylation.html"><a href="lecture-3---smoothing-curves-for-dna-methylation.html"><i class="fa fa-check"></i>Lecture 3 - Smoothing Curves for DNA Methylation</a>
 <ul>
@@ -267,7 +271,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#requirements-3"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lecture-8"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-0-initialize-a-git-repository"><i class="fa fa-check"></i>Activity 0: Initialize a Git Repository</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-1-create-and-track-a-text-file-with-git"><i class="fa fa-check"></i>Activity 1: Create and track a Text File with Git</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-2-revert-a-file-to-a-previous-commit"><i class="fa fa-check"></i>Activity 2 – Revert a file to a previous commit</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-3-create-a-new-branch"><i class="fa fa-check"></i>Activity 3 – Create a new branch</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-4-merging-branches"><i class="fa fa-check"></i>Activity 4 – Merging Branches</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <h1 id="sponsors">Sponsors</h1>
@@ -947,7 +958,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We can still try parallel analysis and see what happens.</p>
 <div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="lecture-2---factor-analysis-for-human-spatial-vision.html#cb370-1" tabindex="-1"></a><span class="fu">fa.parallel</span>(resampled_ACh, <span class="at">fa =</span> <span class="st">&quot;fa&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-287-1.png" width="403.2" /></p>
-<pre><code>## Parallel analysis suggests that the number of factors =  1  and the number of components =  NA</code></pre>
+<pre><code>## Parallel analysis suggests that the number of factors =  0  and the number of components =  NA</code></pre>
 <p>There is no identified factor because there is no covariance. However, re-sampling is required to compute 95% confidence interval.</p>
 <p>A solution is to use a model that captures the contrast sensitivity function, compute parameters that retain the overall characteristic of the curve for each subject, and then re-sample the parameters with replacement. Then using the re-sampled parameters, one can refit the sensitivity data. In this example, we will re-sample for 100 times (<code>nSim &lt;- 100</code>).</p>
 <p>Calculation of the parameters from a data frame that contains contrast sensitivity data can be perfomed with <code>sm_params_list()</code>.</p>

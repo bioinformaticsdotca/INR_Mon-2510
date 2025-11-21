@@ -256,7 +256,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html"><i class="fa fa-check"></i>Practical 5</a>
 <ul>
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lecture-6"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-script"><i class="fa fa-check"></i>Example Script</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-notebook"><i class="fa fa-check"></i>Example Notebook</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="lecture-3---smoothing-curves-for-dna-methylation.html"><a href="lecture-3---smoothing-curves-for-dna-methylation.html"><i class="fa fa-check"></i>Lecture 3 - Smoothing Curves for DNA Methylation</a>
 <ul>
@@ -267,7 +271,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#requirements-3"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lecture-8"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-0-initialize-a-git-repository"><i class="fa fa-check"></i>Activity 0: Initialize a Git Repository</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-1-create-and-track-a-text-file-with-git"><i class="fa fa-check"></i>Activity 1: Create and track a Text File with Git</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-2-revert-a-file-to-a-previous-commit"><i class="fa fa-check"></i>Activity 2 – Revert a file to a previous commit</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-3-create-a-new-branch"><i class="fa fa-check"></i>Activity 3 – Create a new branch</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-4-merging-branches"><i class="fa fa-check"></i>Activity 4 – Merging Branches</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <h1 id="sponsors">Sponsors</h1>
@@ -322,8 +333,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="lab-7" class="section level2 hasAnchor">
 <h2>Lab<a href="practical-6.html#lab-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Materials from this section can be downloaded <a href="https://github.com/aosakwe/CBW-INR-Git-With-R">from here</a>.</p>
+<!--Materials from this section can be downloaded [from here](https://github.com/aosakwe/CBW-INR-Git-With-R).-->
+<div id="activity-0-initialize-a-git-repository" class="section level3 hasAnchor">
+<h3>Activity 0: Initialize a Git Repository<a href="practical-6.html#activity-0-initialize-a-git-repository" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Step 1: Create a new R Project using the project icon in the top-right</p>
+<p>Step 2: Select “Create new repository”</p>
+<p>Step 3: Select “Quarto Website”, name the project and check the “create a git repository” box</p>
+<p>You should now see a git tab in your top-right pane for this new RStudio project.</p>
+<p>In case the ‘create a git repository’ does not appear, click to Tools tab in the top of the window:
+1. Select Version Control and set the version control system to Git
+2. You should now see a Git tab in the top-right pane</p>
+<p>You can now go check the index.qmd file and click “render”. It will automatically open your browser and show the Website that you just created.</p>
+<p>For indication: <br>
+- index.qmd: Home page <br>
+- about.qmd: About page</p>
+</div>
+<div id="activity-1-create-and-track-a-text-file-with-git" class="section level3 hasAnchor">
+<h3>Activity 1: Create and track a Text File with Git<a href="practical-6.html#activity-1-create-and-track-a-text-file-with-git" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Step 1: Create a text file (or code script) within the project</p>
+<p>Step 2: Open the Git tab and see if the file is detected. If yes, create a commit.</p>
+<p>Step 3: Look at your commit history to see your commit!</p>
+<p>Step 4: Modify the file and commit the changes. Try and make informative commit messages!</p>
+<p>You can use the Module 5’ files to make your changes.</p>
+</div>
+<div id="activity-2-revert-a-file-to-a-previous-commit" class="section level3 hasAnchor">
+<h3>Activity 2 – Revert a file to a previous commit<a href="practical-6.html#activity-2-revert-a-file-to-a-previous-commit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Step 1: Make an unwanted change to your file</p>
+<p>Step 2: Use your staging area to discard the changes</p>
+<p>Step 3: Make another unwanted change and commit it</p>
+<p>Step 4: Now use your commit history to revert the commit!</p>
+<p>Extra Step: Try using the reset feature – when would this be helpful?</p>
+</div>
+<div id="activity-3-create-a-new-branch" class="section level3 hasAnchor">
+<h3>Activity 3 – Create a new branch<a href="practical-6.html#activity-3-create-a-new-branch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Step 1: Click the “new branch” button in the Git tab</p>
+<p>Step 2: Make changes to your file in the new branch and commit it</p>
+<p>Step 3: Switch back to the main branch and open the file, what do you notice?</p>
+</div>
+<div id="activity-4-merging-branches" class="section level3 hasAnchor">
+<h3>Activity 4 – Merging Branches<a href="practical-6.html#activity-4-merging-branches" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Step 1: Switch to the main branch</p>
+<p>Step 2: Open the terminal in the console</p>
+<p>Step 3: Run <code>git merge other_branch_name</code></p>
+<p>Step 4: Compare both branches – they should now be identical!</p>
 
+</div>
 </div>
 </div>
             </section>

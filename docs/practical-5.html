@@ -256,7 +256,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html"><i class="fa fa-check"></i>Practical 5</a>
 <ul>
 <li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lecture-6"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#lab-5"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-script"><i class="fa fa-check"></i>Example Script</a></li>
+<li class="chapter" data-level="" data-path="practical-5.html"><a href="practical-5.html#example-notebook"><i class="fa fa-check"></i>Example Notebook</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="lecture-3---smoothing-curves-for-dna-methylation.html"><a href="lecture-3---smoothing-curves-for-dna-methylation.html"><i class="fa fa-check"></i>Lecture 3 - Smoothing Curves for DNA Methylation</a>
 <ul>
@@ -267,7 +271,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#requirements-3"><i class="fa fa-check"></i>Requirements</a></li>
 <li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lecture-8"><i class="fa fa-check"></i>Lecture</a></li>
-<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#lab-7"><i class="fa fa-check"></i>Lab</a>
+<ul>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-0-initialize-a-git-repository"><i class="fa fa-check"></i>Activity 0: Initialize a Git Repository</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-1-create-and-track-a-text-file-with-git"><i class="fa fa-check"></i>Activity 1: Create and track a Text File with Git</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-2-revert-a-file-to-a-previous-commit"><i class="fa fa-check"></i>Activity 2 – Revert a file to a previous commit</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-3-create-a-new-branch"><i class="fa fa-check"></i>Activity 3 – Create a new branch</a></li>
+<li class="chapter" data-level="" data-path="practical-6.html"><a href="practical-6.html#activity-4-merging-branches"><i class="fa fa-check"></i>Activity 4 – Merging Branches</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <h1 id="sponsors">Sponsors</h1>
@@ -315,7 +326,230 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="lab-5" class="section level2 hasAnchor">
 <h2>Lab<a href="practical-5.html#lab-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Materials from this section can be downloaded <a href="https://github.com/aosakwe/CBW-INR-RMarkdown-Quarto">from here</a>.</p>
+<div id="example-script" class="section level3 hasAnchor">
+<h3>Example Script<a href="practical-5.html#example-script" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>You can download the <a href="./exercises/exercises_module5/example_script.R">example_script.R here</a>.</p>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="practical-5.html#cb380-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb380-2"><a href="practical-5.html#cb380-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb380-3"><a href="practical-5.html#cb380-3" tabindex="-1"></a></span>
+<span id="cb380-4"><a href="practical-5.html#cb380-4" tabindex="-1"></a><span class="co">#Script for modelling iris species based on sepal characteristics</span></span>
+<span id="cb380-5"><a href="practical-5.html#cb380-5" tabindex="-1"></a><span class="do">## Iris Dataset Modelling</span></span>
+<span id="cb380-6"><a href="practical-5.html#cb380-6" tabindex="-1"></a><span class="co">#The iris dataset is composed of 50 flowers from three different species. </span></span>
+<span id="cb380-7"><a href="practical-5.html#cb380-7" tabindex="-1"></a><span class="co">#Measurements include width and length (centimeters) for petals and sepals of each flower.</span></span>
+<span id="cb380-8"><a href="practical-5.html#cb380-8" tabindex="-1"></a></span>
+<span id="cb380-9"><a href="practical-5.html#cb380-9" tabindex="-1"></a><span class="co">#Filtering out versicolor to run a binary example</span></span>
+<span id="cb380-10"><a href="practical-5.html#cb380-10" tabindex="-1"></a><span class="co">#focus is on viridis and seratosa species</span></span>
+<span id="cb380-11"><a href="practical-5.html#cb380-11" tabindex="-1"></a>mini_iris <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb380-12"><a href="practical-5.html#cb380-12" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;versicolor&#39;</span>)</span>
+<span id="cb380-13"><a href="practical-5.html#cb380-13" tabindex="-1"></a></span>
+<span id="cb380-14"><a href="practical-5.html#cb380-14" tabindex="-1"></a></span>
+<span id="cb380-15"><a href="practical-5.html#cb380-15" tabindex="-1"></a></span>
+<span id="cb380-16"><a href="practical-5.html#cb380-16" tabindex="-1"></a><span class="do">### Scatter Plot of Iris dataset with Sepal Length and Width as axes</span></span>
+<span id="cb380-17"><a href="practical-5.html#cb380-17" tabindex="-1"></a><span class="do">### Points are colored by their species</span></span>
+<span id="cb380-18"><a href="practical-5.html#cb380-18" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb380-19"><a href="practical-5.html#cb380-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb380-20"><a href="practical-5.html#cb380-20" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb380-21"><a href="practical-5.html#cb380-21" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb380-22"><a href="practical-5.html#cb380-22" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Sepal Dimensions by Species&quot;</span>,</span>
+<span id="cb380-23"><a href="practical-5.html#cb380-23" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Sepal Length&quot;</span>,</span>
+<span id="cb380-24"><a href="practical-5.html#cb380-24" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sepal Width&quot;</span></span>
+<span id="cb380-25"><a href="practical-5.html#cb380-25" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-294-1.png" width="672" /></p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="practical-5.html#cb381-1" tabindex="-1"></a><span class="co">#Objective</span></span>
+<span id="cb381-2"><a href="practical-5.html#cb381-2" tabindex="-1"></a><span class="co">#Goal of this analysis is to identify features capable of distinguishing flower species with high accuracy. We achieve this task using the **logistic regression model**, focusing on 1 vs. all comparisons.</span></span>
+<span id="cb381-3"><a href="practical-5.html#cb381-3" tabindex="-1"></a></span>
+<span id="cb381-4"><a href="practical-5.html#cb381-4" tabindex="-1"></a></span>
+<span id="cb381-5"><a href="practical-5.html#cb381-5" tabindex="-1"></a><span class="co">#Training logistic regression model</span></span>
+<span id="cb381-6"><a href="practical-5.html#cb381-6" tabindex="-1"></a>iris.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span>  Sepal.Width,</span>
+<span id="cb381-7"><a href="practical-5.html#cb381-7" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>,</span>
+<span id="cb381-8"><a href="practical-5.html#cb381-8" tabindex="-1"></a>                <span class="at">data =</span> mini_iris)</span></code></pre></div>
+<pre><code>## Warning: glm.fit: algorithm did not converge</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="practical-5.html#cb384-1" tabindex="-1"></a><span class="co">#Calculating class predictions</span></span>
+<span id="cb384-2"><a href="practical-5.html#cb384-2" tabindex="-1"></a>mini_iris<span class="sc">$</span>Prob <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(iris.fit,</span>
+<span id="cb384-3"><a href="practical-5.html#cb384-3" tabindex="-1"></a>                              mini_iris[,<span class="fu">c</span>(<span class="st">&#39;Sepal.Length&#39;</span>,<span class="st">&#39;Sepal.Width&#39;</span>)],</span>
+<span id="cb384-4"><a href="practical-5.html#cb384-4" tabindex="-1"></a>                              <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb384-5"><a href="practical-5.html#cb384-5" tabindex="-1"></a></span>
+<span id="cb384-6"><a href="practical-5.html#cb384-6" tabindex="-1"></a><span class="co">#Assigning class labels</span></span>
+<span id="cb384-7"><a href="practical-5.html#cb384-7" tabindex="-1"></a>mini_iris<span class="sc">$</span>Pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mini_iris<span class="sc">$</span>Prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>,<span class="st">&quot;virginica&quot;</span>, <span class="st">&quot;setosa&quot;</span>)</span>
+<span id="cb384-8"><a href="practical-5.html#cb384-8" tabindex="-1"></a></span>
+<span id="cb384-9"><a href="practical-5.html#cb384-9" tabindex="-1"></a><span class="co">#Comparing to ground truth labels</span></span>
+<span id="cb384-10"><a href="practical-5.html#cb384-10" tabindex="-1"></a>mini_iris<span class="sc">$</span>Result <span class="ot">&lt;-</span> mini_iris<span class="sc">$</span>Species <span class="sc">==</span> mini_iris<span class="sc">$</span>Pred</span>
+<span id="cb384-11"><a href="practical-5.html#cb384-11" tabindex="-1"></a></span>
+<span id="cb384-12"><a href="practical-5.html#cb384-12" tabindex="-1"></a></span>
+<span id="cb384-13"><a href="practical-5.html#cb384-13" tabindex="-1"></a><span class="do">## Visualizing Sepal dimensions by species</span></span>
+<span id="cb384-14"><a href="practical-5.html#cb384-14" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Pred)) <span class="sc">+</span></span>
+<span id="cb384-15"><a href="practical-5.html#cb384-15" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb384-16"><a href="practical-5.html#cb384-16" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb384-17"><a href="practical-5.html#cb384-17" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb384-18"><a href="practical-5.html#cb384-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Training Classification Performance&quot;</span>,</span>
+<span id="cb384-19"><a href="practical-5.html#cb384-19" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Sepal Length&quot;</span>,</span>
+<span id="cb384-20"><a href="practical-5.html#cb384-20" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sepal Width&quot;</span></span>
+<span id="cb384-21"><a href="practical-5.html#cb384-21" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-294-2.png" width="672" /></p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="practical-5.html#cb385-1" tabindex="-1"></a><span class="do">## Repeating analysis between Viridis and versicolor</span></span>
+<span id="cb385-2"><a href="practical-5.html#cb385-2" tabindex="-1"></a>mini_iris <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb385-3"><a href="practical-5.html#cb385-3" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;setosa&#39;</span>)</span>
+<span id="cb385-4"><a href="practical-5.html#cb385-4" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length, <span class="at">y =</span> Petal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb385-5"><a href="practical-5.html#cb385-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb385-6"><a href="practical-5.html#cb385-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb385-7"><a href="practical-5.html#cb385-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb385-8"><a href="practical-5.html#cb385-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Dimensions by Species&quot;</span>,</span>
+<span id="cb385-9"><a href="practical-5.html#cb385-9" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Petal Length&quot;</span>,</span>
+<span id="cb385-10"><a href="practical-5.html#cb385-10" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Petal Width&quot;</span></span>
+<span id="cb385-11"><a href="practical-5.html#cb385-11" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-294-3.png" width="672" /></p>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="practical-5.html#cb386-1" tabindex="-1"></a>iris.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span> Sepal.Width,</span>
+<span id="cb386-2"><a href="practical-5.html#cb386-2" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>,</span>
+<span id="cb386-3"><a href="practical-5.html#cb386-3" tabindex="-1"></a>                <span class="at">data =</span> mini_iris)</span>
+<span id="cb386-4"><a href="practical-5.html#cb386-4" tabindex="-1"></a></span>
+<span id="cb386-5"><a href="practical-5.html#cb386-5" tabindex="-1"></a>iris_pred <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(iris.fit,</span>
+<span id="cb386-6"><a href="practical-5.html#cb386-6" tabindex="-1"></a>                         mini_iris[,<span class="fu">c</span>(<span class="st">&#39;Sepal.Length&#39;</span>,<span class="st">&#39;Sepal.Width&#39;</span>)],</span>
+<span id="cb386-7"><a href="practical-5.html#cb386-7" tabindex="-1"></a>                         <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb386-8"><a href="practical-5.html#cb386-8" tabindex="-1"></a><span class="fu">table</span>(mini_iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="fu">ifelse</span>(iris_pred <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">&#39;virginica&#39;</span>,<span class="st">&#39;versicolor&#39;</span>))</span></code></pre></div>
+<pre><code>## 
+## FALSE  TRUE 
+##    25    75</code></pre>
+</div>
+<div id="example-notebook" class="section level3 hasAnchor">
+<h3>Example Notebook<a href="practical-5.html#example-notebook" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>You can download the <a href="./exercises/exercises_module5/Example_Notebook.Rmd">Example_Notebook.Rmd here</a>.</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="practical-5.html#cb388-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="iris-dataset-modelling" class="section level4 hasAnchor">
+<h4>Iris Dataset Modelling<a href="practical-5.html#iris-dataset-modelling" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The iris dataset is composed of 50 flowers from three different species. Measurements include width and length (centimeters) for petals and sepals of each flower.</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="practical-5.html#cb389-1" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code></pre></div>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<div id="feature-visualization" class="section level5 hasAnchor">
+<h5>Feature visualization<a href="practical-5.html#feature-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="practical-5.html#cb391-1" tabindex="-1"></a>mini_iris <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb391-2"><a href="practical-5.html#cb391-2" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;versicolor&#39;</span>)</span>
+<span id="cb391-3"><a href="practical-5.html#cb391-3" tabindex="-1"></a></span>
+<span id="cb391-4"><a href="practical-5.html#cb391-4" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb391-5"><a href="practical-5.html#cb391-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb391-6"><a href="practical-5.html#cb391-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb391-7"><a href="practical-5.html#cb391-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb391-8"><a href="practical-5.html#cb391-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Sepal Dimensions by Species&quot;</span>,</span>
+<span id="cb391-9"><a href="practical-5.html#cb391-9" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Sepal Length&quot;</span>,</span>
+<span id="cb391-10"><a href="practical-5.html#cb391-10" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sepal Width&quot;</span></span>
+<span id="cb391-11"><a href="practical-5.html#cb391-11" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-297-1.png" width="672" /></p>
+</div>
+</div>
+<div id="objective" class="section level4 hasAnchor">
+<h4>Objective<a href="practical-5.html#objective" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Goal of this analysis is to identify features capable of distinguishing flower species with high accuracy. We achieve this task using the <strong>logistic regression model</strong>, focusing on 1 vs. all comparisons.</p>
+<div id="logistic-regression-1" class="section level5 hasAnchor">
+<h5>Logistic Regression<a href="practical-5.html#logistic-regression-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>From a probabilistic perspective, the logistic regression follows a Bernoulli distribution</p>
+<p><span class="math display">\[
+y_i \sim Bernouilli(\pi_i)
+\]</span></p>
+<p>Where <span class="math inline">\(y_i\)</span> is the classification for observation <span class="math inline">\(i\)</span>. <span class="math inline">\(\pi_i\)</span> represents the Bernoulli parameter for observation <span class="math inline">\(i\)</span> and is calculated as</p>
+<p><span class="math display">\[
+\pi_i = \sigma(x\beta) = P(y_i = 1| x)=  \frac{1}{1 + \exp(-x\beta)}
+\]</span></p>
+<p>Logistic regression extends the linear model by using the sigmoid/logistic function <span class="math inline">\(\sigma(x\beta)\)</span> which allows it to bound its outputs between 0 and 1.</p>
+</div>
+</div>
+<div id="model-fitting" class="section level4 hasAnchor">
+<h4>Model Fitting<a href="practical-5.html#model-fitting" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="practical-5.html#cb392-1" tabindex="-1"></a><span class="do">## Question: can you try using Petal length and width instead?</span></span>
+<span id="cb392-2"><a href="practical-5.html#cb392-2" tabindex="-1"></a><span class="do">##Hint: how are we currently specifying what features are used in the model?</span></span>
+<span id="cb392-3"><a href="practical-5.html#cb392-3" tabindex="-1"></a>iris.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span>  Sepal.Width,</span>
+<span id="cb392-4"><a href="practical-5.html#cb392-4" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>,</span>
+<span id="cb392-5"><a href="practical-5.html#cb392-5" tabindex="-1"></a>                <span class="at">data =</span> mini_iris)</span></code></pre></div>
+<pre><code>## Warning: glm.fit: algorithm did not converge</code></pre>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="practical-5.html#cb395-1" tabindex="-1"></a>mini_iris<span class="sc">$</span>Prob <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(iris.fit,</span>
+<span id="cb395-2"><a href="practical-5.html#cb395-2" tabindex="-1"></a>                              mini_iris,</span>
+<span id="cb395-3"><a href="practical-5.html#cb395-3" tabindex="-1"></a>                              <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb395-4"><a href="practical-5.html#cb395-4" tabindex="-1"></a></span>
+<span id="cb395-5"><a href="practical-5.html#cb395-5" tabindex="-1"></a><span class="do">##Question: Can you change the two lines below into a pipe operation?</span></span>
+<span id="cb395-6"><a href="practical-5.html#cb395-6" tabindex="-1"></a><span class="do">##Hint: you will need the mutate() function and the %&gt;% operator</span></span>
+<span id="cb395-7"><a href="practical-5.html#cb395-7" tabindex="-1"></a>mini_iris<span class="sc">$</span>Pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mini_iris<span class="sc">$</span>Prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>,<span class="st">&quot;virginica&quot;</span>, <span class="st">&quot;setosa&quot;</span>)</span>
+<span id="cb395-8"><a href="practical-5.html#cb395-8" tabindex="-1"></a>mini_iris<span class="sc">$</span>Result <span class="ot">&lt;-</span> mini_iris<span class="sc">$</span>Species <span class="sc">==</span> mini_iris<span class="sc">$</span>Pred</span>
+<span id="cb395-9"><a href="practical-5.html#cb395-9" tabindex="-1"></a></span>
+<span id="cb395-10"><a href="practical-5.html#cb395-10" tabindex="-1"></a></span>
+<span id="cb395-11"><a href="practical-5.html#cb395-11" tabindex="-1"></a><span class="fu">table</span>(mini_iris<span class="sc">$</span>Result)</span></code></pre></div>
+<pre><code>## 
+## TRUE 
+##  100</code></pre>
+</div>
+<div id="model-visualization" class="section level4 hasAnchor">
+<h4>Model Visualization<a href="practical-5.html#model-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="practical-5.html#cb397-1" tabindex="-1"></a><span class="do">##Question: Can you add an additional plot that shows the TRUE species labels?</span></span>
+<span id="cb397-2"><a href="practical-5.html#cb397-2" tabindex="-1"></a><span class="co">#Hint: what was the name of the column storing the labels? What argument is being used to visualize the Predicted labels?</span></span>
+<span id="cb397-3"><a href="practical-5.html#cb397-3" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Pred)) <span class="sc">+</span></span>
+<span id="cb397-4"><a href="practical-5.html#cb397-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb397-5"><a href="practical-5.html#cb397-5" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb397-6"><a href="practical-5.html#cb397-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb397-7"><a href="practical-5.html#cb397-7" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Training Classification Predictions&quot;</span>,</span>
+<span id="cb397-8"><a href="practical-5.html#cb397-8" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Sepal Length&quot;</span>,</span>
+<span id="cb397-9"><a href="practical-5.html#cb397-9" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sepal Width&quot;</span></span>
+<span id="cb397-10"><a href="practical-5.html#cb397-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-299-1.png" width="672" /></p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="practical-5.html#cb398-1" tabindex="-1"></a><span class="do">## Running a linear regression to compare to logistic regression</span></span>
+<span id="cb398-2"><a href="practical-5.html#cb398-2" tabindex="-1"></a>mini_iris<span class="sc">$</span>Num_Species <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mini_iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">&#39;setosa&#39;</span>, <span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb398-3"><a href="practical-5.html#cb398-3" tabindex="-1"></a>iris.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Num_Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span>  Sepal.Width,</span>
+<span id="cb398-4"><a href="practical-5.html#cb398-4" tabindex="-1"></a>              <span class="at">data =</span> mini_iris)</span>
+<span id="cb398-5"><a href="practical-5.html#cb398-5" tabindex="-1"></a></span>
+<span id="cb398-6"><a href="practical-5.html#cb398-6" tabindex="-1"></a>mini_iris<span class="sc">$</span>Num_pred <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(iris.lm,mini_iris)</span>
+<span id="cb398-7"><a href="practical-5.html#cb398-7" tabindex="-1"></a></span>
+<span id="cb398-8"><a href="practical-5.html#cb398-8" tabindex="-1"></a><span class="fu">summary</span>(mini_iris<span class="sc">$</span>Num_pred)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.8347  1.0740  1.4250  1.5000  1.8993  2.5424</code></pre>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="practical-5.html#cb400-1" tabindex="-1"></a><span class="fu">summary</span>(mini_iris<span class="sc">$</span>Prob)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0     0.0     0.5     0.5     1.0     1.0</code></pre>
+<div id="feature-selection-and-additional-modelling" class="section level5 hasAnchor">
+<h5>Feature selection and additional modelling<a href="practical-5.html#feature-selection-and-additional-modelling" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Exploring optimal features to compare viridis and versicolor species.</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="practical-5.html#cb402-1" tabindex="-1"></a>mini_iris <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb402-2"><a href="practical-5.html#cb402-2" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&#39;setosa&#39;</span>)</span>
+<span id="cb402-3"><a href="practical-5.html#cb402-3" tabindex="-1"></a></span>
+<span id="cb402-4"><a href="practical-5.html#cb402-4" tabindex="-1"></a><span class="do">##Question:can you change the plot to show Petal length and width?</span></span>
+<span id="cb402-5"><a href="practical-5.html#cb402-5" tabindex="-1"></a><span class="do">##hint: aes(x = ?, y = ?)</span></span>
+<span id="cb402-6"><a href="practical-5.html#cb402-6" tabindex="-1"></a><span class="fu">ggplot</span>(mini_iris, <span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb402-7"><a href="practical-5.html#cb402-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Add points with some transparency</span></span>
+<span id="cb402-8"><a href="practical-5.html#cb402-8" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Use a clean theme</span></span>
+<span id="cb402-9"><a href="practical-5.html#cb402-9" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb402-10"><a href="practical-5.html#cb402-10" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Iris Dataset: Dimensions by Species&quot;</span>,</span>
+<span id="cb402-11"><a href="practical-5.html#cb402-11" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Sepal Length&quot;</span>,</span>
+<span id="cb402-12"><a href="practical-5.html#cb402-12" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sepal Width&quot;</span></span>
+<span id="cb402-13"><a href="practical-5.html#cb402-13" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-300-1.png" width="672" /></p>
+</div>
+<div id="evaluation" class="section level5 hasAnchor">
+<h5>Evaluation<a href="practical-5.html#evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Evaluation of the trained logistic regression model demonstrates satisfactory classification performance.</p>
+<p>N.B: current estimates are based on <strong>training data</strong>. Must adapt analysis to be based on held-out samples for future updates.</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="practical-5.html#cb403-1" tabindex="-1"></a>iris.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Species <span class="sc">~</span> Sepal.Length <span class="sc">+</span> Sepal.Width,</span>
+<span id="cb403-2"><a href="practical-5.html#cb403-2" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>,</span>
+<span id="cb403-3"><a href="practical-5.html#cb403-3" tabindex="-1"></a>                <span class="at">data =</span> mini_iris)</span>
+<span id="cb403-4"><a href="practical-5.html#cb403-4" tabindex="-1"></a></span>
+<span id="cb403-5"><a href="practical-5.html#cb403-5" tabindex="-1"></a></span>
+<span id="cb403-6"><a href="practical-5.html#cb403-6" tabindex="-1"></a>iris_pred <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(iris.fit,</span>
+<span id="cb403-7"><a href="practical-5.html#cb403-7" tabindex="-1"></a>                         mini_iris,</span>
+<span id="cb403-8"><a href="practical-5.html#cb403-8" tabindex="-1"></a>                         <span class="at">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb403-9"><a href="practical-5.html#cb403-9" tabindex="-1"></a></span>
+<span id="cb403-10"><a href="practical-5.html#cb403-10" tabindex="-1"></a></span>
+<span id="cb403-11"><a href="practical-5.html#cb403-11" tabindex="-1"></a><span class="do">## Question: is the below function hard to read? How could we fix it?</span></span>
+<span id="cb403-12"><a href="practical-5.html#cb403-12" tabindex="-1"></a><span class="do">##Hint: pipe operator</span></span>
+<span id="cb403-13"><a href="practical-5.html#cb403-13" tabindex="-1"></a><span class="fu">as.data.frame</span>(<span class="fu">table</span>(mini_iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="fu">ifelse</span>(iris_pred <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">&#39;virginica&#39;</span>,<span class="st">&#39;versicolor&#39;</span>)))</span></code></pre></div>
+<pre><code>##    Var1 Freq
+## 1 FALSE   25
+## 2  TRUE   75</code></pre>
 
+</div>
+</div>
+</div>
 </div>
 </div>
             </section>
